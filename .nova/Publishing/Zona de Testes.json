@@ -1,0 +1,12 @@
+{
+  "identifier" : "6AD49454-074F-48F4-836B-FAA73B7DA977",
+  "ignoredFilePatterns" : [
+    ".svn",
+    ".DS_Store"
+  ],
+  "localPath" : "trunk",
+  "remotePath" : "\/var\/www\/clients\/client3\/web105\/web\/wp-content\/plugins\/online-status-insl",
+  "remoteURL" : "https:\/\/zonadetestes.com\/",
+  "server" : "Zona de Testes",
+  "usesPublishing" : false
+}

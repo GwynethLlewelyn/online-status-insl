@@ -1,0 +1,356 @@
+# Translation of Plugins - Online Status inSL - Development (trunk) in Portuguese (Portugal)
+# This file is distributed under the same license as the Plugins - Online Status inSL - Development (trunk) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - Online Status inSL - Development (trunk)\n"
+"POT-Creation-Date: 2021-06-21 14:08+0100\n"
+"PO-Revision-Date: 2021-06-22 03:14+0100\n"
+"Last-Translator: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
+"Language-Team: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
+"Language: pt_PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__;__ngettext:1,2;esc_attr_e\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.0\n"
+
+#: online-status-insl.php:120
+msgid "avatar status tracking object"
+msgstr "objecto para listagem do status de um avatar"
+
+#: online-status-insl.php:121
+msgid "avatar status tracking objects"
+msgstr "objectos para listagem do status de um avatar"
+
+#: online-status-insl.php:143
+msgid "Ping object"
+msgstr "Ping ao objecto"
+
+#: online-status-insl.php:144
+msgid "Delete from tracking table"
+msgstr "Apagar da tabela de objectos"
+
+#: online-status-insl.php:145
+msgid "Reset object(s)"
+msgstr "Reinicializar objecto(s)"
+
+#: online-status-insl.php:146
+msgid "Destroy object forever"
+msgstr "Destruir objecto para sempre"
+
+#: online-status-insl.php:155
+msgid "Empty message."
+msgstr "Mensagem vazia."
+
+#: online-status-insl.php:182
+msgid "Pinging object for "
+msgstr "Pingando objecto para "
+
+#: online-status-insl.php:187 online-status-insl.php:249 online-status-insl.php:308
+#: online-status-insl.php:367
+msgid "Object Name: "
+msgstr "Nome do objecto: "
+
+#: online-status-insl.php:192 online-status-insl.php:254 online-status-insl.php:313
+#: online-status-insl.php:372
+msgid "Location: "
+msgstr "Localização: "
+
+#: online-status-insl.php:195 online-status-insl.php:316 online-status-insl.php:375
+msgid "Calling URL: "
+msgstr "Chamando URL: "
+
+#: online-status-insl.php:211
+#, php-format
+msgid "Object '%s' replied: '%s'"
+msgstr "Objecto «%s» respondeu com: «%s»"
+
+#: online-status-insl.php:220 online-status-insl.php:343
+msgid "Error communicating with in-world object "
+msgstr "Erro na comunicação com objecto no mundo virtual "
+
+#: online-status-insl.php:244
+msgid "Deleting "
+msgstr "Apagando "
+
+#: online-status-insl.php:272
+#, php-format
+msgid "No online status indicators for %s found"
+msgstr "Não se encontraram indicadores de status online para %s"
+
+#: online-status-insl.php:290 online-status-insl.php:427
+msgid "WordPress settings could not be saved - Object(s) not deleted!"
+msgstr "As configurações do WordPress não puderam ser gravadas  - Objecto(s) não apagado(s)!"
+
+#: online-status-insl.php:303
+msgid "Resetting object for "
+msgstr "Reinicializando objecto para "
+
+#: online-status-insl.php:334 online-status-insl.php:391
+#, php-format
+msgid "Object %s replied: %s"
+msgstr "Objecto %s respondeu com: %s"
+
+#: online-status-insl.php:364
+msgid "Deleting in-world object for "
+msgstr "Apagando objecto para "
+
+#: online-status-insl.php:403
+msgid "Object not deleted because there was an error communicating with it "
+msgstr "Objecto não apagado porque houve um erro na comunicação com o mesmo "
+
+#: online-status-insl.php:452
+msgid "Avatar Display Name"
+msgstr "\"Display Name\" do avatar"
+
+#: online-status-insl.php:453
+msgid "Status"
+msgstr "Status"
+
+#: online-status-insl.php:454
+msgid "PermURL"
+msgstr "PermURL"
+
+#: online-status-insl.php:455
+msgid "Avatar Key"
+msgstr "Chave do avatar"
+
+#: online-status-insl.php:456
+msgid "Object Name"
+msgstr "Nome do objecto"
+
+#: online-status-insl.php:457
+msgid "Object Key"
+msgstr "Chave do objecto"
+
+#: online-status-insl.php:458
+msgid "Object Version"
+msgstr "Versão do objecto"
+
+#: online-status-insl.php:459
+msgid "Location"
+msgstr "Localização"
+
+#: online-status-insl.php:460
+msgid "Last time checked"
+msgstr "Última verificação"
+
+#: online-status-insl.php:478
+msgid "Ping"
+msgstr "Ping"
+
+#: online-status-insl.php:485
+msgid "Delete"
+msgstr "Apagar"
+
+#: online-status-insl.php:492
+msgid "Reset"
+msgstr "Reinicializar"
+
+#: online-status-insl.php:499
+msgid "Destroy"
+msgstr "Destruir"
+
+#: online-status-insl.php:536
+msgid "Online Status Indicator for "
+msgstr "Indicador de status online para "
+
+#: online-status-insl.php:601
+msgid "Y M j H:i:s"
+msgstr "Y M j H:i:s"
+
+#: online-status-insl.php:662
+msgid "No avatars are being tracked."
+msgstr "Nenhum avatar configurado."
+
+#. Plugin Name of the plugin/theme
+#: online-status-insl.php:688 online-status-insl.php:947 online-status-insl.php:948
+#: online-status-insl.php:978
+msgid "Online Status inSL"
+msgstr "Online Status inSL"
+
+#: online-status-insl.php:691
+msgid "Online Status inSL Widget"
+msgstr "Widget de Online Status inSL"
+
+#: online-status-insl.php:721
+msgid "(unknown avatar)"
+msgstr "(avatar desconhecido)"
+
+#: online-status-insl.php:723
+msgid "(invalid URL)"
+msgstr "(URL inválido)"
+
+#: online-status-insl.php:779
+msgid "Second Life Online Status"
+msgstr "Second Life Online Status"
+
+#: online-status-insl.php:782
+msgid "I am "
+msgstr "Estou "
+
+#: online-status-insl.php:783
+msgid " in Second Life."
+msgstr " no Second Life."
+
+#: online-status-insl.php:785
+msgid "having problems contacting RPC server..."
+msgstr "com problemas a contactar o servidor..."
+
+#: online-status-insl.php:789
+msgid "Please set up your in-world object first"
+msgstr "Por favor, primeiro configure o seu objecto no SL"
+
+#: online-status-insl.php:792
+msgid "none"
+msgstr "nenhum"
+
+#: online-status-insl.php:817
+msgid "Title"
+msgstr "Título"
+
+#: online-status-insl.php:826
+msgid "Avatar Name"
+msgstr "Nome do avatar"
+
+#: online-status-insl.php:860
+msgid "Unconfigured"
+msgstr "Não configurado"
+
+#: online-status-insl.php:866
+msgid "Before status message"
+msgstr "Antes da mensagem de status"
+
+#: online-status-insl.php:874
+msgid "After status message"
+msgstr "Depois da mensagem de status"
+
+#: online-status-insl.php:882
+msgid "Error message when communicating with SL"
+msgstr "Mensagem de erro na comunicação com o SL"
+
+#: online-status-insl.php:891
+msgid "Widget not configured message"
+msgstr "Mensagem de widget não configurado"
+
+#: online-status-insl.php:900
+msgid "Profile picture?"
+msgstr "Imagem de perfil?"
+
+#: online-status-insl.php:981
+msgid ""
+"Please create an object in Second Life on a plot owned by you, and drop the following "
+"script inside:"
+msgstr ""
+"Por favor crie um objecto no Second Life numa parcela de que seja o dono, e coloque o "
+"seguinte script no seu interior:"
+
+#: online-status-insl.php:1191
+msgid "Then you can drag the appropriate widget on your sidebar."
+msgstr "Depois pode arrastar o widget correspondente para o painel lateral."
+
+#: online-status-insl.php:1202
+msgid "Current avatars being tracked"
+msgstr "Avatars registados"
+
+#: online-status-insl.php:1212 online-status-insl.php:1216
+msgid ""
+"<p><strong>Delete</strong>: Removes the tracking object from the WordPress table. The "
+"object will still remain in-world unless it gets manually deleted. You can touch it in-"
+"world to get it to register again.</p>"
+msgstr ""
+"<p><strong>Apagar</strong>: Remove o objecto da tabela interna do WordPress. O objecto "
+"ainda se mantém no mundo virtual até ser removido manualmente. Pode carregar neste para "
+"que se registe automaticamente de novo.</p>"
+
+#: online-status-insl.php:1220
+msgid ""
+"<p><strong>Reset</strong>: Resets the in-world object. This will give you a new "
+"communications channel. Note that if the object is not responding to pings, it will not be "
+"affected. The object will remain both in-world <em>and</em> being tracked by WordPress.</p>"
+msgstr ""
+"<p><strong>Reiniciar</strong>: Reinicia o objecto. Isto criará um novo canal de "
+"comunicação. Note que se o objecto não estiver a responder a pings, não será afectado por "
+"esta operação. O objecto manter-se-á no mundo virtual <em>e</em> continuará a ser "
+"actualizado pelo WordPress.</p>"
+
+#: online-status-insl.php:1224
+msgid ""
+"<p><strong>Destroy</strong>: Attempts to tell the in-world object to be deleted in-world "
+"<em>and</em> also deletes it from the WordPress table. If it fails, you will have to "
+"delete it manually in-world <em>and</em> delete it from this table as well. Use with "
+"caution, since the object will <em>not</em> be returned to your inventory but disappear "
+"forever!</p>"
+msgstr ""
+"<p><strong>Destruir</strong>: Faz um pedido ao objecto no mundo virtual para que se auto-"
+"destrua, <em>e</em> apaga-o da tabela do WordPress. Se falhar, terá de o remover "
+"manualmente no mundo virtual <em>e</em> nest tabela. Tenha cuidado, pois o objecto "
+"<em>não</em> será devolvido ao seu inventório, mas sim destruído para sempre!</p>"
+
+#: online-status-insl.php:1228
+msgid ""
+"<p>Note that the different options exist mostly to help you to keep your objects in sync "
+"with WordPress. Sometimes this is not possible. Note that the objects will try to contact "
+"WordPress with the updated status if they change owners, if the region simulator crashes, "
+"etc. Sometimes that can fail.</p>"
+msgstr ""
+"<p>Note que estas diferentes opções existem fundamentalmente para o ajudar a manter os "
+"objectos sincronizados com o WordPress. Por vezes isto não é possível. Note também que os "
+"objectos tentarão comunicar com o WordPress com o seu status caso mudem de dono, ou caso o "
+"simulador da região crashe, etc. Por vezes esta comunicação pode falhar.</p>"
+
+#: online-status-insl.php:1333
+msgid "Invalid object key: "
+msgstr "Chave do objecto inválida: "
+
+#: online-status-insl.php:1376
+msgid "No widget configured for "
+msgstr "Não há widget configurado para "
+
+#: online-status-insl.php:1380
+msgid "No avatars being tracked"
+msgstr "Nenhum avatar configurado"
+
+#: save-channel.php:12
+msgid "Request has to come from Second Life or OpenSimulator"
+msgstr "O pedido tem de vir do Second Life ou OpenSimulator"
+
+#: save-channel.php:35
+#, php-format
+msgid "Status '%s' set for '%s' (%s)"
+msgstr "Status «%s» modificado para «%s» (%s)"
+
+#: save-channel.php:41
+msgid " is not yet registered!"
+msgstr " ainda não foi registado!"
+
+#: save-channel.php:77
+#, php-format
+msgid "PermURL %s saved for user \"%s\" using object named \"%s\" (%s)"
+msgstr "PermURL «%s» gravado para o utilizador «%s» usando o objecto chamado «%s» (%s)."
+
+#: save-channel.php:83
+msgid "No PermURL specified on registration"
+msgstr "Não foi especificado nenhum PermURL no registo"
+
+#. Plugin URI of the plugin/theme
+msgid "https://gwynethllewelyn.net/online-status-insl/"
+msgstr "https://gwynethllewelyn.net/online-status-insl/"
+
+#. Description of the plugin/theme
+msgid ""
+"Shows your online status in the Second Life®/OpenSimulator virtual worlds on a widget (or "
+"use shortcodes)"
+msgstr ""
+"Mostra se está online nos mundos virtuais Second Life® ou OpenSimulator num widget (ou "
+"usando shortcodes)"
+
+#. Author of the plugin/theme
+msgid "Gwyneth Llewelyn"
+msgstr "Gwyneth Llewelyn"
+
+#. Author URI of the plugin/theme
+msgid "https://gwynethllewelyn.net/"
+msgstr "https://gwynethllewelyn.net/"
