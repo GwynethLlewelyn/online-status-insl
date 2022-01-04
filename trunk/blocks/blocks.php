@@ -7,12 +7,12 @@
  **/
 
 /**
- * Class Online_Status_inSL_Blocks
+ * Class Online_Status_InSL_Blocks
  */
-class Online_Status_inSL_Blocks {
+class Online_Status_InSL_Blocks {
 
 	/**
-	 * Online_Status_inSL_Blocks constructor.
+	 * Online_Status_InSL_Blocks constructor.
 	 */
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'run' ) );
@@ -46,4 +46,4 @@ class Online_Status_inSL_Blocks {
 	}
 }
 
-new Online_Status_inSL_Blocks();
+new Online_Status_InSL_Blocks();

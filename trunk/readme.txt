@@ -4,7 +4,7 @@ Donate link: https://paypal.me/GwynethLlewelyn
 Tags: second life, opensimulator, online, status, profile, sl
 Requires at least: 5.0
 Requires PHP: 7.3
-Tested up to: 5.7.3-alpha
+Tested up to: 5.8.2
 Stable tag: trunk
 License: BSD-3-Clause
 License URI: https://directory.fsf.org/wiki/License:BSD-3-Clause
@@ -79,7 +79,7 @@ This happens when the dataserver in Second Life is slow in responding; there is 
 
 = I upgraded and now the widget does not update the status =
 
-Go in-world and touch the in-world object. It should re-register and everything should work fine again.
+Go in-world and touch the in-world object. It should re-register and everything should work fine again. If not, create a new LSL script — using the provided pre-generated one — and replace the old one. The idea is that the API hasn't changed much, to make sure that old scripts will still work (see the first question in this FAQ), but, alas, I'm merely human and prone to err.
 
 = The LSL script cannot contact the webserver! =
 
@@ -123,15 +123,35 @@ My apologies. New users have a "fake" last name, "Resident", which is however ne
 
 = Can I get translations in different languages? =
 
-Starting with 1.3.5, you can. A default English .po file is supplied, so you can tweak it to your own language. I've added Portuguese as an example. More translations are welcome!
+Starting with 1.3.5, you can. A default English `.po` file is supplied, so [you can tweak it to your own language](https://poedit.net/). I've added Portuguese as an example. More translations are welcome!
+
+**Note:** WordPress multilingual support is currently being done differently (no need to directly tweak `.po` files), but I'm not even sure how to add support to that. See also the developer note for tag 1.5.0.
 
 = Will this work for OpenSimulator-based grids? =
 
-Not quite, but almost. Basically, you can certainly track if an avatar is online/offline on any grid (the tracking code is grid-independent). However, each OpenSimulator grid operator stores avatar profiles differently. This means that you won't get any fancy pictures, links to profiles, or to location — these are hard-coded to work with the Second Life grid.
+Essentially, yes. Basically, you can certainly track if an avatar is online/offline on any grid (the tracking code is grid-independent). However, each OpenSimulator grid operator stores avatar profiles differently. This means that you won't get any fancy pictures, links to profiles, or to location — these are hard-coded to work with the Second Life grid.
 
 If you just wish to have a text message saying "my avatar is online on grid X", then this plugin will certainly work.
 
 In future versions, the options to extract profile data from OpenSimulator grids might have some extra settings, but it still won't work with every grid. Each grid really does this differently!
+
+= Can I also track NPCs/bots? =
+
+NPCs (Non-Player Characters) or 'bots (automated avatars, controlled by software) are perfectly 'normal' avatars from the perspective of the Second Life Grid; they have no more and no less features than human-controlled avatars and are created exactly in the same way. The sole difference is that, instead of a human behind a Second Life Viewer (released by Linden Lab or by a third party, such as the Firestorm Viewer), there is just software 'speaking' the network protocol developed by Linden Lab for the communication between the Grid and the Viewers; from the perspective of the Grid, therefore, it has no way of distinguishing if there is a human behind a viewer or merely software 'talking' exactly the same protocol, using a popular software development kit such as [LibreMetaverse](https://github.com/cinderblocks/libremetaverse).
+
+Because of that, it's perfectly possible to track NPCs/bots for their online status, exactly as if these were 'normal', human-driven avatars. It's likely, however, that you'll need to log in to the Grid as the NPC/bot to properly set up everything as required (i.e. dropping the script inside an object owned by the NPC/bot).
+
+LibreMetaverse works not only for the Second Life Grid, but also for any OpenSimulator-based grid. As such, any NPCs/bots that are set up using a 'normal' avatar which gets then driven by software using LibreMetaverse will be able to be tracked for their online status, in a grid-independent way, within the limitations addressed on the above question.
+
+However, OpenSimulator _also_ supports 'native' NPCs. This is a feature that Linden Lab _could_ have offered on their Grid as well, but decided not to. Under OpenSimulator, it's possible to 'create' a NPC/bot from a script, which will look exactly like a 'normal', regular avatar, but which does _not_ require external software running under LibreMetaverse — you can do it within the environment provided by OpenSimulator itself, using extended LSL functions to directly script avatar-based NPCs/bots. While these can do pretty much everything that a 'normal' (human) avatar can, at the database level, they are distinguished from humans by a special flag, which gets set when a NPC is 'created', and which will also bind that NPC to a human avatar (i.e. the human avatar running the script creating a NPC will become its 'owner'). This a way to deal with potential security issues: OpenSimulator NPCs aren't anonymous, in the sense that nobody knows who is behind it, but rather 'belong' to a specific user (and therefore can be flagged for abuse like any other object), and that link is enforced at the core level — it cannot be tampered with using LSL.
+
+This allows, among many other things, to use LSL to 'detect' if an avatar is being driven by a human or just by software. It also allows parcel owners to, say, allow human avatars to run scripts on their land, but forbid NPCs to do so. NPCs may be even banned from entering land parcels, whole regions, or even full estates; and grid owners can also ban NPCs altogether (effectively turning off the ability to create and script them), just like on the Second Life Grid.
+
+As such, _these_ kinds of special, native OpenSimulator NPC avatars _may_ fail to be tracked properly regarding their online status. On a fully permissible OpenSimulator grid, it might be possible to consistently get the online status, but it will be tricky — when a NPC goes offline and comes back online, in general, even though it might look the same and have the same name as before, it _will_ have a _different_ UUID (at least, that's what I think that happens; there might be a way to override that procedure), and, as such, any online tracking script that is looking for a specific, valid UUID will fail — the 'reborn' NPC will technically be a _different_ avatar in the database, even if it looks exactly the same. Again, I believe this is done for security considerations. It means that everything that a NPC 'owns' is, at best, _transient_ — it will only be 'owned' as long as that NPC avatar is online. If it drops out of the grid, and comes back, whatever it has owned is now gone. Also, there is no way for a _human_ to log in as a NPC (and vice-versa: you cannot use an _existing_ account for a NPC; each NPC is created on the spot as a completely new entry in the avatar database), so that means it's impossible to log in with the NPC's account (technically, NPC avatars don't have associated 'accounts', even though they certainly have inventory, a profile, worn & attached items, etc.) and write a script to be dropped by the NPC inside an object it owns. This will simply be impossible.
+
+Nevertheless, with some clever scripting, it _may_ be possible to achieve something similar. Because NPCs are created with an inventory — including items worn & attached — it's conceivable that the avatar may come with a box with a copy of the online tracking script. During creation, that box will be assigned ownership to either the NPC or possibly to the NPC's owner (depends on the scripting used): in the former case, it's certainly plausible to admit that the NPC can be scripted to drop that box on the ground once it gets launched. Assuming that the NPC is created on land specifically designed for that purpose, with the proper permissions set (allowing NPCs from a certain group — which can _also_ be set when the NPC is created — to drop objects and run scripts in the parcel), it is conceivable therefore that such an avatar _may_ have an online tracker script active (and therefore its online status being actively tracked!), although it might be pointless: after all, an NPC will either be online or not exist at all (from the perspective of the database!).
+
+In short: aye, you _can_ track the online status of bots and NPCs, if they're scripted using the LibreMetaverse toolkit; there will be some limitations for OpenSimulator bots (lack of a profile picture, for example); but tracking native OpenSimulator NPCs will very likely _not_ work, or, if it does, it will be essentially pointless to do so.
 
 == Screenshots ==
 
@@ -144,17 +164,25 @@ In future versions, the options to extract profile data from OpenSimulator grids
 
 == Changelog ==
 
-= 1.6.0 =
-Adds support for editor blocks (Gutenberg):
+= 1.5.1 =
+* Quick patch! Development will proceed on 1.6.0 as soon as I can...
+* PHP 8+ is stricter when handling wrong types, so some changes were warranted
+* Gutenberg support is, for the moment, on hold (too complex for my tiny little head)
+* Changing " to ' wherever appropriate to conform to some new fancy PHP guidelines
+* Publishing to GitHub as well (which also required SVN to ignore Git-specific things, as well as ignoring my own local configuration, and whatever Mac-specific hidden files that are pointless to save)
+* Code refactoring and documentation, since being on GitHub _may_ mean that more people contribute code (wishful thinking, I know); also, there will be (potentially) some automated tasks in GitHub looking for the documentation...
 
-* Several more layers of complexity in setting up the plugin, because Gutenberg 😩
+= 1.6.0 (upcoming) =
+* Adds support for editor blocks (Gutenberg): unfinished!
+* Several more layers of complexity in setting up the plugin, because: Gutenberg 😩
+* Currently 'on hold' since other things have priority...
 
 = 1.5.0 =
 Recent versions of WordPress basically broke _everything_. So:
 
 * Cleaned up one or two things to bring the code up to PHP 7.3+ compliance
 * Fixed some fatal errors due to WP changes on the call to `WP_Widget::__construct()`
-* Asked for translation validation from the WP Polyglot team; until they approve it, you can continue to use the supplied .mo and .po files
+* Asked for translation validation from the WP Polyglot team; until they approve it, you can continue to use the supplied `.mo` and `.po` files
 * Figured out a workaround to load the _current_ language files: https://stackoverflow.com/questions/45525390/wordpress-plugin-translation-load-plugin-textdomain#comment105104921_45883184; see https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/#loading-text-domain
 * Fixed location of Portuguese (European) and British English translation files (Portuguese was empty!)
 * Fixed a stupid copy & paste that broke `ping`

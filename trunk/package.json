@@ -1,7 +1,7 @@
 {
 	"name": "online-status-insl",
 	"title": "Online Status inSL",
-	"version": "1.6.0",
+	"version": "1.5.1",
 	"description": "Shows your online status in the Second Life®/OpenSimulator virtual worlds on a widget (or use shortcodes/editor blocks)",
 	"main": "index.js",
 	"scripts": {
