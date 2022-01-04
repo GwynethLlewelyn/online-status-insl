@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - Online Status inSL - Development (trunk)\n"
 "POT-Creation-Date: 2021-06-21 14:08+0100\n"
-"PO-Revision-Date: 2021-06-21 14:10+0100\n"
+"PO-Revision-Date: 2022-01-04 10:47+0000\n"
 "Last-Translator: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -176,11 +176,11 @@ msgstr "Online Status inSL Widget"
 
 #: online-status-insl.php:721
 msgid "(unknown avatar)"
-msgstr ""
+msgstr "(unknown avatar)"
 
 #: online-status-insl.php:723
 msgid "(invalid URL)"
-msgstr ""
+msgstr "(invalid URL)"
 
 #: online-status-insl.php:779
 msgid "Second Life Online Status"
