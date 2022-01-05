@@ -157,7 +157,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 								'success',
 								sprintf(
 									// translators: first string is object name; second string is a reply from the in-world object.
-									__( "Object '%1\$s' replied: '%2\$s'", 'online-status-insl' ),
+									__( 'Object "%1\$s" replied: "%2\$s"', 'online-status-insl' ),
 									$this->internal_settings[ $ping_tracking_object ]['objectName'],
 									$result['body']
 								)
@@ -280,7 +280,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 								'success',
 								sprintf(
 									// translators: first string is the object name; second string is a message coming from that object in SL.
-									__( 'Object %1\$s replied: %2\$s', 'online-status-insl' ),
+									__( 'Object "%1\$s" replied: "%2\$s"', 'online-status-insl' ),
 									$this->internal_settings[ $reset_tracking_object ]['objectName'],
 									$result['body']
 								)
@@ -339,7 +339,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 								'success',
 								sprintf(
 									// translators: first string is the object name; second string is a message coming from that object in SL.
-									__( 'Object %1\$s replied: %2\$s', 'online-status-insl' ),
+									__( 'Object "%1\$s" replied: "%2\$s"', 'online-status-insl' ),
 									$this->internal_settings[ $die_tracking_object ]['objectName'],
 									$result['body']
 								)

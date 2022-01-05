@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Online Status inSL\n"
-"POT-Creation-Date: 2022-01-05 01:26+0000\n"
-"PO-Revision-Date: 2022-01-05 01:21+0000\n"
+"POT-Creation-Date: 2022-01-05 13:26+0000\n"
+"PO-Revision-Date: 2022-01-05 13:20+0000\n"
 "Last-Translator: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
 "Language-Team: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
 "MIME-Version: 1.0\n"
@@ -55,32 +55,34 @@ msgstr ""
 
 #: class-online-status-insl-list-table.php:132
 #: class-online-status-insl-list-table.php:196
-#: class-online-status-insl-list-table.php:252
-#: class-online-status-insl-list-table.php:313
+#: class-online-status-insl-list-table.php:253
+#: class-online-status-insl-list-table.php:314
 msgid "Object Name: "
 msgstr ""
 
 #: class-online-status-insl-list-table.php:137
 #: class-online-status-insl-list-table.php:201
-#: class-online-status-insl-list-table.php:257
-#: class-online-status-insl-list-table.php:318
+#: class-online-status-insl-list-table.php:258
+#: class-online-status-insl-list-table.php:319
 msgid "Location: "
 msgstr ""
 
 #: class-online-status-insl-list-table.php:140
-#: class-online-status-insl-list-table.php:260
-#: class-online-status-insl-list-table.php:321
+#: class-online-status-insl-list-table.php:261
+#: class-online-status-insl-list-table.php:322
 msgid "Calling URL: "
 msgstr ""
 
 #. translators: first string is object name; second string is a reply from the in-world object.
+#. translators: first string is the object name; second string is a message coming from that object in SL.
 #: class-online-status-insl-list-table.php:160
-#, php-format
-msgid "Object '%1$s' replied: '%2$s'"
+#: class-online-status-insl-list-table.php:283
+#: class-online-status-insl-list-table.php:342
+msgid "Object \"%1\\$s\" replied: \"%2\\$s\""
 msgstr ""
 
 #: class-online-status-insl-list-table.php:169
-#: class-online-status-insl-list-table.php:291
+#: class-online-status-insl-list-table.php:292
 msgid "Error communicating with in-world object "
 msgstr ""
 
@@ -93,97 +95,91 @@ msgstr ""
 msgid "No online status indicators for %s found"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:237
-#: class-online-status-insl-list-table.php:377
+#: class-online-status-insl-list-table.php:238
+#: class-online-status-insl-list-table.php:378
 msgid "WordPress settings could not be saved - Object(s) not deleted!"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:249
+#: class-online-status-insl-list-table.php:250
 msgid "Resetting object for "
 msgstr ""
 
-#. translators: first string is the object name; second string is a message coming from that object in SL.
-#: class-online-status-insl-list-table.php:282
-#: class-online-status-insl-list-table.php:341
-msgid "Object %1\\$s replied: %2\\$s"
-msgstr ""
-
-#: class-online-status-insl-list-table.php:310
+#: class-online-status-insl-list-table.php:311
 msgid "Deleting in-world object for "
 msgstr ""
 
-#: class-online-status-insl-list-table.php:353
+#: class-online-status-insl-list-table.php:354
 msgid "Object not deleted because there was an error communicating with it "
 msgstr ""
 
-#: class-online-status-insl-list-table.php:418
+#: class-online-status-insl-list-table.php:419
 msgid "Avatar Display Name"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:419
+#: class-online-status-insl-list-table.php:420
 msgid "Status"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:420
+#: class-online-status-insl-list-table.php:421
 msgid "PermURL"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:421
+#: class-online-status-insl-list-table.php:422
 msgid "Avatar Key"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:422
+#: class-online-status-insl-list-table.php:423
 msgid "Object Name"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:423
+#: class-online-status-insl-list-table.php:424
 msgid "Object Key"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:424
+#: class-online-status-insl-list-table.php:425
 msgid "Object Version"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:425
+#: class-online-status-insl-list-table.php:426
 msgid "Location"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:426
+#: class-online-status-insl-list-table.php:427
 msgid "Last time checked"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:452
+#: class-online-status-insl-list-table.php:453
 msgid "Ping"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:459
+#: class-online-status-insl-list-table.php:460
 msgid "Delete"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:466
+#: class-online-status-insl-list-table.php:467
 msgid "Reset"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:473
+#: class-online-status-insl-list-table.php:474
 msgid "Destroy"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:516
+#: class-online-status-insl-list-table.php:517
 msgid "Online Status Indicator for "
 msgstr ""
 
 #. translators: timestamp in date format, see http://php.net/date.
-#: class-online-status-insl-list-table.php:607
+#: class-online-status-insl-list-table.php:608
 msgid "Y M j H:i:s"
 msgstr ""
 
-#: class-online-status-insl-list-table.php:695
+#: class-online-status-insl-list-table.php:696
 msgid "No avatars are being tracked."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
 #: class-online-status-insl.php:44 online-status-insl.php:157
-#: online-status-insl.php:158 online-status-insl.php:191
+#: online-status-insl.php:158 online-status-insl.php:190
 msgid "Online Status inSL"
 msgstr ""
 
@@ -223,35 +219,35 @@ msgstr ""
 msgid "none"
 msgstr ""
 
-#: class-online-status-insl.php:187
+#: class-online-status-insl.php:186
 msgid "Title"
 msgstr ""
 
-#: class-online-status-insl.php:196
+#: class-online-status-insl.php:195
 msgid "Avatar Name"
 msgstr ""
 
-#: class-online-status-insl.php:237
+#: class-online-status-insl.php:238
 msgid "Unconfigured"
 msgstr ""
 
-#: class-online-status-insl.php:243
+#: class-online-status-insl.php:244
 msgid "Before status message"
 msgstr ""
 
-#: class-online-status-insl.php:251
+#: class-online-status-insl.php:252
 msgid "After status message"
 msgstr ""
 
-#: class-online-status-insl.php:259
+#: class-online-status-insl.php:260
 msgid "Error message when communicating with SL"
 msgstr ""
 
-#: class-online-status-insl.php:268
+#: class-online-status-insl.php:269
 msgid "Widget not configured message"
 msgstr ""
 
-#: class-online-status-insl.php:277
+#: class-online-status-insl.php:278
 msgid "Profile picture?"
 msgstr ""
 
@@ -261,28 +257,28 @@ msgid ""
 "following script inside:"
 msgstr ""
 
-#: online-status-insl.php:408
+#: online-status-insl.php:412
 msgid "Then you can drag the appropriate widget on your sidebar."
 msgstr ""
 
-#: online-status-insl.php:419
-msgid "Current avatars being tracked"
+#: online-status-insl.php:424
+msgid "Current avatar(s) being tracked"
 msgstr ""
 
-#: online-status-insl.php:429
+#: online-status-insl.php:434
 msgid ""
 "<p><strong>Ping</strong>: Checks if in-world object is still alive; if not, "
 "you should remove it manually.</p>"
 msgstr ""
 
-#: online-status-insl.php:433
+#: online-status-insl.php:438
 msgid ""
 "<p><strong>Delete</strong>: Removes the tracking object from the WordPress "
 "table. The object will still remain in-world unless it gets manually "
 "deleted. You can touch it in-world to get it to register again.</p>"
 msgstr ""
 
-#: online-status-insl.php:437
+#: online-status-insl.php:442
 msgid ""
 "<p><strong>Reset</strong>: Resets the in-world object. This will give you a "
 "new communications channel. Note that if the object is not responding to "
@@ -290,7 +286,7 @@ msgid ""
 "<em>and</em> being tracked by WordPress.</p>"
 msgstr ""
 
-#: online-status-insl.php:441
+#: online-status-insl.php:446
 msgid ""
 "<p><strong>Destroy</strong>: Attempts to tell the in-world object to be "
 "deleted in-world <em>and</em> also deletes it from the WordPress table. If "
@@ -299,7 +295,7 @@ msgid ""
 "em> be returned to your inventory but disappear forever!</p>"
 msgstr ""
 
-#: online-status-insl.php:445
+#: online-status-insl.php:450
 msgid ""
 "<p>Note that the different options exist mostly to help you to keep your "
 "objects in sync with WordPress. Sometimes this is not possible. Note that "
@@ -308,19 +304,19 @@ msgid ""
 "</p>"
 msgstr ""
 
-#: online-status-insl.php:549
+#: online-status-insl.php:556
 msgid "Invalid object key: "
 msgstr ""
 
-#: online-status-insl.php:589
+#: online-status-insl.php:594
 msgid "(unknown status)"
 msgstr ""
 
-#: online-status-insl.php:596
+#: online-status-insl.php:601
 msgid "No widget configured for "
 msgstr ""
 
-#: online-status-insl.php:600
+#: online-status-insl.php:603
 msgid "No avatars being tracked"
 msgstr ""
 
@@ -330,17 +326,17 @@ msgstr ""
 
 #. translators: in-world status (online/offline/unknown), avatar display name, avatar key (UUID).
 #: save-channel.php:47
-#, php-format
-msgid "Status '%1$s' set for '%2$s' (%3$s)"
+msgid "Status \"%1\\$s\" set for \"%2\\$s\" (%3\\$s)"
 msgstr ""
 
 #. translators: URL, avatar display name, object name, object key.
-#: save-channel.php:92
+#: save-channel.php:94
 #, php-format
-msgid "PermURL %1$s saved for user \"%2$s\" using object named \"%3$s\" (%4$s)"
+msgid ""
+"PermURL \"%1$s\" saved for user \"%2$s\" using object named \"%3$s\" (%4$s)"
 msgstr ""
 
-#: save-channel.php:101
+#: save-channel.php:103
 msgid "No PermURL specified on registration"
 msgstr ""
 

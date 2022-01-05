@@ -44,7 +44,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		header( 'Content-type: text/plain; charset=utf-8' );
 		printf(
 			// translators: in-world status (online/offline/unknown), avatar display name, avatar key (UUID).
-			esc_attr__( "Status '%1\$s' set for '%2\$s' (%3\$s)", 'online-status-insl' ),
+			esc_attr__( 'Status "%1\$s" set for "%2\$s" (%3\$s)', 'online-status-insl' ),
 			esc_attr( $_REQUEST['status'] ),
 			esc_attr( $settings[ $object_key ]['avatarDisplayName'] ),
 			esc_attr( $settings[ $object_key ]['avatarKey'] )
@@ -91,7 +91,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		header( 'Content-type: text/plain; charset=utf-8' );
 		printf(
 			// translators: URL, avatar display name, object name, object key.
-			esc_attr__( 'PermURL %1$s saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
+			esc_attr__( 'PermURL "%1$s" saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
 			esc_url( $settings[ $object_key ]['PermURL'], null, 'none' ),
 			$settings[ $object_key ]['avatarDisplayName'],
 			$settings[ $object_key ]['objectName'],

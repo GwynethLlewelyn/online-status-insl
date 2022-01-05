@@ -435,7 +435,7 @@ default
 			'online-status-insl'
 		);
 		_e(
-			'<p><strong>Delete</strong>: Removes the tracking object from the WordPress table. The object will still remain in-world unless it gets manually deleted. You can touch it in-world to get it to register again._e/p>',
+			'<p><strong>Delete</strong>: Removes the tracking object from the WordPress table. The object will still remain in-world unless it gets manually deleted. You can touch it in-world to get it to register again.</p>',
 			'online-status-insl'
 		);
 		_e(
