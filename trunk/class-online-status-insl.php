@@ -23,6 +23,18 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 */
 		public static $plugin_version;
 
+		private const ONLINE_STATUS_INSL_VALID_KSES_TAGS = array(
+			'a'      => array(
+				'href'  => array(),
+				'title' => array(),
+			),
+			'br'     => array(),
+			'em'     => array(),
+			'i'      => array(),
+			'strong' => array(),
+			'b'      => array(),
+		);
+
 		/**
 		 *  Constructor for the widget class.
 		 *
@@ -127,14 +139,14 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance                    = $old_instance;
-			$instance['title']           = wp_kses_post( $new_instance['title'] );
-			$instance['avatar_name']     = wp_strip_all_tags( $new_instance['avatar_name'] ); // probably not needed...
-			$instance['object_key']      = wp_kses_post( $new_instance['object_key'] );
-			$instance['before_status']   = wp_kses_post( $new_instance['before_status'] );
-			$instance['after_status']    = wp_kses_post( $new_instance['after_status'] );
-			$instance['having_problems'] = wp_kses_post( $new_instance['having_problems'] );
-			$instance['unconfigured']    = wp_kses_post( $new_instance['unconfigured'] );
-			$instance['profile_picture'] = wp_kses_post( $new_instance['profile_picture'] );
+			$instance['title']           = wp_kses( $new_instance['title'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['avatar_name']     = wp_kses_post( $new_instance['avatar_name'] ?? '(???)' ); // probably not needed...
+			$instance['object_key']      = wp_kses( $new_instance['object_key'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['before_status']   = wp_kses( $new_instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['after_status']    = wp_kses( $new_instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['having_problems'] = wp_kses( $new_instance['having_problems'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['unconfigured']    = wp_kses( $new_instance['unconfigured'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['profile_picture'] = wp_kses( $new_instance['profile_picture'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			return $instance;
 		} // end public function update
 
@@ -175,9 +187,19 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			// thus we try to get the location as well, to help the user.
 			if (
 				empty( $instance['avatar_name'] ) &&
-				( ! empty( $instance['object_key'] ) && NULL_KEY !== $instance['object_key'] )
+				( ! empty( $instance['object_key'] && NULL_KEY !== $instance['object_key'] ) )
 			) {
-				$instance['avatar_name'] = $settings[ $instance['object_key'] ]['avatarName'];
+				// phpcs:ignore
+				error_log(
+					wp_sprintf(
+						'DEBUG: instance[avatar_name]: "%1$s" instance[object_key]: "%2$s" settings[instance[object_key]] %3$s what we\'re assigning, after all: "%4$s"',
+						$instance['avatar_name'],
+						$instance['object_key'],
+						print_r( $settings[ $instance['object_key'] ], true ), // phpcs:ignore
+						$settings[ $instance['object_key'] ]['avatarDisplayName']
+					)
+				);
+				$instance['avatar_name'] = $settings[ $instance['object_key'] ]['avatarDisplayName'] ?? '(???)';
 			}
 			// try to fill in something...
 			?>
