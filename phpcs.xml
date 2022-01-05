@@ -3,29 +3,29 @@
 <!--<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress\Plugins" xsi:noNamespaceSchemaLocation="phpcs.xsd"> -->
     <description>Rules for WordPress plugins</description>
 
-    <file>trunk/*.php</file>
+    <file>trunk</file>
 
     <arg name="basepath" value="trunk"/>
     <arg name="extensions" value="php"/>
     <arg name="colors"/>
 <!--    <arg name="parallel" value="75"/> -->
     <arg name="tab-width" value="4"/>
-    
-    <!-- Show progress of the run 
+
+    <!-- Show progress of the run
     <arg value="p"/>
     -->
 
     <!-- Include the whole WordPress standard -->
     <rule ref="WordPress"/>
-    
-    <rule ref="PHPCompatibility"/>
-    <config name="testVersion" value="7.3-"/>
-    
+
+<!--    <rule ref="PHPCompatibility"/>
+    <config name="testVersion" value="7.3-"/> -->
+
     <!-- Allow long lines -->
     <rule ref="Generic.Files.LineLength">
         <severity>0</severity>
     </rule>
-    
+
     <rule ref="WordPress.WP.DeprecatedClasses">
         <properties>
             <property name="minimum_supported_version" value="5.0"/>
