@@ -24,7 +24,9 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 	 */
 	class Online_Status_InSL_List_Table extends WP_List_Table {
 		/**
-		 *  @var array $internal_settings Temporary internal variable for copying settings.
+		 * Temporary internal variable for copying settings.
+		 *
+		 * @var array $internal_settings
 		 */
 		private $internal_settings = array();
 
@@ -70,7 +72,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			$actions = array(
 				'ping'   => __( 'Ping object', 'online-status-insl' ),
 				'delete' => __( 'Delete from tracking table', 'online-status-insl' ),
-				'reset'  => __( 'Reset object(s)', 'online-status-insl' ) ,
+				'reset'  => __( 'Reset object(s)', 'online-status-insl' ),
 				'die'    => __( 'Destroy object forever', 'online-status-insl' ),
 			);
 			return $actions;
@@ -111,10 +113,10 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 				// Check if it's an array or a single request:
 				// Single request: user clicked below the avatar picture;
 				// Array: this was a bulk request, and we have several UUIDs.
-				if ( is_array( $_REQUEST['deletedStatusIndicators'] ) ) {
-					$process_ids = wp_unslash( $_REQUEST['deletedStatusIndicators'] );
-				} else {
-					$process_ids = wp_unslash( array( $_REQUEST['deletedStatusIndicators'] ) );
+				$process_ids = wp_unslash( $_REQUEST['deletedStatusIndicators'] );
+				if ( ! is_array( $process_ids ) ) {
+					// For our purposes, we need everything to be an array later on (gwyneth 20220104).
+					$process_ids = array( $process_ids );
 				}
 
 				// Check if we got one of the valid actions.
@@ -125,38 +127,38 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 					foreach ( $process_ids as $ping_tracking_object ) {
 						$status_message =
 							__( 'Pinging object for ', 'online-status-insl' ) .
-							$this->internal_settings[$ping_tracking_object]['avatarDisplayName'] .
+							$this->internal_settings[ $ping_tracking_object ]['avatarDisplayName'] .
 							', ' .
 							set_bold( __( 'Object Name: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$ping_tracking_object]['objectName'] .
+							$this->internal_settings[ $ping_tracking_object ]['objectName'] .
 							' (' .
-							$this->internal_settings[$ping_tracking_object]['objectKey'] .
+							$this->internal_settings[ $ping_tracking_object ]['objectKey'] .
 							'), ' .
 							set_bold( __( 'Location: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$ping_tracking_object]['objectRegion'] .
+							$this->internal_settings[ $ping_tracking_object ]['objectRegion'] .
 							'<br />' .
 							set_bold( __( 'Calling URL: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$ping_tracking_object]['PermURL'] .
+							$this->internal_settings[ $ping_tracking_object ]['PermURL'] .
 							'<br />';
 						self::emit_status_message( 'info', $status_message );
 
-						// Get PermURL and contact the object:
+						// Get PermURL and contact the object.
 						$request = new WP_Http();
-						$result = $request->request(
-							$this->internal_settings[$ping_tracking_object]['PermURL'],
+						$result  = $request->request(
+							$this->internal_settings[ $ping_tracking_object ]['PermURL'],
 							array(
 								'method' => 'POST',
 								'body'   => array( 'command' => 'ping' ),
 							)
 						);
 
-						if ( '200' == $result['response']['code'] ) {
+						if ( '200' === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
 								sprintf(
 									// translators: first string is object name; second string is a reply from the in-world object.
-									__( "Object '%s' replied: '%s'", 'online-status-insl' ),
-									$this->internal_settings[$ping_tracking_object]['objectName'],
+									__( "Object '%1\$s' replied: '%2\$s'", 'online-status-insl' ),
+									$this->internal_settings[ $ping_tracking_object ]['objectName'],
 									$result['body']
 								)
 							);
@@ -189,42 +191,39 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 					foreach ( $process_ids as $delete_tracking_object ) {
 						$status_message .=
 							__( 'Deleting ', 'online-status-insl' ) .
-							$this->internal_settings[$delete_tracking_object][
-								'avatarDisplayName'
-							] .
+							$this->internal_settings[ $delete_tracking_object ]['avatarDisplayName'] .
 							', ' .
 							set_bold( __( 'Object Name: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$delete_tracking_object]['objectName'] .
+							$this->internal_settings[ $delete_tracking_object ]['objectName'] .
 							' (' .
-							$this->internal_settings[$delete_tracking_object]['objectKey'] .
+							$this->internal_settings[ $delete_tracking_object ]['objectKey'] .
 							'), ' .
 							set_bold( __( 'Location: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$delete_tracking_object]['objectRegion'] .
+							$this->internal_settings[ $delete_tracking_object ]['objectRegion'] .
 							'<br />';
 
 						// Get rid of it from our internal table!
-						unset( $this->internal_settings[$delete_tracking_object] );
+						unset( $this->internal_settings[ $delete_tracking_object ] );
 					}
 
 					// Emit *info* class showing we have deleted some things; error if we haven't managed to delete anything.
 					if ( $status_message ) {
 						self::emit_status_message( 'warning', $status_message );
-					}
-					else {
+					} else {
 						self::emit_status_message(
 							'error',
 							sprintf(
+								// translators: placeholder is (possibly) an avatar name.
 								__(
-									// translators: placeholder is an avatar name.
-									"No online status indicators for %s found",
+									'No online status indicators for %s found',
 									'online-status-insl'
 								),
-								print_r( $_REQUEST['deletedStatusIndicators'], true )
+								print_r( $process_ids, true )
 							)
 						);
 					}
 
-					// update options with new settings; gets serialized automatically
+					// update options with new settings; gets serialized automatically.
 					if (
 						! update_option(
 							'Online_Status_InSL_settings',
@@ -233,56 +232,55 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 					) {
 						self::emit_status_message(
 							'error',
-							set_bold( __(
-								'WordPress settings could not be saved - Object(s) not deleted!'),
-								'online-status-insl'
+							set_bold(
+								__(
+									'WordPress settings could not be saved - Object(s) not deleted!',
+									'online-status-insl'
+								)
 							)
 						);
 					} // endif update options
-				}
-				// endif delete
-				elseif ( 'reset' === $this->current_action() ) {
+				} elseif ( 'reset' === $this->current_action() ) {
 					// Send reset command to inworld object. Object will do a llResetScript() and attempt
-					//  to register again. There is a slight bug here, because somehow the settings are
-					//  not saved (maybe there is a lock on them?)
+					// to register again. There is a slight bug here, because somehow the settings are
+					// not saved (maybe there is a lock on them?).
 					foreach ( $process_ids as $reset_tracking_object ) {
 						$status_message =
 							__( 'Resetting object for ', 'online-status-insl' ) .
-							$this->internal_settings[$reset_tracking_object][
-								'avatarDisplayName'
-							] .
+							$this->internal_settings[ $reset_tracking_object ]['avatarDisplayName'] .
 							', ' .
 							set_bold( __( 'Object Name: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$reset_tracking_object]['objectName'] .
+							$this->internal_settings[ $reset_tracking_object ]['objectName'] .
 							' (' .
-							$this->internal_settings[$reset_tracking_object]['objectKey'] .
+							$this->internal_settings[ $reset_tracking_object ]['objectKey'] .
 							'), ' .
 							set_bold( __( 'Location: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$reset_tracking_object]['objectRegion'] .
+							$this->internal_settings[ $reset_tracking_object ]['objectRegion'] .
 							'<br />' .
 							set_bold( __( 'Calling URL: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$reset_tracking_object]['PermURL'] .
+							$this->internal_settings[ $reset_tracking_object ]['PermURL'] .
 							'<br />';
 						self::emit_status_message( 'info', $status_message );
 
-						// Get PermURL and contact it
+						// Get PermURL and contact it.
 						$request = new WP_Http();
-						$result = $request->request(
-							$this->internal_settings[$reset_tracking_object]['PermURL'],
+						$result  = $request->request(
+							$this->internal_settings[ $reset_tracking_object ]['PermURL'],
 							array(
 								'method' => 'POST',
-								'body'   => array( 'command' => 'reset' )
+								'body'   => array( 'command' => 'reset' ),
 							)
 						);
 
 						// For some reason, we always get an error, although the communication worked!
-						//  Maybe a good idea is to read the settings again? Or save them?
-						if ( '200' == $result['response']['code'] ) {
+						// Maybe a good idea is to read the settings again? Or save them?
+						if ( '200' === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
 								sprintf(
-									__( "Object %s replied: %s", 'online-status-insl' ),
-									$this->internal_settings[$reset_tracking_object]['objectName'],
+									// translators: first string is the object name; second string is a message coming from that object in SL.
+									__( 'Object %1\$s replied: %2\$s', 'online-status-insl' ),
+									$this->internal_settings[ $reset_tracking_object ]['objectName'],
 									$result['body']
 								)
 							);
@@ -304,51 +302,50 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 							);
 						}
 					}
-				}
-				// endif reset
-				elseif ( 'die' === $this->current_action() ) {
-					// Send llDie() command to in-world object (it will disappear forever) and
-					//  we need to delete them from our table too
+				} elseif ( 'die' === $this->current_action() ) {
+					// Send `llDie()` command to each in-world object (they will disappear forever) and
+					// we need to delete them from our table too.
 					foreach ( $process_ids as $die_tracking_object ) {
 						$status_message =
 							__( 'Deleting in-world object for ', 'online-status-insl' ) .
-							$this->internal_settings[$die_tracking_object]['avatarDisplayName'] .
+							$this->internal_settings[ $die_tracking_object ]['avatarDisplayName'] .
 							', ' .
 							set_bold( __( 'Object Name: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$die_tracking_object]['objectName'] .
+							$this->internal_settings[ $die_tracking_object ]['objectName'] .
 							' (' .
-							$this->internal_settings[$die_tracking_object]['objectKey'] .
+							$this->internal_settings[ $die_tracking_object ]['objectKey'] .
 							'), ' .
 							set_bold( __( 'Location: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$die_tracking_object]['objectRegion'] .
+							$this->internal_settings[ $die_tracking_object ]['objectRegion'] .
 							'<br />' .
 							set_bold( __( 'Calling URL: ', 'online-status-insl' ) ) .
-							$this->internal_settings[$die_tracking_object]['PermURL'] .
+							$this->internal_settings[ $die_tracking_object ]['PermURL'] .
 							'<br />';
 						self::emit_status_message( 'info', $status_message );
 
-						// Get PermURL and send it the killing message
+						// Get PermURL and send it the killing message!
 						$request = new WP_Http();
-						$result = $request->request(
-							$this->internal_settings[$die_tracking_object]['PermURL'],
+						$result  = $request->request(
+							$this->internal_settings[ $die_tracking_object ]['PermURL'],
 							array(
 								'method' => 'POST',
-								'body'   => array( 'command' => 'die' )
+								'body'   => array( 'command' => 'die' ),
 							)
 						);
 
-						if ('200' == $result['response']['code']) {
+						if ( '200' === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
 								sprintf(
-									__( "Object %s replied: %s", 'online-status-insl' ),
-									$this->internal_settings[$die_tracking_object]['objectName'],
+									// translators: first string is the object name; second string is a message coming from that object in SL.
+									__( 'Object %1\$s replied: %2\$s', 'online-status-insl' ),
+									$this->internal_settings[ $die_tracking_object ]['objectName'],
 									$result['body']
 								)
 							);
 
-							// now get rid of the object in the settings table
-							unset( $this->internal_settings[$die_tracking_object] );
+							// now get rid of the object in the settings table!
+							unset( $this->internal_settings[ $die_tracking_object ] );
 						} else {
 							self::emit_status_message(
 								'error',
@@ -367,26 +364,32 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 							);
 						}
 					}
-					// Objects might have been deleted, so now it's time to purge them from the WP settings
+					// Objects might have been deleted, so now it's time to purge them from the WP settings.
 					if ( ! update_option(
-							'Online_Status_InSL_settings',
-							$this->internal_settings
-							)
-						) {
+						'Online_Status_InSL_settings',
+						$this->internal_settings
+					)
+					) {
 						self::emit_status_message(
 							'error',
-							set_bold( __(
-								'WordPress settings could not be saved - Object(s) not deleted!',
-								'online-status-insl'
-							) )
+							set_bold(
+								__(
+									'WordPress settings could not be saved - Object(s) not deleted!',
+									'online-status-insl'
+								)
+							)
 						);
 					} // endif update options
 				} // endif die
 			}
-			// no valid parameters for bulk actions! But this seems to be normal!
+
+			/*
+			No valid parameters for bulk actions! But this seems to be normal!
+
 			// else {
-			// 	// self::emit_status_message('error', __('No bulk actions to process', 'online-status-insl'));
-			// }
+			// 	// self::emit_status_message('error', __('No bulk actions to process', online-status-insl'));
+			}
+			*/
 		} // end function process_bulk_actions
 
 		/**
@@ -403,12 +406,12 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		}
 
 		/**
-		*  Assembles the column names and descriptions we wish to apply to each line
-		*  and returns it with proper HTML formatting.
-		*
-		*  @return string[]
-		*  @phan-return array{string:string}
-		*/
+		 *  Assembles the column names and descriptions we wish to apply to each line
+		 *  and returns it with proper HTML formatting.
+		 *
+		 *  @return string[]
+		 *  @phan-return array{string:string}
+		 */
 		public function get_columns() {
 			$columns = array(
 				'cb'                => '<input type="checkbox" />',
@@ -429,41 +432,41 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		// generate the links for manually applying an action to them.
 
 		/**
-		*  Deals with the special column with the avatar's display name.
-		*
-		*  @param string $item to be selected for the action.
-		*  @return string HTML-formatted code for the link that will enable this action.
-		*/
+		 *  Deals with the special column with the avatar's display name.
+		 *
+		 *  @param string $item to be selected for the action.
+		 *  @return string HTML-formatted code for the link that will enable this action.
+		 */
 		public function column_avatarDisplayName( $item ) {
 			$avatar_name_sanitised = sanitise_avatarname( $item['avatarDisplayName'] );
-			$page                  = esc_attr( $_REQUEST['page'] );
+			$page                  = esc_attr( $_REQUEST['page'] ?? '' );
 			$object_key            = esc_attr( $item['objectKey'] );
 
-			// This column will also have options to affect the in-world object
+			// This column will also have options to affect the in-world object.
 			$actions = array(
 				'ping'   => sprintf(
-					"<a href=\"?page=%s&action=%s&deletedStatusIndicators=%s\">%s</a>",
+					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'ping',
 					$object_key,
 					__( 'Ping', 'online-status-insl' )
 				),
 				'delete' => sprintf(
-					"<a href=\"?page=%s&action=%s&deletedStatusIndicators=%s\">%s</a>",
+					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'delete',
 					$object_key,
 					__( 'Delete', 'online-status-insl' )
 				),
 				'reset'  => sprintf(
-					"<a href=\"?page=%s&action=%s&deletedStatusIndicators=%s\">%s</a>",
+					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'reset',
 					$object_key,
 					__( 'Reset', 'online-status-insl' )
 				),
 				'die'    => sprintf(
-					"<a href=\"?page=%s&action=%s&deletedStatusIndicators=%s\">%s</a>",
+					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'die',
 					$object_key,
@@ -486,21 +489,21 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		}
 
 		/**
-		*  Deals with the special column with the object's region name.
-		*
-		*  @param string $item to be selected for the action.
-		*  @return string HTML-formatted code for the link that will enable this action.
-		*/
+		 *  Deals with the special column with the object's region name.
+		 *
+		 *  @param string $item to be selected for the action.
+		 *  @return string HTML-formatted code for the link that will enable this action.
+		 */
 		public function column_objectRegion( $item ) {
 			// parse name of the region and coordinates to create a link to maps.secondlife.com.
-			$object_region = esc_attr( $item['objectRegion'] );	// first, sanitise!
-			$region_name = substr(
+			$object_region = esc_attr( $item['objectRegion'] ); // first, sanitise!
+			$region_name   = substr(
 				$object_region,
 				0,
 				strpos( $object_region, '(' ) - 1
 			);
-			$coords = trim( esc_attr( $item['objectLocalPosition'] ), '() \t\n\r' );
-			$xyz = explode( ',', $coords );
+			$coords        = trim( esc_attr( $item['objectLocalPosition'] ), '() \t\n\r' );
+			$xyz           = explode( ',', $coords );
 
 			return sprintf(
 				'<a href="https://maps.secondlife.com/secondlife/%s/%F/%F/%F?title=%s&amp;msg=%s&amp;img=%s" target="_blank">%s (%d,%d,%d)</a>',
@@ -524,20 +527,20 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		}
 
 		/**
-		*  Deals with the special column that displays the script version contained in an item.
-		*
-		*  @param string[] $item to be selected for the action.
-		*  @phan-param array{string, string} $item to be selected for the action.
-		*  @return string HTML-formatted code for the link that will enable this action.
-		*/
+		 *  Deals with the special column that displays the script version contained in an item.
+		 *
+		 *  @param string[] $item to be selected for the action.
+		 *  @phan-param array{string, string} $item to be selected for the action.
+		 *  @return string HTML-formatted code for the link that will enable this action.
+		 */
 		public function column_objectVersion( $item ) {
 			// Added some fancy visuals: green if the plugin is at the same version as the in-world object.
 			// Versions 1.3.X are considered 'safe' (same protocol) so they're coloured a dark yellow.
 			// Anything before that might be still tracked, but communications will be lost with it.
 			// The hope is that users upgrade the script manually if they have some visual feedback.
-			$object_version = esc_attr( $item['objectVersion'] );	// sanitise!
-			$obv_css_colour = 'Maroon';	// colour by default, if we couldn't check version.
-			if ( $object_version == Online_Status_InSL::$plugin_version ) {
+			$object_version = esc_attr( $item['objectVersion'] ); // sanitise!
+			$obv_css_colour = 'Maroon'; // colour by default, if we couldn't check version.
+			if ( Online_Status_InSL::$plugin_version === $object_version ) {
 				$obv_css_colour = 'DarkGreen';
 			} elseif (
 				in_array(
@@ -552,7 +555,8 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						'1.4.1',
 						'1.4.2',
 						'1.5.0',
-					)
+					),
+					true	// strict checking required in WordPress (gwyneth 20220104).
 				)
 			) {
 				$obv_css_colour = 'DarkGoldenRod';
@@ -575,11 +579,11 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		public function column_Status( $item ) {
 			// Just some fancy colouring. Note that only online/offline are valid status. If the object
 			// breaks but still communicates, it might send a different status (rare!).
-			$item_status = esc_attr( $item['Status'] );	// sanitise it first!
+			$item_status    = esc_attr( $item['Status'] );	// sanitise it first!
 			$obs_css_colour = 'DimGray';	// colour by default for unknown status.
-			if ( 'online' == $item_status )  {
+			if ( 'online' === $item_status ) {
 				$obs_css_colour = 'DarkGreen';
-			} elseif ( 'offline' == $item_status ) {
+			} elseif ( 'offline' === $item_status ) {
 				$obs_css_colour = 'Maroon';
 			}
 
@@ -599,7 +603,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *  @return string HTML-formatted code for the link that will enable this action.
 		 */
 		public function column_timeStamp( $item ) {
-			/* translators: timestamp in date format, see http://php.net/date */
+			// translators: timestamp in date format, see http://php.net/date.
 			return date( __( 'Y M j H:i:s', 'online-status-insl' ), esc_attr( $item['timeStamp'] ) );
 		}
 
@@ -608,11 +612,11 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *
 		 *  @param string[] $item to be selected for the action.
 		 *  @phan-param array{string: string} $item
-		 *  @param string column_name (which is one of the valid column names _not_ listed on any of the above functions!).
+		 *  @param string   $column_name (which is one of the valid column names _not_ listed on any of the above functions!).
 		 *  @return string HTML-formatted code for the link that will enable this action.
 		 */
 		public function column_default( $item, $column_name ) {
-			return esc_attr( $item[$column_name] );
+			return esc_attr( $item[ $column_name ] );
 		}
 
 		/**
@@ -620,7 +624,6 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *
 		 *  @return string[] an array with the names of the sortable columns.
 		 *  @phan-return array(string, string)
-		 *
 		 */
 		private function get_sortable_columns() {
 			// Maybe other columns should be sorted too. These are the more useful ones.
@@ -633,48 +636,48 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		}
 
 		/**
-		*  Utility function to be passed to `usort` to reorder the sortable columns
-		*  according to our preferences (ascending or descending),
-		*
-		*  @param string[] $a	one of the strings to be compared inside `usort`.
-		*  @param string[] $b	the other string to be compared with.
-		*  @phan-param array{string:string} $a
-		*  @phan-param array{string:string} $a
-		*  @return boolean result of comparing a with b, returning `asc` (ascending) for true, false otherwise.
-		*/
+		 *  Utility function to be passed to `usort` to reorder the sortable columns
+		 *  according to our preferences (ascending or descending),
+		 *
+		 *  @param string[] $a one of the strings to be compared inside `usort`.
+		 *  @param string[] $b the other string to be compared with.
+		 *  @phan-param array{string:string} $a
+		 *  @phan-param array{string:string} $a
+		 *  @return boolean result of comparing a with b, returning `asc` (ascending) for true, false otherwise.
+		 */
 		private function usort_reorder( $a, $b ) {
 			// If no sort, default to avatarDisplayName.
 			$orderby = esc_attr( $_GET['orderby'] ?? 'avatarDisplayName' );
-			// If no order, default to asc
-			$order =   esc_attr( $_GET['order']   ?? 'asc' );
-			// Determine sort order
-			$result =  strcmp( $a[$orderby], $b[$orderby] );
-			// Send final sort direction to usort
-			return $order === 'asc' ? $result : -$result;
+			// If no order, default to asc.
+			$order = esc_attr( $_GET['order'] ?? 'asc' );
+			// Determine sort order.
+			$result = strcmp( $a[ $orderby ], $b[ $orderby ] );
+			// Send final sort direction to usort.
+			return 'asc' === $order ? $result : -$result;
 		}
 
 		/**
-		*  Utility function to get the current WP settings
-		*  according to our preferences (ascending or descending)
-		*  and to process bulk actions.
-		*
-		*  @return void
-		*/
+		 *  Utility function to get the current WP settings
+		 *  according to our preferences (ascending or descending)
+		 *  and to process bulk actions.
+		 *
+		 *  @return void
+		 */
 		private function prepare_items() {
-			$columns  = $this->get_columns();
-			$hidden   = [];
-			$sortable = $this->get_sortable_columns();
+			$columns               = $this->get_columns();
+			$hidden                = array();
+			$sortable              = $this->get_sortable_columns();
 			$this->_column_headers = array( $columns, $hidden, $sortable );
 
-			// $settings might have changed in the mean time due to bulk actions
+			// $settings might have changed in the mean time due to bulk actions.
 			$this->internal_settings = maybe_unserialize(
 				get_option( 'Online_Status_InSL_settings' )
 			);
 
-			// now process bulk actions
+			// now process bulk actions!
 			$this->process_bulk_action();
 
-			// sort our data, if it exists (to avoid an error)
+			// sort our data, if it exists (to avoid an error).
 			if ( ! empty( $this->internal_settings ) ) {
 				usort( $this->internal_settings, array( &$this, 'usort_reorder' ) );
 			}
@@ -683,13 +686,13 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		}
 
 		/**
-		*  Edge case function to deal with the special case that there are no items on the table
-		*  because no avatars have been configured yet.
-		*
-		*  @return void
-		*/
+		 *  Edge case function to deal with the special case that there are no items on the table
+		 *  because no avatars have been configured yet.
+		 *
+		 *  @return void
+		 */
 		private function no_items() {
-			_e( 'No avatars are being tracked.', 'online-status-insl' );
+			esc_html_e( 'No avatars are being tracked.', 'online-status-insl' );
 		}
-	} // class Online_Status_InSL_List_Table
-} // if !class_exists( 'Online_Status_InSL_List_Table' )
+	} // end class Online_Status_InSL_List_Table
+} // end if !class_exists( 'Online_Status_InSL_List_Table' )

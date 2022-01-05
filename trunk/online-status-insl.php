@@ -52,7 +52,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 Based on code developed by Dave Doolin, http://website-in-a-weekend.net/extending-wordpress/wordpress-widget-plugin-super-easy-customization-tuesday-means-technical/
 
- * PHPDocumentor tags:
+ * PHPDocumentor tags for this plugin below.
  *
  * @category OnlineStatusInSL
  * @package  OnlineStatusInSL
@@ -62,10 +62,8 @@ Based on code developed by Dave Doolin, http://website-in-a-weekend.net/extendin
  * @link     https://gwynethllewelyn.net/online-status-insl/
  */
 
-define( 'NULL_KEY', '00000000-0000-0000-0000-000000000000' );	// always useful when playing around with SL-related code.
-define( 'ONLINE_STATUS_INSL_MAIN_FILE', __FILE__ );			// needed by blocks/blocks.php (gwyneth 20210622).
-															// unused (yet); will be used in 1.6.0+.
-
+define( 'NULL_KEY', '00000000-0000-0000-0000-000000000000' ); // always useful when playing around with SL-related code.
+define( 'ONLINE_STATUS_INSL_MAIN_FILE', __FILE__ ); // needed by blocks/blocks.php (gwyneth 20210622) - unused (yet); will be used in 1.6.0+.
 if ( ! class_exists( 'WP_Http' ) ) {
 	include_once ABSPATH . WPINC . '/class-http.php';
 }
@@ -75,7 +73,7 @@ require_once 'class-online-status-insl-list-table.php';
 require_once 'class-online-status-insl-list-table.php';
 
 /**
- *	Auxiliary generic functions.
+ *  Auxiliary generic functions.
  */
 
 if ( ! function_exists( 'sanitise_avatarname' ) ) {
@@ -83,17 +81,17 @@ if ( ! function_exists( 'sanitise_avatarname' ) ) {
 	 *  Sanitise avatar names.
 	 *
 	 *  Deal with avatars called 'SomethingOrOther Resident'
-	 *	 and sanitise the name by replacing spaces with dots.
+	 *  and sanitise the name by replacing spaces with dots.
 	 *
-	 *  @param string $avatarName is the avatar's name to be sanitised.
+	 *  @param string $avatar_name is the avatar's name to be sanitised.
 	 *  @return string is a sanitised avatar name.
 	 **/
-	function sanitise_avatarname( $avatarName ) {
-		$sanitised = rawurlencode( strtolower( strtr( $avatarName, ' ', '.' ) ) );
-		// check if 'Resident' is appended:
-		$match = stripos( $sanitised, 'Resident' );
+	function sanitise_avatarname( $avatar_name ) {
+		$sanitised = rawurlencode( strtolower( strtr( $avatar_name, ' ', '.' ) ) );
+		// Check if 'Resident' is appended!
+		$match     = stripos( $sanitised, 'Resident' );
 		if ( false === $match ) {
-			// return everything up to the character before the dot
+			// Return everything up to the character before the dot.
 			return substr( $sanitised, 0, $match - 1 );
 		}
 		return $sanitised;
@@ -121,7 +119,7 @@ if ( ! function_exists( 'set_bold' ) ) {
  *
  *  @return void
  */
-function Online_Status_InSL_widget_init() {
+function online_status_insl_widget_init() {
 	register_widget( 'Online_Status_InSL' );
 }
 
@@ -131,7 +129,7 @@ function Online_Status_InSL_widget_init() {
  *
  *  @return void
  */
-function Online_Status_InSL_widget_activate() {
+function online_status_insl_widget_activate() {
 	// no special options
 }
 
@@ -141,11 +139,11 @@ function Online_Status_InSL_widget_activate() {
  *
  *  @return void
  */
-function Online_Status_InSL_widget_deactivate() {
+function online_status_insl_widget_deactivate() {
 	// First, clean up options on the settings database table.
-	delete_option( 'Online_Status_InSL_settings' );
+	delete_option( 'online_status_insl_settings' );
 	// Then sanitise the rest:
-	unregister_setting( 'Online_Status_InSL', 'Online_Status_InSL_settings' );
+	unregister_setting( 'Online_Status_InSL', 'online_status_insl_settings' );
 }
 
 /**
@@ -154,13 +152,13 @@ function Online_Status_InSL_widget_deactivate() {
  *
  *  @return void
  */
-function Online_Status_InSL_admin_menu_options() {
+function online_status_insl_admin_menu_options() {
 	add_options_page(
 		__( 'Online Status inSL', 'online-status-insl' ),
 		__( 'Online Status inSL', 'online-status-insl' ),
 		1,
 		'Online_Status_InSL',
-		'Online_Status_InSL_menu'
+		'online_status_insl_menu'
 	);
 }
 
@@ -173,10 +171,10 @@ function Online_Status_InSL_admin_menu_options() {
  */
 function request_protocol() {
 	$isSecure = false;
-	if ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' ) {
+	if ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ) {
 		$isSecure = true;
 	}
-	elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || ! empty( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on' ) {
+	elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] || ! empty( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && 'on' === $_SERVER['HTTP_X_FORWARDED_SSL'] ) {
 		$isSecure = true;
 	}
 	return $isSecure ? 'https' : 'http';
@@ -187,7 +185,7 @@ function request_protocol() {
  *
  *  @return void
  */
-function Online_Status_InSL_menu() {
+function online_status_insl_menu() {
 ?>
 <div class="wrap"> <!-- Plugin page for Online Status inSL -->
 	<h2><?php _e( 'Online Status inSL', 'online-status-insl' ); ?></h2>
@@ -198,7 +196,7 @@ function Online_Status_InSL_menu() {
 ); ?>
 	</p>
 	<hr />
-<?php // Figure out plugin version; if we have it already, skip this check (since it's resource-intensive)
+<?php // Figure out plugin version; if we have it already, skip this check (since it's resource-intensive).
 	if ( ! Online_Status_InSL::$plugin_version ) {
 		$plugin_data                        = get_file_data(
 			__FILE__,
@@ -208,11 +206,11 @@ function Online_Status_InSL_menu() {
 		);
 		Online_Status_InSL::$plugin_version = $plugin_data['Version'];
 	}
-// Now spew the script; one day, this might be tied in with a pretty-formatting thingy
+// Now spew the script; one day, this might be tied in with a pretty-formatting thingy!
 //
 // TODO(gwyneth): Check if llRequestSecureURL() works; a first approach could be to check if
-//  we're inside SL and use llRequestSecureURL(); if in OpenSim, use llRequestURL()
-// Note: llRequestSecureURL() seems to be partially implementes in OpenSim these days (gwyneth 20220103)
+// we're inside SL and use llRequestSecureURL(); if in OpenSim, use llRequestURL().
+// Note: llRequestSecureURL() seems to be partially implemented in OpenSim these days (gwyneth 20220103).
 ?>
 	<textarea name="osinsl-lsl-script" cols="120" rows="12" readonly style="font-family: monospace;">
 // Code to show online status and let it be retrieved by external calls.
@@ -412,7 +410,7 @@ default
 ); ?>
 <?php
 	// Prepare the list of tracked objects
-	$myListTable = new Online_Status_InSL_List_Table();
+	$myListTable = new online_status_insl_List_Table();
 	$myListTable->prepare_items();
 	// Note that this is inside the <p>...</p> because it emits \n somewhere!
 ?>
@@ -454,17 +452,17 @@ default
 </div><!-- end wrap for whole plugin -->
 <div class="clear"></div>
 <?php
-} // end function Online_Status_InSL_menu()
+} // end function online_status_insl_menu()
 
 /**
  *  Add a settings group, which hopefully makes it easier to delete later on.
  *
  *  @return void
  */
-function Online_Status_InSL_register_settings() {
+function online_status_insl_register_settings() {
 	// it's a huge serialised array for now, stored as a WP option in the database;
 	// if performance drops, this might change in the future.
-	register_setting('Online_Status_InSL', 'Online_Status_InSL_settings');
+	register_setting('Online_Status_InSL', 'online_status_insl_settings');
 }
 
 /**
@@ -477,8 +475,8 @@ function Online_Status_InSL_register_settings() {
  * @param  string      $tag     Shortcode tag (name). Default empty.
  * @return string               Shortcode output.
  */
-function Online_Status_InSL_shortcode( $atts = [], $content = null, $tag = '' ) {
-//	error_log('Entering Online_Status_InSL_shortcode, atts are ' . print_r($atts, true));
+function online_status_insl_shortcode( $atts = [], $content = null, $tag = '' ) {
+//	error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true));
 	extract(
 		shortcode_atts(
 			array(
@@ -492,7 +490,7 @@ function Online_Status_InSL_shortcode( $atts = [], $content = null, $tag = '' ) 
 		)
 	);
 	// search for the avatar name
-	$settings = maybe_unserialize( get_option( 'Online_Status_InSL_settings' ) );
+	$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 	// figure out stupid id for nice formatting
 	$osinslID = 'broken';	// default: we assume it's broken until proven otherwise! (gwyneth 20220103)
@@ -513,9 +511,9 @@ function Online_Status_InSL_shortcode( $atts = [], $content = null, $tag = '' ) 
 		// See if objectkey is set. If yes, instead of using avatar names, we use object UUIDs (guaranteed to
 		//	be unique, even across grids)
 		if ( ! empty( $objectkey) && ( NULL_KEY != $objectkey ) ) {
-			if ( ! empty( $settings[$objectkey] ) ) {
+			if ( ! empty( $settings[ $objectkey ] ) ) {
 				$avatar_name_sanitised = sanitise_avatarname(
-					$settings[$objectkey]['avatarDisplayName']
+					$settings[ $objectkey ]['avatarDisplayName']
 				);
  				if ( ! empty( $picture ) && ( 'none' != $picture ) ) {
 					if ( ! empty( $profilelink ) && ( 'off' != $profilelink ) ) {
@@ -542,7 +540,7 @@ function Online_Status_InSL_shortcode( $atts = [], $content = null, $tag = '' ) 
 					}
 				}
 				if ( ! empty( $status ) && ( 'off' != $status ) ) {
-					$returnValue .= $settings[$objectkey]['Status'];
+					$returnValue .= $settings[ $objectkey ]['Status'];
 				}
 			}
 			// no such object being tracked!
@@ -595,8 +593,7 @@ function Online_Status_InSL_shortcode( $atts = [], $content = null, $tag = '' ) 
 				}
 			}
 			if ( ! $foundAvatar ) {
-				$returnValue .=
-					__( 'No widget configured for ', 'online-status-insl' ) . $avatar;
+				$returnValue .=	__( 'No widget configured for ', 'online-status-insl' ) . $avatar;
 			}
 		} // else
 	} else {
@@ -606,30 +603,30 @@ function Online_Status_InSL_shortcode( $atts = [], $content = null, $tag = '' ) 
 	$returnValue .= '</span>';
 
 	return $returnValue;
-} // end function Online_Status_InSL_shortcode()
+} // end function online_status_insl_shortcode()
 
 /**
  *  Deal with translations. British English and European Portuguese only for now.
  *
  *  @return void
  */
-function Online_Status_InSL_load_textdomain() {
+function online_status_insl_load_textdomain() {
 	// This is how it _used_ to work under WP < 4.6:
-	// error_log('Calling Online_Status_InSL_load_textdomain(), locale is: "' . determine_locale() . '"');
+	// error_log('Calling online_status_insl_load_textdomain(), locale is: "' . determine_locale() . '"');
 	load_plugin_textdomain(
 		'online-status-insl',
 		false,
 		basename( dirname( __FILE__ ) ) . '/languages/'
 	);
-}
+} // end function online_status_insl_load_textdomain()
 
 /**
  *  Central location to create all shortcodes.
  *
  *  @return void
  */
-function Online_Status_InSL_shortcodes_init() {
-	add_shortcode( 'osinsl', 'Online_Status_InSL_shortcode' );
+function online_status_insl_shortcodes_init() {
+	add_shortcode( 'osinsl', 'online_status_insl_shortcode' );
 }
 
 /**
@@ -637,14 +634,14 @@ function Online_Status_InSL_shortcodes_init() {
  */
 
 // error_log( 'Entering action/hook area...' );
-// add_filter( 'load_textdomain_mofile', 'Online_Status_InSL_load_textdomain_mofile', 10, 2 );
-add_action( 'init', 'Online_Status_InSL_load_textdomain' );	// load translations here.
-add_action( 'widgets_init', 'Online_Status_InSL_widget_init' );
-add_action( 'admin_menu', 'Online_Status_InSL_admin_menu_options' );
-register_activation_hook( __FILE__, 'Online_Status_InSL_widget_activate' );
-register_deactivation_hook( __FILE__, 'Online_Status_InSL_widget_deactivate' );
-add_action( 'admin_init', 'Online_Status_InSL_register_settings' );
-add_action( 'init', 'Online_Status_InSL_shortcodes_init' );
+// add_filter( 'load_textdomain_mofile', 'online_status_insl_load_textdomain_mofile', 10, 2 );
+add_action( 'init', 'online_status_insl_load_textdomain' );	// load translations here.
+add_action( 'widgets_init', 'online_status_insl_widget_init' );
+add_action( 'admin_menu', 'online_status_insl_admin_menu_options' );
+register_activation_hook( __FILE__, 'online_status_insl_widget_activate' );
+register_deactivation_hook( __FILE__, 'online_status_insl_widget_deactivate' );
+add_action( 'admin_init', 'online_status_insl_register_settings' );
+add_action( 'init', 'online_status_insl_shortcodes_init' );
 // error_log( 'Leaving action/hook area...' );
 
 $wpdpd = new Online_Status_InSL( 'online-status-insl', 'Online Status inSL' );
