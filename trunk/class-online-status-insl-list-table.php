@@ -93,7 +93,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			printf(
 				"<div class='notice notice-%s is-dismissible'><p>%s</p></div>",
 				esc_attr( $type ),
-				esc_attr( $text )
+				wp_kses_post( $text )
 			);
 		}
 
