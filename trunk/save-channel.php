@@ -28,12 +28,12 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 	$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 	// Change settings just for this OBJECT.
-	// $avatar_legacy_name = $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'];
+	// $avatar_legacy_name = $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME']; // I don't know why this was commented out?...
 	if ( ! empty( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_KEY'] ) ) {
 		$object_key = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_KEY'] );
 	}
 
-	if ( $settings[ $object_key ] ) {
+	if ( ! empty( $settings[ $object_key ] ) ) {
 		$settings[ $object_key ]['Status']            = wp_unslash( $_REQUEST['status'] ?? '' );
 		$settings[ $object_key ]['avatarDisplayName'] = wp_unslash( $_REQUEST['avatar_name'] ?? '' );
 		$settings[ $object_key ]['timeStamp']         = time();
@@ -53,20 +53,20 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		header( 'HTTP/1.0 404 Avatar not found' );
 		header( 'Content-type: text/plain; charset=utf-8' );
 		// translators: the sentence begins with the avatar name.
-		esc_attr_e( ( $_REQUEST['avatar_name'] . ' is not yet registered!' ), 'online-status-insl' );
+		echo esc_attr( $_REQUEST['avatar_name'] ) . esc_attr__( ' is not yet registered!', 'online-status-insl' );
 	}
 } else {
 	// clean up with esc_url, but _avoid_ the 'display' context which will mess everything up (gwyneth 202220105).
 	$perm_url = esc_url( $_REQUEST['PermURL'], null, 'none' );
 	if ( ! empty( $perm_url ) ) {
-		$avatar_key            = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OWNER_KEY'] );
-		$avatar_legacy_name    = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] );
-		$avatar_display_name   = wp_unslash( $_REQUEST['avatar_name'] );
-		$object_version        = wp_unslash( $_REQUEST['object_version'] ); // We'll ignore versions for now.
-		$object_key            = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_KEY'] );
-		$object_name           = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_NAME'] ); // This will allow us to do some fancy editing.
-		$object_region         = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_REGION'] );
-		$object_local_position = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_LOCAL_POSITION'] );
+		$avatar_key            = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OWNER_KEY'] ?? NULL_KEY );
+		$avatar_legacy_name    = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] ?? '' );
+		$avatar_display_name   = wp_unslash( $_REQUEST['avatar_name'] ?? '' );
+		$object_version        = wp_unslash( $_REQUEST['object_version'] ?? '' ); // We'll ignore versions for now.
+		$object_key            = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_KEY'] ?? NULL_KEY );
+		$object_name           = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_NAME'] ?? '' ); // This will allow us to do some fancy editing.
+		$object_region         = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_REGION'] ?? 'Nowhere' );
+		$object_local_position = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_LOCAL_POSITION'] ?? '' );
 
 		// Now get the whole serialised array!
 
@@ -89,7 +89,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 
 		header( 'HTTP/1.0 200 OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
-		printf(
+		echo wp_sprintf(
 			// translators: URL, avatar display name, object name, object key.
 			esc_attr__( 'PermURL "%1$s" saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
 			esc_url( $settings[ $object_key ]['PermURL'], null, 'none' ),

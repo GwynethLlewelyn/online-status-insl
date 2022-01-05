@@ -69,7 +69,7 @@ if ( ! class_exists( 'WP_Http' ) ) {
 }
 
 // Include the two classes we're using.
-require_once 'class-online-status-insl-list-table.php';
+require_once 'class-online-status-insl.php';
 require_once 'class-online-status-insl-list-table.php';
 
 /**
@@ -90,7 +90,7 @@ if ( ! function_exists( 'sanitise_avatarname' ) ) {
 		$sanitised = rawurlencode( strtolower( strtr( $avatar_name, ' ', '.' ) ) );
 		// Check if 'Resident' is appended!
 		$match = stripos( $sanitised, 'Resident' );
-		if ( false === $match ) {
+		if ( false !== $match ) {
 			// Return everything up to the character before the dot.
 			return substr( $sanitised, 0, $match - 1 );
 		}
@@ -106,7 +106,7 @@ if ( ! function_exists( 'set_bold' ) ) {
 	 *  @return string is the wrapped text.
 	 */
 	function set_bold( $text = '' ) {
-		return '<strong>' . esc_attr__( $text, 'online-status-insl' ) . '</strong>';
+		return '<strong>' . esc_attr( $text ) . '</strong>';
 	}
 }
 
@@ -217,7 +217,7 @@ function online_status_insl_menu() {
 	?>
 	<textarea name="osinsl-lsl-script" cols="120" rows="12" readonly style="font-family: monospace;">
 // Code to show online status and let it be retrieved by external calls.
-// © 2011-<?php echo date( 'Y' ); ?> by Gwyneth Llewelyn. Most rights reserved.
+// © 2011-<?php echo date( 'Y' ); // phpcs:ignore ?> by Gwyneth Llewelyn. Most rights reserved.
 // Global Variables
 key avatar;
 string avatarName;
@@ -230,10 +230,10 @@ key dateBornStatusRequest;
 key displayNameStatusRequest;
 key registrationResponse;		// to send the PermURL to the blog
 key webResponse;				// to send periodic updates to the blog
-string objectVersion = "<?php esc_attr_e( Online_Status_InSL::$plugin_version ); ?>";
+string objectVersion = "<?php echo esc_attr( Online_Status_InSL::$plugin_version ); ?>";
 
 // modified by SignpostMarv
-string http_host = "<?php esc_attr_e( $_SERVER['HTTP_HOST'] ); ?>";
+string http_host = "<?php echo esc_url( $_SERVER['HTTP_HOST'] ?? '<<unknown>>' ); ?>";
 
 default
 {
@@ -307,7 +307,7 @@ default
 					"&dateBorn=" + dateBorn +
 					"&status=" + llEscapeURL(onlineStatus);
 				// llOwnerSay("DEBUG: Message to send to blog is: " + message);
-				registrationResponse = llHTTPRequest("<?php esc_attr( request_protocol() ); ?>://" + http_host + "/wp-content/plugins/online-status-insl/save-channel.php",
+				registrationResponse = llHTTPRequest("<?php echo esc_attr( request_protocol() ); ?>://" + http_host + "/wp-content/plugins/online-status-insl/save-channel.php",
 				[HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/x-www-form-urlencoded"],
 				message);
 			}
@@ -374,7 +374,7 @@ default
 				"&status=" + llEscapeURL(onlineStatus) +
 				"&PermURL=" + llEscapeURL(body);
 			// llOwnerSay("DEBUG: Message to send to blog is: " + message);
-			registrationResponse = llHTTPRequest("<?php esc_attr_e( request_protocol() ); ?>://" + http_host + "/wp-content/plugins/online-status-insl/save-channel.php",
+			registrationResponse = llHTTPRequest("<?php echo esc_attr( request_protocol() ); ?>://" + http_host + "/wp-content/plugins/online-status-insl/save-channel.php",
 				[HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/x-www-form-urlencoded"],
 				message);
 			llSetTimerEvent(60.0);	// call a timer event every 60 seconds.
@@ -423,7 +423,7 @@ default
 	<div class="wrap"> <!-- List of avatars being tracked. -->
 		<h2><?php esc_attr_e( 'Current avatar(s) being tracked', 'online-status-insl' ); ?>:</h2>
 		<form method="post">
-			<input type="hidden" name="page" value="<?php esc_attr_e( $_REQUEST['page'] ) ?: 1; ?>">
+			<input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ?? 1 ); ?>">
 		<?php $my_list_table->display(); ?>
 		</form>
 		<div class="clear"></div>
@@ -481,7 +481,7 @@ function online_status_insl_register_settings() {
  * @return string               Shortcode output.
  */
 function online_status_insl_shortcode( $atts = array(), $content = null, $tag = '' ) {
-	// error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true));
+	// error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true)); // debug.
 	extract(
 		shortcode_atts(
 			array(
@@ -509,7 +509,7 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 	$return_value =
 		"<span class='osinsl-shortcode' id='osinsl-shortcode-" . esc_attr( $os_insl_id ) . "'>";
 	?>
-<!-- Avatar Name or Object Key: "<?php esc_attr_e( $os_insl_id ); ?>" -->
+<!-- Avatar Name or Object Key: "<?php echo esc_attr( $os_insl_id ); ?>" -->
 	<?php
 	if ( ! empty( $settings ) && count( $settings ) > 0 ) {
 		// did we find anything at all??
@@ -639,8 +639,8 @@ function online_status_insl_shortcodes_init() {
  *  Main action/filter calls for this plugin.
  */
 
-// error_log( 'Entering action/hook area...' );
-// add_filter( 'load_textdomain_mofile', 'online_status_insl_load_textdomain_mofile', 10, 2 );
+// error_log( 'Entering action/hook area...' ); // debug.
+// add_filter( 'load_textdomain_mofile', 'online_status_insl_load_textdomain_mofile', 10, 2 ); // deprecated.
 add_action( 'init', 'online_status_insl_load_textdomain' ); // load translations here.
 add_action( 'widgets_init', 'online_status_insl_widget_init' );
 add_action( 'admin_menu', 'online_status_insl_admin_menu_options' );
@@ -648,6 +648,6 @@ register_activation_hook( __FILE__, 'online_status_insl_widget_activate' );
 register_deactivation_hook( __FILE__, 'online_status_insl_widget_deactivate' );
 add_action( 'admin_init', 'online_status_insl_register_settings' );
 add_action( 'init', 'online_status_insl_shortcodes_init' );
-// error_log( 'Leaving action/hook area...' );
+// error_log( 'Leaving action/hook area...' ); // debug.
 
 $wpdpd = new Online_Status_InSL( 'online-status-insl', 'Online Status inSL' );

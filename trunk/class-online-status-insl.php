@@ -103,13 +103,13 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			// does this widget have an associated in-world object?
 			if ( empty( $settings ) || empty( $settings[ $object_key ]['Status'] ) ) {
 			?>
-		<span class="osinsl-unconfigured"><?php esc_attr_e( $instance['unconfigured'] ); ?></span>
+		<span class="osinsl-unconfigured"><?php echo esc_attr( $instance['unconfigured'] ); ?></span>
 			<?php
 			} else {
 			?>
-		<span class="osinsl-before-status"><?php esc_attr_e( $instance['before_status'] ); ?></span>
-		<span class="osinsl-status"><?php esc_attr_e( $settings[ $object_key ]['Status'] ); ?></span>
-		<span class="osinsl-after-status"><?php esc_attr_e( $instance['after_status'] ); ?></span>
+		<span class="osinsl-before-status"><?php echo esc_attr( $instance['before_status'] ); ?></span>
+		<span class="osinsl-status"><?php echo esc_attr( $settings[ $object_key ]['Status'] ); ?></span>
+		<span class="osinsl-after-status"><?php echo esc_attr( $instance['after_status'] ); ?></span>
 	</div>
 	<?php
 			}
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 *  @phan-return array{}
 		 */
 		public function update( $new_instance, $old_instance ) {
-			$instance = $old_instance;
+			$instance                    = $old_instance;
 			$instance['title']           = strip_tags( $new_instance['title'] );
 			$instance['avatar_name']     = strip_tags( $new_instance['avatar_name'] ); // probably not needed...
 			$instance['object_key']      = strip_tags( $new_instance['object_key'] );
@@ -180,23 +180,23 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				$instance['avatar_name'] = $settings[ $instance['object_key'] ]['avatarName'];
 			}
 			// try to fill in something...
-?>
+			?>
 <p>
-	<label for="<?php esc_attr_e( $this->get_field_id( 'title' ), 'online-status-insl' ); ?>">
-		<?php _e( 'Title', 'online-status-insl' ); ?>:
+	<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
+			<?php esc_attr_e( 'Title', 'online-status-insl' ); ?>:
 		<input class="widefat"
-			id="<?php esc_attr_e( $this->get_field_id( 'title' ), 'online-status-insl' ); ?>"
-			name="<?php esc_attr_e( $this->get_field_name( 'title' ), 'online-status-insl' ); ?>"
+			id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
 			type="text"
-			value="<?php esc_attr_e( $title, 'online-status-insl' ); ?>"
+			value="<?php echo esc_attr( $title ); ?>"
 		/>
 	</label>
-	<label for="<?php esc_attr_e( $this->get_field_id('object_key' ), 'online-status-insl' ); ?>">
+	<label for="<?php echo esc_attr( $this->get_field_id( 'object_key' ) ); ?>">
 			<?php esc_attr_e( 'Avatar Name', 'online-status-insl' ); ?>:
 	</label>
 	<select class="widefat"
-		id="<?php esc_attr_e( $this->get_field_id( 'object_key' ), 'online-status-insl' ); ?>"
-		name="<?php esc_attr_e( $this->get_field_name( 'object_key' ), 'online-status-insl' ); ?>" style="width:100%;">
+		id="<?php echo esc_attr( $this->get_field_id( 'object_key' ) ); ?>"
+		name="<?php echo esc_attr( $this->get_field_name( 'object_key' ) ); ?>" style="width:100%;">
 			<?php
 			// now loop through all avatar names!
 
@@ -216,9 +216,9 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		<option <?php if ( $one_tracked_object['objectKey'] == $instance['object_key'] ) : ?>
 			selected="selected"
 				<?php endif; ?>
-			value="<?php esc_attr_e( $one_tracked_object['objectKey'] ); ?>">
+			value="<?php echo esc_attr( $one_tracked_object['objectKey'] ); ?>">
 					<?php
-					esc_attr(
+					echo esc_attr(
 						wp_sprintf(
 							'%s [%s (%d,%d,%d)]',
 							$one_tracked_object['avatarDisplayName'],
@@ -240,45 +240,45 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			} // end empty settings.
 					?>
 	</select>
-	<label for="<?php esc_attr_e( $this->get_field_id( 'before_status' ), 'online-status-insl' ); ?>">
+	<label for="<?php echo esc_attr( $this->get_field_id( 'before_status' ) ); ?>">
 		<?php esc_attr_e( 'Before status message', 'online-status-insl' ); ?>:
 		<input class="widefat"
-			id="<?php esc_attr_e( $this->get_field_id( 'before_status' ), 'online-status-insl' ); ?>"
-			name="<?php esc_attr_e(	$this->get_field_name( 'before_status' ), 'online-status-insl' ); ?>" type="text"
-			value="<?php esc_attr_e( $instance['before_status'], 'online-status-insl' ); ?>"
+			id="<?php echo esc_attr( $this->get_field_id( 'before_status' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'before_status' ) ); ?>" type="text"
+			value="<?php echo esc_attr( $instance['before_status'] ); ?>"
 		/>
 	</label>
-	<label for="<?php esc_attr_e( $this->get_field_id( 'after_status' ), 'online-status-insl' ); ?>">
+	<label for="<?php echo esc_attr( $this->get_field_id( 'after_status' ) ); ?>">
 		<?php esc_attr_e( 'After status message', 'online-status-insl' ); ?>:
 		<input class="widefat"
-			id="<?php esc_attr_e( $this->get_field_id( 'after_status' ), 'online-status-insl' ); ?>"
-			name="<?php esc_attr_e( $this->get_field_name( 'after_status' ), 'online-status-insl' ); ?>" type="text"
-			value="<?php esc_attr_e( $instance['after_status'], 'online-status-insl' ); ?>"
+			id="<?php echo esc_attr( $this->get_field_id( 'after_status' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'after_status' ) ); ?>" type="text"
+			value="<?php echo esc_attr( $instance['after_status'] ); ?>"
 		/>
 	</label>
-	<label for="<?php esc_attr_e( $this->get_field_id( 'having_problems' ), 'online-status-insl' ); ?>">
+	<label for="<?php echo esc_attr( $this->get_field_id( 'having_problems' ) ); ?>">
 		<?php esc_attr_e( 'Error message when communicating with SL', 'online-status-insl' ); ?>:
 		<input class="widefat"
-			id="<?php esc_attr_e( $this->get_field_id( 'having_problems' ), 'online-status-insl' ); ?>"
-			name="<?php esc_attr_e(	$this->get_field_name( 'having_problems' ), 'online-status-insl' ); ?>"
+			id="<?php echo esc_attr( $this->get_field_id( 'having_problems' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'having_problems' ) ); ?>"
 			type="text"
-			value="<?php esc_attr_e( $instance['having_problems'], 'online-status-insl' ); ?>"
+			value="<?php echo esc_attr( $instance['having_problems'], 'online-status-insl' ); ?>"
 		/>
 	</label>
-	<label for="<?php esc_attr_e( $this->get_field_id( 'unconfigured' ), 'online-status-insl' ); ?>">
+	<label for="<?php esc_attr( $this->get_field_id( 'unconfigured' ) ); ?>">
 		<?php esc_attr_e( 'Widget not configured message', 'online-status-insl' ); ?>:
 		<input class="widefat"
-			id="<?php esc_attr_e( $this->get_field_id( 'unconfigured' ), 'online-status-insl' ); ?>"
-			name="<?php esc_attr_e( $this->get_field_name( 'unconfigured' ), 'online-status-insl' ); ?>"
+			id="<?php echo esc_attr( $this->get_field_id( 'unconfigured' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'unconfigured' ) ); ?>"
 			type="text"
-			value="<?php esc_attr_e( $instance['unconfigured'], 'online-status-insl' ); ?>"
+			value="<?php echo esc_attr( $instance['unconfigured'] ); ?>"
 		/>
 	</label>
-	<label for="<?php esc_attr_e( $this->get_field_id( 'profile_picture' ), 'online-status-insl' ); ?>">
+	<label for="<?php echo esc_attr( $this->get_field_id( 'profile_picture' ) ); ?>">
 		<?php esc_attr_e( 'Profile picture?', 'online-status-insl' ); ?>
 	</label>
-	<select id="<?php esc_attr_e( $this->get_field_id( 'profile_picture' ), 'online-status-insl' ); ?>"
-		name="<?php esc_attr_e( $this->get_field_name( 'profile_picture' ), 'online-status-insl' ); ?>" class="widefat">
+	<select id="<?php echo esc_attr( $this->get_field_id( 'profile_picture' ) ); ?>"
+		name="<?php echo esc_attr( $this->get_field_name( 'profile_picture' ) ); ?>" class="widefat">
 		<option <?php if ( 'none' === $instance['profile_picture'] ) {
 			echo 'selected="selected"';
 		} ?>>none</option>

@@ -155,7 +155,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						if ( '200' === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
-								sprintf(
+								wp_sprintf(
 									// translators: first string is object name; second string is a reply from the in-world object.
 									__( 'Object "%1\$s" replied: "%2\$s"', 'online-status-insl' ),
 									$this->internal_settings[ $ping_tracking_object ]['objectName'],
@@ -212,7 +212,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 					} else {
 						self::emit_status_message(
 							'error',
-							sprintf(
+							wp_sprintf(
 								// translators: placeholder is (possibly) an avatar name.
 								__(
 									'No online status indicators for %s found',
@@ -278,7 +278,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						if ( '200' === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
-								sprintf(
+								wp_sprintf(
 									// translators: first string is the object name; second string is a message coming from that object in SL.
 									__( 'Object "%1\$s" replied: "%2\$s"', 'online-status-insl' ),
 									$this->internal_settings[ $reset_tracking_object ]['objectName'],
@@ -337,7 +337,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						if ( '200' === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
-								sprintf(
+								wp_sprintf(
 									// translators: first string is the object name; second string is a message coming from that object in SL.
 									__( 'Object "%1\$s" replied: "%2\$s"', 'online-status-insl' ),
 									$this->internal_settings[ $die_tracking_object ]['objectName'],
@@ -388,7 +388,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			No valid parameters for bulk actions! But this seems to be normal!
 
 			// else {
-			// 	// self::emit_status_message('error', __('No bulk actions to process', online-status-insl'));
+			// // self::emit_status_message('error', __('No bulk actions to process', online-status-insl'));
 			}
 			*/
 		} // end function process_bulk_actions
@@ -400,7 +400,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *  @return string HTML-formatted code for the correspondent item.
 		 */
 		public function column_cb( $item ) {
-			return sprintf(
+			return wp_sprintf(
 				'<input type="checkbox" name="deletedStatusIndicators[]" value="%s" />',
 				esc_attr( $item['objectKey'] )
 			);
@@ -445,28 +445,28 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 
 			// This column will also have options to affect the in-world object.
 			$actions = array(
-				'ping'   => sprintf(
+				'ping'   => wp_sprintf(
 					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'ping',
 					$object_key,
 					__( 'Ping', 'online-status-insl' )
 				),
-				'delete' => sprintf(
+				'delete' => wp_sprintf(
 					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'delete',
 					$object_key,
 					__( 'Delete', 'online-status-insl' )
 				),
-				'reset'  => sprintf(
+				'reset'  => wp_sprintf(
 					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'reset',
 					$object_key,
 					__( 'Reset', 'online-status-insl' )
 				),
-				'die'    => sprintf(
+				'die'    => wp_sprintf(
 					'<a href="?page=%s&action=%s&deletedStatusIndicators=%s">%s</a>',
 					$page,
 					'die',
@@ -506,7 +506,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			$coords        = trim( esc_attr( $item['objectLocalPosition'] ), '() \t\n\r' );
 			$xyz           = explode( ',', $coords );
 
-			return sprintf(
+			return wp_sprintf(
 				'<a href="https://maps.secondlife.com/secondlife/%s/%F/%F/%F?title=%s&amp;msg=%s&amp;img=%s" target="_blank">%s (%d,%d,%d)</a>',
 				esc_attr( $region_name ),
 				$xyz[0],
@@ -580,8 +580,8 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		public function column_Status( $item ) {
 			// Just some fancy colouring. Note that only online/offline are valid status. If the object
 			// breaks but still communicates, it might send a different status (rare!).
-			$item_status    = esc_attr( $item['Status'] );	// sanitise it first!
-			$obs_css_colour = 'DimGray';	// colour by default for unknown status.
+			$item_status    = esc_attr( $item['Status'] ); // sanitise it first!
+			$obs_css_colour = 'DimGray'; // colour by default for unknown status.
 			if ( 'online' === $item_status ) {
 				$obs_css_colour = 'DarkGreen';
 			} elseif ( 'offline' === $item_status ) {
@@ -626,7 +626,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *  @return string[] an array with the names of the sortable columns.
 		 *  @phan-return array(string, string)
 		 */
-		private function get_sortable_columns() {
+		protected function get_sortable_columns() {
 			// Maybe other columns should be sorted too. These are the more useful ones.
 			$sortable_columns = array(
 				'avatarDisplayName' => array( 'avatarDisplayName', false ),
@@ -664,7 +664,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *
 		 *  @return void
 		 */
-		private function prepare_items() {
+		public function prepare_items() {
 			$columns               = $this->get_columns();
 			$hidden                = array();
 			$sortable              = $this->get_sortable_columns();
@@ -692,8 +692,8 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *
 		 *  @return void
 		 */
-		private function no_items() {
+		public function no_items() {
 			esc_html_e( 'No avatars are being tracked.', 'online-status-insl' );
 		}
 	} // end class Online_Status_InSL_List_Table
-} // end if !class_exists( 'Online_Status_InSL_List_Table' ).
+} // end if class_exists
