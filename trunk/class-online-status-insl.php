@@ -72,7 +72,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 
 			// Get list of tracked avatars from the WordPress settings.
 
-			$settings = maybe_unserialize( get_option( 'Online_Status_InSL_settings' ) );
+			$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 			// Objects in settings are now indexed by object key.
 			$object_key = $instance['object_key'] ?? NULL_KEY;
@@ -90,44 +90,45 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				$avatar_name_sanitised = sanitise_avatarname( $avatar_display_name );
 			?>
 		<a href="https://my.secondlife.com/<?php echo $avatar_name_sanitised; ?>" target="_blank">
-			<img class="osinsl-profile-picture align<?php echo esc_attr( $instance['profile_picture'] ); ?>"
-				src="https://my-secondlife.s3.amazonaws.com/users/<?php echo $avatar_name_sanitised; ?>/thumb_sl_image.png"
-				width="80" height="80"
-				alt="<?php echo esc_attr( $avatar_display_name ); ?>"
-				title="<?php echo esc_attr( $avatar_display_name ); ?>" valign="top">
+		<img class="osinsl-profile-picture align<?php echo esc_attr( $instance['profile_picture'] ); ?>"
+			src="https://my-secondlife.s3.amazonaws.com/users/<?php echo $avatar_name_sanitised; ?>/thumb_sl_image.png"
+			width="80" height="80"
+			alt="<?php echo esc_attr( $avatar_display_name ); ?>"
+			title="<?php echo esc_attr( $avatar_display_name ); ?>" valign="top">
 		</a>
 		<br />
-		<?php
-			} // if picture == none, do not put anything here
+			<?php
+			} // if picture == none, do not put anything here.
 
 			// does this widget have an associated in-world object?
 			if ( empty( $settings ) || empty( $settings[ $object_key ]['Status'] ) ) {
-		?>
+			?>
 		<span class="osinsl-unconfigured"><?php esc_attr_e( $instance['unconfigured'] ); ?></span>
-		<?php
+			<?php
 			} else {
-		?>
+			?>
 		<span class="osinsl-before-status"><?php esc_attr_e( $instance['before_status'] ); ?></span>
 		<span class="osinsl-status"><?php esc_attr_e( $settings[ $object_key ]['Status'] ); ?></span>
 		<span class="osinsl-after-status"><?php esc_attr_e( $instance['after_status'] ); ?></span>
 	</div>
-<?php		}
-			// return to widget handling code
+	<?php
+			}
+			// return to widget handling code.
 			echo $after_widget ?? '';
-		} // end function widget()
+		} // end function widget
 
 		/**
-		  *  The WP core calls this method when the widget gets updated by the user.
-		  *
-		  *  @param string[] $new_instance (one wonders why this gets passed at all).
-		  *  @param string[] $old_instance
-		  *  @return string[] with the new instance.
+		 *  The WP core calls this method when the widget gets updated by the user.
+		 *
+		 *  @param string[] $new_instance (one wonders why this gets passed at all).
+		 *  @param string[] $old_instance (the widget we're currently modifying).
+		 *  @return string[] with the new instance.
 		 *  @phan-return array{}
-		  */
+		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = $old_instance;
 			$instance['title']           = strip_tags( $new_instance['title'] );
-			$instance['avatar_name']     = strip_tags( $new_instance['avatar_name'] ); // probably not needed
+			$instance['avatar_name']     = strip_tags( $new_instance['avatar_name'] ); // probably not needed...
 			$instance['object_key']      = strip_tags( $new_instance['object_key'] );
 			$instance['before_status']   = strip_tags( $new_instance['before_status'] );
 			$instance['after_status']    = strip_tags( $new_instance['after_status'] );
@@ -135,7 +136,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			$instance['unconfigured']    = strip_tags( $new_instance['unconfigured'] );
 			$instance['profile_picture'] = strip_tags( $new_instance['profile_picture'] );
 			return $instance;
-		} // end public function update()
+		} // end public function update
 
 		/**
 		 *  Back end, the interface shown in the _Appearance -> Widgets_ administration interface.
@@ -144,33 +145,31 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 *  @phan-param array{string, string} $instance
 		 *  @return void
 		 */
-		public function form( $instance )
-		{
+		public function form( $instance ) {
 			$defaults = array(
-				'title'             => __( 'Second Life Online Status', 'online-status-insl' ),
-				'avatar_name'       => '', // probably not needed, we get this from the settings.
-				'object_key'        => NULL_KEY,
-				'before_status'     => __( 'I am ', 'online-status-insl' ),
-				'after_status'      => __( ' in Second Life.', 'online-status-insl' ),
-				'having_problems'   => __(
+				'title'           => __( 'Second Life Online Status', 'online-status-insl' ),
+				'avatar_name'     => '', // probably not needed, we get this from the settings.
+				'object_key'      => NULL_KEY,
+				'before_status'   => __( 'I am ', 'online-status-insl' ),
+				'after_status'    => __( ' in Second Life.', 'online-status-insl' ),
+				'having_problems' => __(
 					'having problems contacting RPC server...',
 					'online-status-insl'
 				),
-				'unconfigured'      => __(
+				'unconfigured'    => __(
 					'Please set up your in-world object first',
 					'online-status-insl'
 				),
-				'profile_picture'   => __( 'none', 'online-status-insl' ),
+				'profile_picture' => __( 'none', 'online-status-insl' ),
 			);
 
 			$instance = wp_parse_args( (array) $instance, $defaults );
-
-			$title    = strip_tags( $instance['title'] );
+			$title    = wp_strip_all_tags( $instance['title'] );
 
 			// Get the saved options; this will allow us to choose avatar names from
 			// registered in-world objects (which are indexed by object key)
 			// and assign this widget to one avatar name.
-			$settings = maybe_unserialize( get_option( 'Online_Status_InSL_settings' ) );
+			$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 			// The obvious problem is selecting avatars that have the same name on different grids;
 			// thus we try to get the location as well, to help the user.
@@ -178,69 +177,71 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				empty( $instance['avatar_name'] ) &&
 				( ! empty( $instance['object_key'] ) && NULL_KEY !== $instance['object_key'] )
 			) {
-				$instance['avatar_name'] = $settings[$instance['object_key']]['avatarName'];
+				$instance['avatar_name'] = $settings[ $instance['object_key'] ]['avatarName'];
 			}
 			// try to fill in something...
 ?>
 <p>
 	<label for="<?php esc_attr_e( $this->get_field_id( 'title' ), 'online-status-insl' ); ?>">
-		<?php _e('Title', 'online-status-insl'); ?>:
+		<?php _e( 'Title', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php esc_attr_e( $this->get_field_id( 'title' ), 'online-status-insl' ); ?>"
-			name="<?php esc_attr_e( $this->get_field_name( 'title' ),	'online-status-insl' ); ?>"
+			name="<?php esc_attr_e( $this->get_field_name( 'title' ), 'online-status-insl' ); ?>"
 			type="text"
 			value="<?php esc_attr_e( $title, 'online-status-insl' ); ?>"
 		/>
 	</label>
 	<label for="<?php esc_attr_e( $this->get_field_id('object_key' ), 'online-status-insl' ); ?>">
-		<?php _e( 'Avatar Name', 'online-status-insl' ); ?>:
+			<?php esc_attr_e( 'Avatar Name', 'online-status-insl' ); ?>:
 	</label>
 	<select class="widefat"
-		id="<?php esc_attr_e( $this->get_field_id( 'object_key' ), 'online-status-insl') ; ?>"
+		id="<?php esc_attr_e( $this->get_field_id( 'object_key' ), 'online-status-insl' ); ?>"
 		name="<?php esc_attr_e( $this->get_field_name( 'object_key' ), 'online-status-insl' ); ?>" style="width:100%;">
-	<?php // now loop through all avatar names!
+			<?php
+			// now loop through all avatar names!
 
-	if ( ! empty( $settings ) ) {
-		foreach ( $settings as $oneTrackedObject ) {
-			// parse name of the region and coordinates to help to identify tracked object.
-			$regionName = substr(
-				$oneTrackedObject['objectRegion'],
-				0,
-				strpos( $oneTrackedObject['objectRegion'], '(' ) - 1
-			);
-			$coords = trim( $oneTrackedObject['objectLocalPosition'], '() \t\n\r' );
-			$xyz    = explode( ',', $coords );
+			if ( ! empty( $settings ) ) {
+				foreach ( $settings as $one_tracked_object ) {
+					// parse name of the region and coordinates to help to identify tracked object.
+					$region_name = substr(
+						$one_tracked_object['objectRegion'],
+						0,
+						strpos( $one_tracked_object['objectRegion'], '(' ) - 1
+					);
+					$coords      = trim( $one_tracked_object['objectLocalPosition'], '() \t\n\r' );
+					$xyz         = explode( ',', $coords );
 
-			// Output a dropbox option with 'Avatar Name [Region (x,y,z)]'.
-?>
-		<option <?php if ( $oneTrackedObject['objectKey'] == $instance['object_key'] ) : ?>
+					// Output a dropbox option with 'Avatar Name [Region (x,y,z)]'.
+			?>
+		<option <?php if ( $one_tracked_object['objectKey'] == $instance['object_key'] ) : ?>
 			selected="selected"
 				<?php endif; ?>
-			value="<?php esc_attr_e( $oneTrackedObject['objectKey'] ); ?>">
-			<?php esc_attr_e(
-				sprintf(
-					"%s [%s (%d,%d,%d)]",
-					$oneTrackedObject['avatarDisplayName'],
-					$regionName,
-					$xyz[0],
-					$xyz[1],
-					$xyz[2]
-				)
-			); ?>
+			value="<?php esc_attr_e( $one_tracked_object['objectKey'] ); ?>">
+					<?php
+					esc_attr(
+						wp_sprintf(
+							'%s [%s (%d,%d,%d)]',
+							$one_tracked_object['avatarDisplayName'],
+							$region_name,
+							$xyz[0],
+							$xyz[1],
+							$xyz[2]
+						)
+					);
+					?>
 		</option>
-<?php
-		}
-	}
-	// never configured before; moved to have a 'disabled' setting.
-	else {
-?>
-		<option disabled="disabled">--<?php _e(	'Unconfigured',	'online-status-insl'  ); ?>--</option>
-<?php
-	}
-?>
+					<?php
+				}
+			} else {
+				// never configured before; moved to have a 'disabled' setting.
+					?>
+		<option disabled="disabled">--<?php esc_attr_e( 'Unconfigured', 'online-status-insl' ); ?>--</option>
+					<?php
+			} // end empty settings.
+					?>
 	</select>
 	<label for="<?php esc_attr_e( $this->get_field_id( 'before_status' ), 'online-status-insl' ); ?>">
-		<?php _e('Before status message', 'online-status-insl'); ?>:
+		<?php esc_attr_e( 'Before status message', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php esc_attr_e( $this->get_field_id( 'before_status' ), 'online-status-insl' ); ?>"
 			name="<?php esc_attr_e(	$this->get_field_name( 'before_status' ), 'online-status-insl' ); ?>" type="text"
@@ -248,7 +249,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php esc_attr_e( $this->get_field_id( 'after_status' ), 'online-status-insl' ); ?>">
-		<?php _e( 'After status message', 'online-status-insl' ); ?>:
+		<?php esc_attr_e( 'After status message', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php esc_attr_e( $this->get_field_id( 'after_status' ), 'online-status-insl' ); ?>"
 			name="<?php esc_attr_e( $this->get_field_name( 'after_status' ), 'online-status-insl' ); ?>" type="text"
@@ -256,7 +257,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php esc_attr_e( $this->get_field_id( 'having_problems' ), 'online-status-insl' ); ?>">
-		<?php _e( 'Error message when communicating with SL', 'online-status-insl' ); ?>:
+		<?php esc_attr_e( 'Error message when communicating with SL', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php esc_attr_e( $this->get_field_id( 'having_problems' ), 'online-status-insl' ); ?>"
 			name="<?php esc_attr_e(	$this->get_field_name( 'having_problems' ), 'online-status-insl' ); ?>"
@@ -265,34 +266,34 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php esc_attr_e( $this->get_field_id( 'unconfigured' ), 'online-status-insl' ); ?>">
-		<?php _e( 'Widget not configured message', 'online-status-insl' ); ?>:
+		<?php esc_attr_e( 'Widget not configured message', 'online-status-insl' ); ?>:
 		<input class="widefat"
-			id="<?php esc_attr_e( $this->get_field_id( 'unconfigured' ), 'online-status-insl'	); ?>"
+			id="<?php esc_attr_e( $this->get_field_id( 'unconfigured' ), 'online-status-insl' ); ?>"
 			name="<?php esc_attr_e( $this->get_field_name( 'unconfigured' ), 'online-status-insl' ); ?>"
 			type="text"
 			value="<?php esc_attr_e( $instance['unconfigured'], 'online-status-insl' ); ?>"
 		/>
 	</label>
 	<label for="<?php esc_attr_e( $this->get_field_id( 'profile_picture' ), 'online-status-insl' ); ?>">
-		<?php _e( 'Profile picture?', 'online-status-insl' ); ?>
+		<?php esc_attr_e( 'Profile picture?', 'online-status-insl' ); ?>
 	</label>
 	<select id="<?php esc_attr_e( $this->get_field_id( 'profile_picture' ), 'online-status-insl' ); ?>"
 		name="<?php esc_attr_e( $this->get_field_name( 'profile_picture' ), 'online-status-insl' ); ?>" class="widefat">
-		<option <?php if ( 'none' == $instance['profile_picture'] ) {
+		<option <?php if ( 'none' === $instance['profile_picture'] ) {
 			echo 'selected="selected"';
 		} ?>>none</option>
-		<option <?php if ( 'center' == $instance['profile_picture'] ) {
+		<option <?php if ( 'center' === $instance['profile_picture'] ) {
 			echo 'selected="selected"';
 		} ?>>center</option>
-		<option <?php if ( 'left' == $instance['profile_picture'] ) {
+		<option <?php if ( 'left' === $instance['profile_picture'] ) {
 			echo 'selected="selected"';
 		} ?>>left</option>
-		<option <?php if ( 'right' == $instance['profile_picture'] ) {
+		<option <?php if ( 'right' === $instance['profile_picture'] ) {
 			echo 'selected="selected"';
 		} ?>>right</option>
 	</select>
 </p>
-<?php
-		}	// end function form()
-	}	// end class Online_Status_InSL
-}	// end if class_exists
+			<?php
+		} // end function form.
+	} // end class Online_Status_InSL.
+} // end if class_exists.

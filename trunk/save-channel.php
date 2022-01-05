@@ -25,10 +25,10 @@ if ( empty( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] ) ) {
 require_once '../../../wp-blog-header.php';
 
 if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
-	$settings = maybe_unserialize( get_option( 'Online_Status_InSL_settings' ) );
+	$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 	// Change settings just for this OBJECT.
-	/* $avatar_legacy_name = $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME']; */
+	// $avatar_legacy_name = $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'];
 	if ( ! empty( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_KEY'] ) ) {
 		$object_key = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OBJECT_KEY'] );
 	}
@@ -38,7 +38,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		$settings[ $object_key ]['avatarDisplayName'] = wp_unslash( $_REQUEST['avatar_name'] ?? '' );
 		$settings[ $object_key ]['timeStamp']         = time();
 
-		update_option( 'Online_Status_InSL_settings', $settings );
+		update_option( 'online_status_insl_settings', $settings );
 
 		header( 'HTTP/1.0 200 OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
@@ -56,8 +56,9 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		esc_attr_e( ( $_REQUEST['avatar_name'] . ' is not yet registered!' ), 'online-status-insl' );
 	}
 } else {
-	$perm_url = wp_unslash( $_REQUEST['PermURL'] );
-	if ( ! empty( $perm_url ) && '' !== $perm_url ) {
+	// clean up with esc_url, but _avoid_ the 'display' context which will mess everything up (gwyneth 202220105).
+	$perm_url = esc_url( $_REQUEST['PermURL'], null, 'none' );
+	if ( ! empty( $perm_url ) ) {
 		$avatar_key            = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OWNER_KEY'] );
 		$avatar_legacy_name    = wp_unslash( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] );
 		$avatar_display_name   = wp_unslash( $_REQUEST['avatar_name'] );
@@ -69,7 +70,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 
 		// Now get the whole serialised array!
 
-		$settings = maybe_unserialize( get_option( 'Online_Status_InSL_settings' ) );
+		$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 		$settings[ $object_key ] = array(
 			'avatarDisplayName'   => $avatar_display_name,
@@ -84,22 +85,21 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 			'timeStamp'           => time(),
 		);
 
-		update_option( 'Online_Status_InSL_settings', $settings );
+		update_option( 'online_status_insl_settings', $settings );
 
 		header( 'HTTP/1.0 200 OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
 		printf(
 			// translators: URL, avatar display name, object name, object key.
 			esc_attr__( 'PermURL %1$s saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
-			$settings[ $object_key ]['PermURL'],
+			esc_url( $settings[ $object_key ]['PermURL'], null, 'none' ),
 			$settings[ $object_key ]['avatarDisplayName'],
 			$settings[ $object_key ]['objectName'],
 			$settings[ $object_key ]['object_key']
 		);
+	} else {
+		header( 'HTTP/1.0 405 Method Not Allowed' );
+		header( 'Content-type: text/plain; charset=utf-8' );
+		esc_attr_e( 'No PermURL specified on registration', 'online-status-insl' );
 	}
-} else {
-	header( 'HTTP/1.0 405 Method Not Allowed' );
-	header( 'Content-type: text/plain; charset=utf-8' );
-	esc_attr_e( 'No PermURL specified on registration', 'online-status-insl' );
 }
-

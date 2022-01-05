@@ -58,7 +58,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 
 			// Get the plugin settings (table with all entries) and store it internally.
 			$this->internal_settings = maybe_unserialize(
-				get_option( 'Online_Status_InSL_settings' )
+				get_option( 'online_status_insl_settings' )
 			);
 		}
 
@@ -218,6 +218,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 									'No online status indicators for %s found',
 									'online-status-insl'
 								),
+								// phpcs:ignore WordPress.PHP.DevelopmentFunctions
 								print_r( $process_ids, true )
 							)
 						);
@@ -226,7 +227,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 					// update options with new settings; gets serialized automatically.
 					if (
 						! update_option(
-							'Online_Status_InSL_settings',
+							'online_status_insl_settings',
 							$this->internal_settings
 						)
 					) {
@@ -366,7 +367,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 					}
 					// Objects might have been deleted, so now it's time to purge them from the WP settings.
 					if ( ! update_option(
-						'Online_Status_InSL_settings',
+						'online_status_insl_settings',
 						$this->internal_settings
 					)
 					) {
@@ -556,7 +557,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						'1.4.2',
 						'1.5.0',
 					),
-					true	// strict checking required in WordPress (gwyneth 20220104).
+					true // strict checking required in WordPress (gwyneth 20220104).
 				)
 			) {
 				$obv_css_colour = 'DarkGoldenRod';
@@ -671,7 +672,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 
 			// $settings might have changed in the mean time due to bulk actions.
 			$this->internal_settings = maybe_unserialize(
-				get_option( 'Online_Status_InSL_settings' )
+				get_option( 'online_status_insl_settings' )
 			);
 
 			// now process bulk actions!
@@ -695,4 +696,4 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			esc_html_e( 'No avatars are being tracked.', 'online-status-insl' );
 		}
 	} // end class Online_Status_InSL_List_Table
-} // end if !class_exists( 'Online_Status_InSL_List_Table' )
+} // end if !class_exists( 'Online_Status_InSL_List_Table' ).

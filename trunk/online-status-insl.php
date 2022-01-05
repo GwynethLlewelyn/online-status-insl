@@ -197,7 +197,9 @@ function online_status_insl_menu() {
 	?>
 	</p>
 	<hr />
-	<?php // Figure out plugin version; if we have it already, skip this check (since it's resource-intensive).
+
+	<?php
+	// Figure out plugin version; if we have it already, skip this check (since it's resource-intensive).
 	if ( ! Online_Status_InSL::$plugin_version ) {
 		$plugin_data                        = get_file_data(
 			__FILE__,
@@ -228,7 +230,7 @@ key dateBornStatusRequest;
 key displayNameStatusRequest;
 key registrationResponse;		// to send the PermURL to the blog
 key webResponse;				// to send periodic updates to the blog
-string objectVersion = "<?php esc_attr_e( Online_Status_InSL::$plugin_version; ?>";
+string objectVersion = "<?php esc_attr_e( Online_Status_InSL::$plugin_version ); ?>";
 
 // modified by SignpostMarv
 string http_host = "<?php esc_attr_e( $_SERVER['HTTP_HOST'] ); ?>";
@@ -455,7 +457,7 @@ default
 </div><!-- end wrap for whole plugin -->
 <div class="clear"></div>
 		<?php
-} // end function online_status_insl_menu()
+} // end function online_status_insl_menu
 
 /**
  *  Add a settings group, which hopefully makes it easier to delete later on.
@@ -479,7 +481,7 @@ function online_status_insl_register_settings() {
  * @return string               Shortcode output.
  */
 function online_status_insl_shortcode( $atts = array(), $content = null, $tag = '' ) {
-	/* error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true)); */
+	// error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true));
 	extract(
 		shortcode_atts(
 			array(
@@ -508,11 +510,14 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 		"<span class='osinsl-shortcode' id='osinsl-shortcode-" . esc_attr( $os_insl_id ) . "'>";
 	?>
 <!-- Avatar Name or Object Key: "<?php esc_attr_e( $os_insl_id ); ?>" -->
-<?php
+	<?php
 	if ( ! empty( $settings ) && count( $settings ) > 0 ) {
 		// did we find anything at all??
 		// See if objectkey is set. If yes, instead of using avatar names, we use object UUIDs (guaranteed to
 		// be unique, even across grids).
+
+		$avatar_name_sanitised = ''; // to avoid assigning nulls (gwyneth 20220103).
+
 		if ( ! empty( $objectkey ) && ( NULL_KEY !== $objectkey ) ) {
 			if ( ! empty( $settings[ $objectkey ] ) ) {
 				$avatar_name_sanitised = sanitise_avatarname(
@@ -553,58 +558,56 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 		} else {
 			if ( ! empty( $avatar ) ) {
 				$avatar_name_sanitised = sanitise_avatarname( $avatar );
-			} else {
-				$avatar_name_sanitised = ''; // to avoid assigning nulls (gwyneth 20220103).
 			}
+		}
+		// Search through settings; retrieve first tracked object with this avatar name.
 
-			// Search through settings; retrieve first tracked object with this avatar name.
+		$found_avatar = false;
 
-			$found_avatar = false;
-
-			foreach ( $settings as $tracked_avatar ) {
-				if ( ! empty( $tracked_avatar['avatarDisplayName'] )
-					&& ( $avatar == $tracked_avatar['avatarDisplayName'] ) ) {
-					if ( ! empty( $picture ) && ( 'none' != $picture ) ) {
-						if ( ! empty( $profilelink ) && ('off' != $profilelink ) ) {
-							$return_value .=
-								"<a href='https://my.secondlife.com/" .
-								$avatar_name_sanitised .
-								"' target='_blank'>";
-						}
+		foreach ( $settings as $tracked_avatar ) {
+			if ( ! empty( $tracked_avatar['avatarDisplayName'] )
+				&& ( $avatar === $tracked_avatar['avatarDisplayName'] ) ) {
+				if ( ! empty( $picture ) && ( 'none' !== $picture ) ) {
+					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
 						$return_value .=
-							'<img class="osinsl-profile-picture align' .
-							$picture ?? '' .
-							'" alt="' .
-							$avatar_name_sanitised.
-							'" title="' .
-							$avatar_name_sanitised.
-							'" src="https://my-secondlife.s3.amazonaws.com/users/' .
+							"<a href='https://my.secondlife.com/" .
 							$avatar_name_sanitised .
-							'/thumb_sl_image.png" width="80" height="80" alt="' .
-							$avatar ?? '' .
-							'" valign="bottom">';
-						if ( ! empty( $profilelink ) && ( 'off' != $profilelink ) ) {
-							$return_value .= '</a>';
-						}
+							"' target='_blank'>";
 					}
-					if ( ! empty( $status ) && ( 'off' != $status ) ) {
-						$return_value .= $tracked_avatar['Status'] ?? __( '(unknown status)', 'online-status-insl' );
+					$return_value .=
+						'<img class="osinsl-profile-picture align' .
+						$picture ?? '' .
+						'" alt="' .
+						$avatar_name_sanitised .
+						'" title="' .
+						$avatar_name_sanitised .
+						'" src="https://my-secondlife.s3.amazonaws.com/users/' .
+						$avatar_name_sanitised .
+						'/thumb_sl_image.png" width="80" height="80" alt="' .
+						$avatar ?? '' .
+						'" valign="bottom">';
+					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+						$return_value .= '</a>';
 					}
-					$found_avatar = true;
-					break;
 				}
+				if ( ! empty( $status ) && ( 'off' !== $status ) ) {
+					$return_value .= $tracked_avatar['Status'] ?? __( '(unknown status)', 'online-status-insl' );
+				}
+				$found_avatar = true;
+				break;
 			}
-			if ( ! $found_avatar ) {
-				$return_value .=	__( 'No widget configured for ', 'online-status-insl' ) . $avatar;
-			} // else
-	} else {
-		$return_value .= __( 'No avatars being tracked', 'online-status-insl' );
+		}
+		if ( ! $found_avatar ) {
+			$return_value .= __( 'No widget configured for ', 'online-status-insl' ) . $avatar;
+		} else {
+			$return_value .= __( 'No avatars being tracked', 'online-status-insl' );
+		}
 	}
 
 	$return_value .= '</span>';
 
 	return $return_value;
-} // end function online_status_insl_shortcode()
+} // end function online_status_insl_shortcode
 
 /**
  *  Deal with translations. British English and European Portuguese only for now.
@@ -612,14 +615,16 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
  *  @return void
  */
 function online_status_insl_load_textdomain() {
-	// This is how it _used_ to work under WP < 4.6:
-	// error_log('Calling online_status_insl_load_textdomain(), locale is: "' . determine_locale() . '"');
+	/*
+	This is how it _used_ to work under WP < 4.6:
+	error_log('Calling online_status_insl_load_textdomain(), locale is: "' . determine_locale() . '"');
+	*/
 	load_plugin_textdomain(
 		'online-status-insl',
 		false,
 		basename( dirname( __FILE__ ) ) . '/languages/'
 	);
-} // end function online_status_insl_load_textdomain()
+} // end function online_status_insl_load_textdomain
 
 /**
  *  Central location to create all shortcodes.
@@ -636,7 +641,7 @@ function online_status_insl_shortcodes_init() {
 
 // error_log( 'Entering action/hook area...' );
 // add_filter( 'load_textdomain_mofile', 'online_status_insl_load_textdomain_mofile', 10, 2 );
-add_action( 'init', 'online_status_insl_load_textdomain' );	// load translations here.
+add_action( 'init', 'online_status_insl_load_textdomain' ); // load translations here.
 add_action( 'widgets_init', 'online_status_insl_widget_init' );
 add_action( 'admin_menu', 'online_status_insl_admin_menu_options' );
 register_activation_hook( __FILE__, 'online_status_insl_widget_activate' );
