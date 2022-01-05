@@ -90,7 +90,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			if ( empty( $text ) ) {
 				$text = __( 'Empty message.', 'online-status-insl' );
 			}
-			printf(
+			echo wp_sprintf(
 				"<div class='notice notice-%s is-dismissible'><p>%s</p></div>",
 				esc_attr( $type ),
 				wp_kses_post( $text )

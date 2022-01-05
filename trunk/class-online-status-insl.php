@@ -127,14 +127,14 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance                    = $old_instance;
-			$instance['title']           = strip_tags( $new_instance['title'] );
-			$instance['avatar_name']     = strip_tags( $new_instance['avatar_name'] ); // probably not needed...
-			$instance['object_key']      = strip_tags( $new_instance['object_key'] );
-			$instance['before_status']   = strip_tags( $new_instance['before_status'] );
-			$instance['after_status']    = strip_tags( $new_instance['after_status'] );
-			$instance['having_problems'] = strip_tags( $new_instance['having_problems'] );
-			$instance['unconfigured']    = strip_tags( $new_instance['unconfigured'] );
-			$instance['profile_picture'] = strip_tags( $new_instance['profile_picture'] );
+			$instance['title']           = wp_kses_post( $new_instance['title'] );
+			$instance['avatar_name']     = wp_strip_all_tags( $new_instance['avatar_name'] ); // probably not needed...
+			$instance['object_key']      = wp_kses_post( $new_instance['object_key'] );
+			$instance['before_status']   = wp_kses_post( $new_instance['before_status'] );
+			$instance['after_status']    = wp_kses_post( $new_instance['after_status'] );
+			$instance['having_problems'] = wp_kses_post( $new_instance['having_problems'] );
+			$instance['unconfigured']    = wp_kses_post( $new_instance['unconfigured'] );
+			$instance['profile_picture'] = wp_kses_post( $new_instance['profile_picture'] );
 			return $instance;
 		} // end public function update
 

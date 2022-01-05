@@ -233,7 +233,7 @@ key webResponse;				// to send periodic updates to the blog
 string objectVersion = "<?php echo esc_attr( Online_Status_InSL::$plugin_version ); ?>";
 
 // modified by SignpostMarv
-string http_host = "<?php echo esc_url( $_SERVER['HTTP_HOST'] ?? '<<unknown>>' ); ?>";
+string http_host = "<?php echo esc_attr( $_SERVER['HTTP_HOST'] ?? '<<unknown>>' ); ?>";
 
 default
 {

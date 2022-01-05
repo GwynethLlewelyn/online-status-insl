@@ -42,9 +42,9 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 
 		header( 'HTTP/1.0 200 OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
-		printf(
+		echo wp_sprintf(
 			// translators: in-world status (online/offline/unknown), avatar display name, avatar key (UUID).
-			esc_attr__( 'Status "%1\$s" set for "%2\$s" (%3\$s)', 'online-status-insl' ),
+			wp_kses_post( __( 'Status "%1\$s" set for "%2\$s" (%3\$s)', 'online-status-insl' ) ),
 			esc_attr( $_REQUEST['status'] ),
 			esc_attr( $settings[ $object_key ]['avatarDisplayName'] ),
 			esc_attr( $settings[ $object_key ]['avatarKey'] )
@@ -91,11 +91,11 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		header( 'Content-type: text/plain; charset=utf-8' );
 		echo wp_sprintf(
 			// translators: URL, avatar display name, object name, object key.
-			esc_attr__( 'PermURL "%1$s" saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
+			wp_kses_post( 'PermURL "%1$s" saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
 			esc_url( $settings[ $object_key ]['PermURL'], null, 'none' ),
 			$settings[ $object_key ]['avatarDisplayName'],
 			$settings[ $object_key ]['objectName'],
-			$settings[ $object_key ]['object_key']
+			$settings[ $object_key ]['objectKey']
 		);
 	} else {
 		header( 'HTTP/1.0 405 Method Not Allowed' );
