@@ -53,7 +53,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 		header( 'HTTP/1.0 404 Avatar not found' );
 		header( 'Content-type: text/plain; charset=utf-8' );
 		// translators: the sentence begins with the avatar name.
-		esc_attr_e( ( $_REQUEST['avatar_name'] . ' is not yet registered!', 'online-status-insl' ) );
+		esc_attr_e( ( $_REQUEST['avatar_name'] . ' is not yet registered!' ), 'online-status-insl' );
 	}
 } else {
 	$perm_url = wp_unslash( $_REQUEST['PermURL'] );
@@ -88,8 +88,10 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 
 		header( 'HTTP/1.0 200 OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
-		// translators: URL, avatar display name, object name, object key.
-		printf( esc_attr__( 'PermURL %1$s saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl')		$settings[ $object_key ]['PermURL'],
+		printf(
+			// translators: URL, avatar display name, object name, object key.
+			esc_attr__( 'PermURL %1$s saved for user "%2$s" using object named "%3$s" (%4$s)', 'online-status-insl' ),
+			$settings[ $object_key ]['PermURL'],
 			$settings[ $object_key ]['avatarDisplayName'],
 			$settings[ $object_key ]['objectName'],
 			$settings[ $object_key ]['object_key']

@@ -89,7 +89,7 @@ if ( ! function_exists( 'sanitise_avatarname' ) ) {
 	function sanitise_avatarname( $avatar_name ) {
 		$sanitised = rawurlencode( strtolower( strtr( $avatar_name, ' ', '.' ) ) );
 		// Check if 'Resident' is appended!
-		$match     = stripos( $sanitised, 'Resident' );
+		$match = stripos( $sanitised, 'Resident' );
 		if ( false === $match ) {
 			// Return everything up to the character before the dot.
 			return substr( $sanitised, 0, $match - 1 );
@@ -100,7 +100,7 @@ if ( ! function_exists( 'sanitise_avatarname' ) ) {
 
 if ( ! function_exists( 'set_bold' ) ) {
 	/**
-	 * 	Simple wrapper function to save some typing when placing <strong> around text.
+	 *  Simple wrapper function to save some typing when placing <strong> around text.
 	 *
 	 *  @param string $text to wrap around with <strong>...</strong>.
 	 *  @return string is the wrapped text.
@@ -111,7 +111,7 @@ if ( ! function_exists( 'set_bold' ) ) {
 }
 
 /**
- *	Auxiliary plugin functions (outside any class).
+ *  Auxiliary plugin functions (outside any class).
  */
 
 /**
@@ -130,7 +130,7 @@ function online_status_insl_widget_init() {
  *  @return void
  */
 function online_status_insl_widget_activate() {
-	// no special options
+	// no special options.
 }
 
 /**
@@ -142,7 +142,7 @@ function online_status_insl_widget_activate() {
 function online_status_insl_widget_deactivate() {
 	// First, clean up options on the settings database table.
 	delete_option( 'online_status_insl_settings' );
-	// Then sanitise the rest:
+	// _Then_ sanitise the rest.
 	unregister_setting( 'Online_Status_InSL', 'online_status_insl_settings' );
 }
 
@@ -163,21 +163,20 @@ function online_status_insl_admin_menu_options() {
 }
 
 /**
- *  request_protocol is a function to figure out if the WP site has been called via HTTPS or not.
+ *  Function request_protocol() attempts to figure out if the WP site has been called via HTTPS or not.
  *
  *  @see https://stackoverflow.com/a/16076965/1035977
  *
  *  @return string 'https' or 'http'
  */
 function request_protocol() {
-	$isSecure = false;
+	$is_secure = false;
 	if ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ) {
-		$isSecure = true;
+		$is_secure = true;
+	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] || ! empty( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && 'on' === $_SERVER['HTTP_X_FORWARDED_SSL'] ) {
+		$is_secure = true;
 	}
-	elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] || ! empty( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && 'on' === $_SERVER['HTTP_X_FORWARDED_SSL'] ) {
-		$isSecure = true;
-	}
-	return $isSecure ? 'https' : 'http';
+	return $is_secure ? 'https' : 'http';
 }
 
 /**
@@ -186,32 +185,34 @@ function request_protocol() {
  *  @return void
  */
 function online_status_insl_menu() {
-?>
+	?>
 <div class="wrap"> <!-- Plugin page for Online Status inSL -->
-	<h2><?php _e( 'Online Status inSL', 'online-status-insl' ); ?></h2>
+	<h2><?php esc_attr_e( 'Online Status inSL', 'online-status-insl' ); ?></h2>
 	<p>
-<?php _e(
-	'Please create an object in Second Life on a plot owned by you, and drop the following script inside:',
-	'online-status-insl'
-); ?>
+	<?php
+	esc_attr_e(
+		'Please create an object in Second Life on a plot owned by you, and drop the following script inside:',
+		'online-status-insl'
+	);
+	?>
 	</p>
 	<hr />
-<?php // Figure out plugin version; if we have it already, skip this check (since it's resource-intensive).
+	<?php // Figure out plugin version; if we have it already, skip this check (since it's resource-intensive).
 	if ( ! Online_Status_InSL::$plugin_version ) {
 		$plugin_data                        = get_file_data(
 			__FILE__,
 			array(
-        		'Version' => 'Version',
+				'Version' => 'Version',
 			)
 		);
 		Online_Status_InSL::$plugin_version = $plugin_data['Version'];
 	}
-// Now spew the script; one day, this might be tied in with a pretty-formatting thingy!
-//
-// TODO(gwyneth): Check if llRequestSecureURL() works; a first approach could be to check if
-// we're inside SL and use llRequestSecureURL(); if in OpenSim, use llRequestURL().
-// Note: llRequestSecureURL() seems to be partially implemented in OpenSim these days (gwyneth 20220103).
-?>
+	// Now spew the script; one day, this might be tied in with a pretty-formatting thingy!
+	//
+	// TODO(gwyneth): Check if llRequestSecureURL() works; a first approach could be to check if
+	// we're inside SL and use llRequestSecureURL(); if in OpenSim, use llRequestURL().
+	// Note: llRequestSecureURL() seems to be partially implemented in OpenSim these days (gwyneth 20220103).
+	?>
 	<textarea name="osinsl-lsl-script" cols="120" rows="12" readonly style="font-family: monospace;">
 // Code to show online status and let it be retrieved by external calls.
 // © 2011-<?php echo date( 'Y' ); ?> by Gwyneth Llewelyn. Most rights reserved.
@@ -227,7 +228,7 @@ key dateBornStatusRequest;
 key displayNameStatusRequest;
 key registrationResponse;		// to send the PermURL to the blog
 key webResponse;				// to send periodic updates to the blog
-string objectVersion = "<?php echo Online_Status_InSL::$plugin_version; ?>";
+string objectVersion = "<?php esc_attr_e( Online_Status_InSL::$plugin_version; ?>";
 
 // modified by SignpostMarv
 string http_host = "<?php esc_attr_e( $_SERVER['HTTP_HOST'] ); ?>";
@@ -404,54 +405,56 @@ default
 	</textarea>
 	<hr />
 	<p>
-<?php _e(
-	'Then you can drag the appropriate widget on your sidebar.',
-	'online-status-insl'
-); ?>
-<?php
-	// Prepare the list of tracked objects
-	$myListTable = new online_status_insl_List_Table();
-	$myListTable->prepare_items();
-	// Note that this is inside the <p>...</p> because it emits \n somewhere!
-?>
+	<?php
+	esc_attr_e(
+		'Then you can drag the appropriate widget on your sidebar.',
+		'online-status-insl'
+	);
+	?>
+	<?php
+		// Prepare the list of tracked objects.
+		$my_list_table = new online_status_insl_List_Table();
+		$my_list_table->prepare_items();
+		// Note that this is inside the <p>...</p> because it emits \n somewhere!
+	?>
 	</p>
-	<div class="wrap"> <!-- List of avatars being tracked -->
-		<h2><?php _e( 'Current avatars being tracked', 'online-status-insl' ); ?>:</h2>
+	<div class="wrap"> <!-- List of avatars being tracked. -->
+		<h2><?php esc_attr_e( 'Current avatar(s) being tracked', 'online-status-insl' ); ?>:</h2>
 		<form method="post">
-			<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?: 1; ?>">
-<?php $myListTable->display(); ?>
+			<input type="hidden" name="page" value="<?php esc_attr_e( $_REQUEST['page'] ) ?: 1; ?>">
+		<?php $my_list_table->display(); ?>
 		</form>
 		<div class="clear"></div>
 		<div class="instructions">
-<?php
-// Add some instructions
-	_e(
-		'<p><strong>Ping</strong>: Checks if in-world object is still alive; if not, you should remove it manually.</p>',
-		'online-status-insl'
-	);
-	_e(
-		'<p><strong>Delete</strong>: Removes the tracking object from the WordPress table. The object will still remain in-world unless it gets manually deleted. You can touch it in-world to get it to register again.</p>',
-		'online-status-insl'
-	);
-	_e(
-		'<p><strong>Reset</strong>: Resets the in-world object. This will give you a new communications channel. Note that if the object is not responding to pings, it will not be affected. The object will remain both in-world <em>and</em> being tracked by WordPress.</p>',
-		'online-status-insl'
-	);
-	_e(
-		'<p><strong>Destroy</strong>: Attempts to tell the in-world object to be deleted in-world <em>and</em> also deletes it from the WordPress table. If it fails, you will have to delete it manually in-world <em>and</em> delete it from this table as well. Use with caution, since the object will <em>not</em> be returned to your inventory but disappear forever!</p>',
-		'online-status-insl'
-	);
-	_e(
-		'<p>Note that the different options exist mostly to help you to keep your objects in sync with WordPress. Sometimes this is not possible. Note that the objects will try to contact WordPress with the updated status if they change owners, if the region simulator crashes, etc. Sometimes that can fail.</p>',
-		'online-status-insl'
-	);
-?>
+		<?php
+		// Add some instructions.
+		_e(
+			'<p><strong>Ping</strong>: Checks if in-world object is still alive; if not, you should remove it manually.</p>',
+			'online-status-insl'
+		);
+		_e(
+			'<p><strong>Delete</strong>: Removes the tracking object from the WordPress table. The object will still remain in-world unless it gets manually deleted. You can touch it in-world to get it to register again._e/p>',
+			'online-status-insl'
+		);
+		_e(
+			'<p><strong>Reset</strong>: Resets the in-world object. This will give you a new communications channel. Note that if the object is not responding to pings, it will not be affected. The object will remain both in-world <em>and</em> being tracked by WordPress.</p>',
+			'online-status-insl'
+		);
+		_e(
+			'<p><strong>Destroy</strong>: Attempts to tell the in-world object to be deleted in-world <em>and</em> also deletes it from the WordPress table. If it fails, you will have to delete it manually in-world <em>and</em> delete it from this table as well. Use with caution, since the object will <em>not</em> be returned to your inventory but disappear forever!</p>',
+			'online-status-insl'
+		);
+		_e(
+			'<p>Note that the different options exist mostly to help you to keep your objects in sync with WordPress. Sometimes this is not possible. Note that the objects will try to contact WordPress with the updated status if they change owners, if the region simulator crashes, etc. Sometimes that can fail.</p>',
+			'online-status-insl'
+		);
+		?>
 		</div>
 		<div class="clear"></div>
 	</div><!-- end wrap for list -->
 </div><!-- end wrap for whole plugin -->
 <div class="clear"></div>
-<?php
+		<?php
 } // end function online_status_insl_menu()
 
 /**
@@ -462,7 +465,7 @@ default
 function online_status_insl_register_settings() {
 	// it's a huge serialised array for now, stored as a WP option in the database;
 	// if performance drops, this might change in the future.
-	register_setting('Online_Status_InSL', 'online_status_insl_settings');
+	register_setting( 'Online_Status_InSL', 'online_status_insl_settings' );
 }
 
 /**
@@ -475,55 +478,55 @@ function online_status_insl_register_settings() {
  * @param  string      $tag     Shortcode tag (name). Default empty.
  * @return string               Shortcode output.
  */
-function online_status_insl_shortcode( $atts = [], $content = null, $tag = '' ) {
-//	error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true));
+function online_status_insl_shortcode( $atts = array(), $content = null, $tag = '' ) {
+	/* error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true)); */
 	extract(
 		shortcode_atts(
 			array(
-				'avatar'      => '(???)', // assigns $avatar to name if it exists, and provides a default of (???) which is supposed *not* to exist
-				'objectkey'   => NULL_KEY, // if there are multiple avatars with the same name, you need the object key instead
+				'avatar'      => '(???)', // assigns $avatar to name if it exists, and provides a default of (???) which is supposed *not* to exist.
+				'objectkey'   => NULL_KEY, // if there are multiple avatars with the same name, you need the object key instead.
 				'picture'     => 'none', // emits picture tags, can be center/right/left/ etc.
-				'status'      => 'on', // emits no status, just the picture (or nothing)
-				'profilelink' => 'off', // puts links to web profile if picture active
+				'status'      => 'on', // emits no status, just the picture (or nothing).
+				'profilelink' => 'off', // puts links to web profile if picture active.
 			),
 			$atts
 		)
 	);
-	// search for the avatar name
+	// search for the avatar name.
 	$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
-	// figure out stupid id for nice formatting
-	$osinslID = 'broken';	// default: we assume it's broken until proven otherwise! (gwyneth 20220103)
-	if ( ! empty( $avatar ) && ( '(???)' != $avatar ) ) {
-		$osinslID = strtolower( strtr( $avatar, ' ', '-' ) );
-	} elseif ( ! empty( $objectkey ) && ( NULL_KEY != $objectkey ) ) {
-		$osinslID = $objectkey;
+	// figure out stupid id for nice formatting.
+	$os_insl_id = 'broken'; // default: we assume it's broken until proven otherwise (gwyneth 20220103)!
+	if ( ! empty( $avatar ) && ( '(???)' !== $avatar ) ) {
+		$os_insl_id = strtolower( strtr( $avatar, ' ', '-' ) );
+	} elseif ( ! empty( $objectkey ) && ( NULL_KEY !== $objectkey ) ) {
+		$os_insl_id = $objectkey;
 	}
-	// store things in a return value; add class attributes to allow styling
-	// Added esc_attr() in case someone creates an avatar name encoded with a XSS attack (gwyneth 20210621)
-	$returnValue =
-		"<span class='osinsl-shortcode' id='osinsl-shortcode-" . esc_attr( $osinslID ) . "'>";
-?>
-<!-- Avatar Name or Object Key: "<?php esc_attr_e( $osinslID ); ?>" -->
+	// Store things in a return value; add class attributes to allow styling.
+	// Added esc_attr() in case someone creates an avatar name encoded with a XSS attack (gwyneth 20210621).
+	$return_value =
+		"<span class='osinsl-shortcode' id='osinsl-shortcode-" . esc_attr( $os_insl_id ) . "'>";
+	?>
+<!-- Avatar Name or Object Key: "<?php esc_attr_e( $os_insl_id ); ?>" -->
 <?php
 	if ( ! empty( $settings ) && count( $settings ) > 0 ) {
 		// did we find anything at all??
 		// See if objectkey is set. If yes, instead of using avatar names, we use object UUIDs (guaranteed to
-		//	be unique, even across grids)
-		if ( ! empty( $objectkey) && ( NULL_KEY != $objectkey ) ) {
+		// be unique, even across grids).
+		if ( ! empty( $objectkey ) && ( NULL_KEY !== $objectkey ) ) {
 			if ( ! empty( $settings[ $objectkey ] ) ) {
 				$avatar_name_sanitised = sanitise_avatarname(
 					$settings[ $objectkey ]['avatarDisplayName']
 				);
- 				if ( ! empty( $picture ) && ( 'none' != $picture ) ) {
-					if ( ! empty( $profilelink ) && ( 'off' != $profilelink ) ) {
-						// This will only work on OpenSimulator if there is an avatar with the same name in SL
-						$returnValue .=
+				if ( ! empty( $picture ) && ( 'none' !== $picture ) ) {
+					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+						// This will only work on OpenSimulator if there is an avatar with the same name in SL!
+						$return_value .=
 							"<a href='https://my.secondlife.com/" .
 							$avatar_name_sanitised .
 							"' target='_blank'>";
 					}
-					$returnValue .=
+					$return_value .=
 						'<img class="osinsl-profile-picture align' .
 						$picture .
 						'" alt="' .
@@ -535,41 +538,40 @@ function online_status_insl_shortcode( $atts = [], $content = null, $tag = '' ) 
 						'/thumb_sl_image.png" width="80" height="80" alt="' .
 						$avatar .
 						'" valign="bottom">';
-					if ( ! empty( $profilelink ) && ( 'off' != $profilelink ) ) {
-						$returnValue .= '</a>';
+					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+						$return_value .= '</a>';
 					}
 				}
-				if ( ! empty( $status ) && ( 'off' != $status ) ) {
-					$returnValue .= $settings[ $objectkey ]['Status'];
+				if ( ! empty( $status ) && ( 'off' !== $status ) ) {
+					$return_value .= $settings[ $objectkey ]['Status'];
 				}
-			}
-			// no such object being tracked!
-			else {
-				$returnValue .=
+			} else {
+				// no such object being tracked!
+				$return_value .=
 					__( 'Invalid object key: ', 'online-status-insl' ) . $objectkey;
 			}
 		} else {
 			if ( ! empty( $avatar ) ) {
 				$avatar_name_sanitised = sanitise_avatarname( $avatar );
 			} else {
-				$avatar_name_sanitised = '';	// to avoid assigning nulls (gwyneth 20220103)
+				$avatar_name_sanitised = ''; // to avoid assigning nulls (gwyneth 20220103).
 			}
 
-			// Search through settings; retrieve first tracked object with this avatar name
+			// Search through settings; retrieve first tracked object with this avatar name.
 
-			$foundAvatar = false;
+			$found_avatar = false;
 
-			foreach ( $settings as $trackedAvatar ) {
-				if ( ! empty( $trackedAvatar['avatarDisplayName'] )
-					&& ( $avatar == $trackedAvatar['avatarDisplayName'] ) ) {
+			foreach ( $settings as $tracked_avatar ) {
+				if ( ! empty( $tracked_avatar['avatarDisplayName'] )
+					&& ( $avatar == $tracked_avatar['avatarDisplayName'] ) ) {
 					if ( ! empty( $picture ) && ( 'none' != $picture ) ) {
 						if ( ! empty( $profilelink ) && ('off' != $profilelink ) ) {
-							$returnValue .=
+							$return_value .=
 								"<a href='https://my.secondlife.com/" .
 								$avatar_name_sanitised .
 								"' target='_blank'>";
 						}
-						$returnValue .=
+						$return_value .=
 							'<img class="osinsl-profile-picture align' .
 							$picture ?? '' .
 							'" alt="' .
@@ -582,27 +584,26 @@ function online_status_insl_shortcode( $atts = [], $content = null, $tag = '' ) 
 							$avatar ?? '' .
 							'" valign="bottom">';
 						if ( ! empty( $profilelink ) && ( 'off' != $profilelink ) ) {
-							$returnValue .= '</a>';
+							$return_value .= '</a>';
 						}
 					}
 					if ( ! empty( $status ) && ( 'off' != $status ) ) {
-						$returnValue .= $trackedAvatar['Status'] ?? __( '(unknown status)', 'online-status-insl' );
+						$return_value .= $tracked_avatar['Status'] ?? __( '(unknown status)', 'online-status-insl' );
 					}
-					$foundAvatar = true;
+					$found_avatar = true;
 					break;
 				}
 			}
-			if ( ! $foundAvatar ) {
-				$returnValue .=	__( 'No widget configured for ', 'online-status-insl' ) . $avatar;
-			}
-		} // else
+			if ( ! $found_avatar ) {
+				$return_value .=	__( 'No widget configured for ', 'online-status-insl' ) . $avatar;
+			} // else
 	} else {
-		$returnValue .= __( 'No avatars being tracked', 'online-status-insl' );
+		$return_value .= __( 'No avatars being tracked', 'online-status-insl' );
 	}
 
-	$returnValue .= '</span>';
+	$return_value .= '</span>';
 
-	return $returnValue;
+	return $return_value;
 } // end function online_status_insl_shortcode()
 
 /**
