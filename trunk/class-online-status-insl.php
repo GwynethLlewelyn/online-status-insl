@@ -221,7 +221,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				empty( $instance['avatar_name'] ) &&
 				( ! empty( $instance['object_key'] && NULL_KEY !== $instance['object_key'] ) )
 			) {
-				if ( isset( WP_DEBUG ) ) {
+				if ( defined( WP_DEBUG ) ) {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions
 					error_log(
 						wp_sprintf(
