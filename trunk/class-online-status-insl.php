@@ -71,13 +71,13 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			extract( $args, EXTR_SKIP );
-			echo $before_widget ?? '';
+			echo wp_kses( $before_widget ?? '', self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$title = empty( $instance['title'] )
 				? '&nbsp;'
 				: apply_filters( 'widget_title', $instance['title'] );
 
 			if ( ! empty( $title ) ) {
-				echo $before_title ?? '', $title ?? '', $after_title ?? '';
+				echo wp_kses( ( $before_title ?? '' ) . ' ' . ( $title ?? '' ) . ' ' . ( $after_title ?? '' ), self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			}
 
 			// Code to check the in-world thingy and spew out results.
@@ -91,11 +91,18 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 
 			// To get the avatar name for this object, we need to use its key...
 			$avatar_display_name = $settings[ $object_key ]['avatarDisplayName'] ?? __( '(unknown avatar)', 'Online_Status_InSL' );
+
 			// Similar for PermURL...
-			$perm_url = $settings[ $object_key ]['PermURL'] ?? __( '(invalid URL)', 'Online_Status_InSL' );
-			// Check if this avatar comes from the Second Life grid or an OpenSimulator grid;
+			// with a catch: we now do an extra check to see if the avatar comes from the Second Life grid or an OpenSimulator grid;
 			// this will matter down below when we address the issue of profile pics & links (gwyneth 20220106).
-			$in_secondlife = ( false !== stripos( $settings[ $objectkey ]['PermURL'], 'secondlife' ) );
+			$perm_url = $settings[ $object_key ]['PermURL'];
+			if ( empty( $perm_url ) ) {
+				$perm_url = esc_attr__( '(invalid URL)', 'Online_Status_InSL' );
+				// If it has an invalid/unexisting PermURL, I guess we can assume it's unconfigured (gwyneth 20220106)...
+				$in_secondlife = false;
+			} else {
+				$in_secondlife = stripos( $perm_url, 'secondlife' ) );
+			}
 			?>
 	<div class='osinsl'>
 			<?php
@@ -103,7 +110,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			// Note that we're using the default alignleft, aligncenter, alignright classes for WP.
 			if ( ! empty( $instance['profile_picture'] ) && 'none' !== $instance['profile_picture'] && $in_secondlife ) {
 				$avatar_name_sanitised = sanitise_avatarname( $avatar_display_name );
-			?>
+				?>
 		<a href="https://my.secondlife.com/<?php echo $avatar_name_sanitised; ?>" target="_blank">
 		<img class="osinsl-profile-picture align<?php echo esc_attr( $instance['profile_picture'] ); ?>"
 			src="https://my-secondlife.s3.amazonaws.com/users/<?php echo $avatar_name_sanitised; ?>/thumb_sl_image.png"
@@ -112,28 +119,31 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			title="<?php echo esc_attr( $avatar_display_name ); ?>" valign="top">
 		</a>
 		<br />
-			<?php
+				<?php
 			} // if picture == none, or if this avatar comes from OpenSimulator, do not put anything here.
 
 			// does this widget have an associated in-world object?
 			if ( empty( $settings ) || empty( $settings[ $object_key ]['Status'] ) ) {
-			?>
+				?>
 		<span class="osinsl-unconfigured"><?php echo esc_attr( $instance['unconfigured'] ); ?></span>
-			<?php
+				<?php
 			} else {
-			?>
+				?>
 		<span class="osinsl-before-status"><?php echo esc_attr( $instance['before_status'] ); ?></span>
 		<span class="osinsl-status"><?php echo esc_attr( $settings[ $object_key ]['Status'] ); ?></span>
 		<span class="osinsl-after-status"><?php echo esc_attr( $instance['after_status'] ); ?></span>
 	</div>
-	<?php
+				<?php
 			}
 			// return to widget handling code.
-			echo $after_widget ?? '';
+			echo wp_kses( $after_widget, self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 		} // end function widget
 
 		/**
 		 *  The WP core calls this method when the widget gets updated by the user.
+		 *
+		 *  It now includes our 'own' check of tags for `wp_kses()` in an attempt
+		 *  to preserve _some_ of the perfectly valid tags (gwyneth 20220106).
 		 *
 		 *  @param string[] $new_instance (one wonders why this gets passed at all).
 		 *  @param string[] $old_instance (the widget we're currently modifying).
@@ -206,7 +216,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			}
 			// try to fill in something...
 			?>
-<p>
+	<p>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
 			<?php esc_attr_e( 'Title', 'online-status-insl' ); ?>:
 		<input class="widefat"
@@ -237,7 +247,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 					$xyz         = explode( ',', $coords );
 
 					// Output a dropbox option with 'Avatar Name [Region (x,y,z)]'.
-			?>
+					?>
 		<option <?php if ( $one_tracked_object['objectKey'] == $instance['object_key'] ) : ?>
 			selected="selected"
 				<?php endif; ?>
@@ -259,14 +269,14 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				}
 			} else {
 				// never configured before; moved to have a 'disabled' setting.
-					?>
+				?>
 		<option disabled="disabled">--<?php esc_attr_e( 'Unconfigured', 'online-status-insl' ); ?>--</option>
 					<?php
 			} // end empty settings.
-					?>
+			?>
 	</select>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'before_status' ) ); ?>">
-		<?php esc_attr_e( 'Before status message', 'online-status-insl' ); ?>:
+			<?php esc_attr_e( 'Before status message', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php echo esc_attr( $this->get_field_id( 'before_status' ) ); ?>"
 			name="<?php echo esc_attr( $this->get_field_name( 'before_status' ) ); ?>" type="text"
@@ -274,7 +284,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'after_status' ) ); ?>">
-		<?php esc_attr_e( 'After status message', 'online-status-insl' ); ?>:
+			<?php esc_attr_e( 'After status message', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php echo esc_attr( $this->get_field_id( 'after_status' ) ); ?>"
 			name="<?php echo esc_attr( $this->get_field_name( 'after_status' ) ); ?>" type="text"
@@ -282,16 +292,16 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'having_problems' ) ); ?>">
-		<?php esc_attr_e( 'Error message when communicating with SL', 'online-status-insl' ); ?>:
+			<?php esc_attr_e( 'Error message when communicating with SL', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php echo esc_attr( $this->get_field_id( 'having_problems' ) ); ?>"
 			name="<?php echo esc_attr( $this->get_field_name( 'having_problems' ) ); ?>"
 			type="text"
-			value="<?php echo esc_attr( $instance['having_problems'], 'online-status-insl' ); ?>"
+			value="<?php echo esc_attr( $instance['having_problems'] ); ?>"
 		/>
 	</label>
 	<label for="<?php esc_attr( $this->get_field_id( 'unconfigured' ) ); ?>">
-		<?php esc_attr_e( 'Widget not configured message', 'online-status-insl' ); ?>:
+			<?php esc_attr_e( 'Widget not configured message', 'online-status-insl' ); ?>:
 		<input class="widefat"
 			id="<?php echo esc_attr( $this->get_field_id( 'unconfigured' ) ); ?>"
 			name="<?php echo esc_attr( $this->get_field_name( 'unconfigured' ) ); ?>"
@@ -300,22 +310,14 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'profile_picture' ) ); ?>">
-		<?php esc_attr_e( 'Profile picture?', 'online-status-insl' ); ?>
+			<?php esc_attr_e( 'Profile picture?', 'online-status-insl' ); ?>
 	</label>
 	<select id="<?php echo esc_attr( $this->get_field_id( 'profile_picture' ) ); ?>"
 		name="<?php echo esc_attr( $this->get_field_name( 'profile_picture' ) ); ?>" class="widefat">
-		<option <?php if ( 'none' === $instance['profile_picture'] ) {
-			echo 'selected="selected"';
-		} ?>>none</option>
-		<option <?php if ( 'center' === $instance['profile_picture'] ) {
-			echo 'selected="selected"';
-		} ?>>center</option>
-		<option <?php if ( 'left' === $instance['profile_picture'] ) {
-			echo 'selected="selected"';
-		} ?>>left</option>
-		<option <?php if ( 'right' === $instance['profile_picture'] ) {
-			echo 'selected="selected"';
-		} ?>>right</option>
+		<option <?php echo ( 'none' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'none', 'online-status-insl' ); ?></option>
+		<option <?php echo ( 'center' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'center', 'online-status-insl' ); ?></option>
+		<option <?php echo ( 'left' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'left', 'online-status-insl' ); ?></option>
+		<option <?php echo ( 'right' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'right', 'online-status-insl' ); ?></option>
 	</select>
 </p>
 			<?php
