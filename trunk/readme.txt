@@ -318,7 +318,9 @@ To style embedded shortcode, change the CSS class for `osinsl-shortcode`.
 The overall syntax is:
 
 `[osinsl avatar="<avatar name>" picture="[none|center|right|left]" status="[on|off]" profilelink="[on|off]"]`
+
 or
+
 `[osinsl objectkey="<UUID>" picture="[none|center|right|left]" status="[on|off]" profilelink="[on|off]"]`
 
 **avatar** should have a valid Second Life/OpenSimulator avatar name which has an associated online status indicator in SL/OpenSimulator. This will expand to show the online status (e.g. usually *online*, *offline*, or an error message if no widget was configured or if the avatar is not being tracked). Note that if you have avatars with the same name on different grids, this will just get you one of them.
