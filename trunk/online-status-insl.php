@@ -3,7 +3,7 @@
 Plugin Name: Online Status inSL
 Plugin URI: https://gwynethllewelyn.net/online-status-insl/
 Description: Shows your online status in the Second Life®/OpenSimulator virtual worlds on a widget (or use shortcodes/editor blocks)
-Version: 1.5.1
+Version: 1.6.1
 Requires at least: 5.0
 Requires PHP: 7.3
 Author: Gwyneth Llewelyn
@@ -58,7 +58,7 @@ Based on code developed by Dave Doolin, http://website-in-a-weekend.net/extendin
  * @package  OnlineStatusInSL
  * @author   Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
  * @license  https://directory.fsf.org/wiki/License:BSD-3-Clause BSD 3-Clause "New" or "Revised" License
- * @version  1.5.1
+ * @version  1.6.1
  * @link     https://gwynethllewelyn.net/online-status-insl/
  */
 

@@ -6,7 +6,7 @@
  *  @package  OnlineStatusInSL
  *  @author   Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
  *  @license  https://directory.fsf.org/wiki/License:BSD-3-Clause BSD 3-Clause "New" or "Revised" License
- *  @version  1.5.1
+ *  @version  1.6.1
  *  @link     https://gwynethllewelyn.net/online-status-insl/
  */
 
@@ -556,6 +556,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						'1.4.1',
 						'1.4.2',
 						'1.5.0',
+						// note: 1.5.1 was never released; 1.6.0 was abandoned...
 					),
 					true // strict checking required in WordPress (gwyneth 20220104).
 				)

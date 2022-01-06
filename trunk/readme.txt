@@ -123,9 +123,9 @@ My apologies. New users have a "fake" last name, "Resident", which is however ne
 
 = Can I get translations in different languages? =
 
-Starting with 1.3.5, you can. A default English `.po` file is supplied, so [you can tweak it to your own language](https://poedit.net/). I've added Portuguese as an example. More translations are welcome!
+Starting with 1.3.5, you can. A default English (US) `.pot` file is supplied, so [you can tweak it to your own language using POEdit](https://poedit.net/). I've added Portuguese and British English as examples. More translations are most welcome!
 
-**Note:** WordPress multilingual support is currently being done differently (no need to directly tweak `.po` files), but I'm not even sure how to add support to that. See also the developer note for tag 1.5.0.
+**Note:** WordPress multilingual support is currently being done differently (no need to directly tweak `.po` files), but it requires the WordPress 'translation team' to approve them (this is not under my control). See also the developer notes for tags 1.5.0 and 1.6.1.
 
 = Will this work for OpenSimulator-based grids? =
 
@@ -153,6 +153,10 @@ Nevertheless, with some clever scripting, it _may_ be possible to achieve someth
 
 In short: aye, you _can_ track the online status of bots and NPCs, if they're scripted using the LibreMetaverse toolkit; there will be some limitations for OpenSimulator bots (lack of a profile picture, for example); but tracking native OpenSimulator NPCs will very likely _not_ work, or, if it does, it will be essentially pointless to do so.
 
+= This plugin is awesome! I have lots of suggestions on how to improve it! Can I send them to you? =
+
+I'm glad you find it useful. Sure, to make collaboration easier, the code for this plugin is also on [GitHub]()
+
 == Screenshots ==
 
 1. Screenshot of widget in action in the Appearance > Widgets area
@@ -164,15 +168,20 @@ In short: aye, you _can_ track the online status of bots and NPCs, if they're sc
 
 == Changelog ==
 
-= 1.5.1 =
-* Quick patch! Development will proceed on 1.6.0 as soon as I can...
+= 1.6.1 =
+* Major code refactoring to comply as much as possible with the WordPress coding guidelines!
+* Code is now being audited via PHP CodeSniffer to check for non-conformities to overall style (even if sometimes I have no choice but to override it)
 * PHP 8+ is stricter when handling wrong types, so some changes were warranted
-* Gutenberg support is, for the moment, on hold (too complex for my tiny little head)
+* Added gazillions of anti-XSS checks, sometimes to the point of exasperation. The current code should run much slower, but at least it will be a bit more secure
+* Gutenberg support (blocks & widgets) is, for the moment, on hold (too complex for my tiny little head); bumped to 2.0.0
 * Changing " to ' wherever appropriate to conform to some new fancy PHP guidelines
 * Publishing to GitHub as well (which also required SVN to ignore Git-specific things, as well as ignoring my own local configuration, and whatever Mac-specific hidden files that are pointless to save)
 * Code refactoring and documentation, since being on GitHub _may_ mean that more people contribute code (wishful thinking, I know); also, there will be (potentially) some automated tasks in GitHub looking for the documentation...
+* Getting translations updated for the new code. Note that only the English-UK team responded (the Portuguese team couldn't care less about this plugin), so I'm sticking with the old method of providing translations. I've tried putting the files on Crowdin, but I think they do not work yet,
+* TODO: how to fix 'fake' requests (after all, the only thing you need to do is to fake a few headers using, say, Postman...)
+* TODO: re-audit the edge cases when a 'fake' request can actually do some XSS injection (!)
 
-= 1.6.0 (upcoming) =
+= 1.6.0 (abandoned) =
 * Adds support for editor blocks (Gutenberg): unfinished!
 * Several more layers of complexity in setting up the plugin, because: Gutenberg 😩
 * Currently 'on hold' since other things have priority...
