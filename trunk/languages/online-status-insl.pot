@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Online Status inSL\n"
-"POT-Creation-Date: 2022-01-05 13:26+0000\n"
+"POT-Creation-Date: 2022-01-05 23:53+0000\n"
 "PO-Revision-Date: 2022-01-05 13:20+0000\n"
 "Last-Translator: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
 "Language-Team: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
@@ -78,7 +78,8 @@ msgstr ""
 #: class-online-status-insl-list-table.php:160
 #: class-online-status-insl-list-table.php:283
 #: class-online-status-insl-list-table.php:342
-msgid "Object \"%1\\$s\" replied: \"%2\\$s\""
+#, php-format
+msgid "Object \"%1$s\" replied: \"%2$s\""
 msgstr ""
 
 #: class-online-status-insl-list-table.php:169
@@ -178,76 +179,76 @@ msgid "No avatars are being tracked."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-#: class-online-status-insl.php:44 online-status-insl.php:157
+#: class-online-status-insl.php:56 online-status-insl.php:157
 #: online-status-insl.php:158 online-status-insl.php:190
 msgid "Online Status inSL"
 msgstr ""
 
-#: class-online-status-insl.php:48
+#: class-online-status-insl.php:60
 msgid "Online Status inSL Widget"
 msgstr ""
 
-#: class-online-status-insl.php:81
+#: class-online-status-insl.php:93
 msgid "(unknown avatar)"
 msgstr ""
 
-#: class-online-status-insl.php:83
+#: class-online-status-insl.php:95
 msgid "(invalid URL)"
 msgstr ""
 
-#: class-online-status-insl.php:150
+#: class-online-status-insl.php:162
 msgid "Second Life Online Status"
 msgstr ""
 
-#: class-online-status-insl.php:153
+#: class-online-status-insl.php:165
 msgid "I am "
 msgstr ""
 
-#: class-online-status-insl.php:154
+#: class-online-status-insl.php:166
 msgid " in Second Life."
 msgstr ""
 
-#: class-online-status-insl.php:156
+#: class-online-status-insl.php:168
 msgid "having problems contacting RPC server..."
 msgstr ""
 
-#: class-online-status-insl.php:160
+#: class-online-status-insl.php:172
 msgid "Please set up your in-world object first"
 msgstr ""
 
-#: class-online-status-insl.php:163
+#: class-online-status-insl.php:175
 msgid "none"
 msgstr ""
 
-#: class-online-status-insl.php:186
+#: class-online-status-insl.php:208
 msgid "Title"
 msgstr ""
 
-#: class-online-status-insl.php:195
+#: class-online-status-insl.php:217
 msgid "Avatar Name"
 msgstr ""
 
-#: class-online-status-insl.php:238
+#: class-online-status-insl.php:260
 msgid "Unconfigured"
 msgstr ""
 
-#: class-online-status-insl.php:244
+#: class-online-status-insl.php:266
 msgid "Before status message"
 msgstr ""
 
-#: class-online-status-insl.php:252
+#: class-online-status-insl.php:274
 msgid "After status message"
 msgstr ""
 
-#: class-online-status-insl.php:260
+#: class-online-status-insl.php:282
 msgid "Error message when communicating with SL"
 msgstr ""
 
-#: class-online-status-insl.php:269
+#: class-online-status-insl.php:291
 msgid "Widget not configured message"
 msgstr ""
 
-#: class-online-status-insl.php:278
+#: class-online-status-insl.php:300
 msgid "Profile picture?"
 msgstr ""
 
@@ -326,14 +327,13 @@ msgstr ""
 
 #. translators: in-world status (online/offline/unknown), avatar display name, avatar key (UUID).
 #: save-channel.php:47
-msgid "Status \"%1\\$s\" set for \"%2\\$s\" (%3\\$s)"
+#, php-format
+msgid "Status \"%1$s\" set for \"%2$s\" (%3$s)"
 msgstr ""
 
-#. translators: URL, avatar display name, object name, object key.
-#: save-channel.php:94
-#, php-format
-msgid ""
-"PermURL \"%1$s\" saved for user \"%2$s\" using object named \"%3$s\" (%4$s)"
+#. translators: the sentence begins with the avatar name.
+#: save-channel.php:56
+msgid " is not yet registered!"
 msgstr ""
 
 #: save-channel.php:103

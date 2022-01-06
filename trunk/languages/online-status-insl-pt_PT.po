@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: Online Status inSL\n"
-"POT-Creation-Date: 2022-01-05 13:26+0000\n"
-"PO-Revision-Date: 2022-01-05 13:30+0000\n"
+"POT-Creation-Date: 2022-01-05 23:53+0000\n"
+"PO-Revision-Date: 2022-01-05 23:54+0000\n"
 "Language-Team: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,7 +78,8 @@ msgstr "Chamando URL: "
 #: class-online-status-insl-list-table.php:160
 #: class-online-status-insl-list-table.php:283
 #: class-online-status-insl-list-table.php:342
-msgid "Object \"%1\\$s\" replied: \"%2\\$s\""
+#, php-format
+msgid "Object \"%1$s\" replied: \"%2$s\""
 msgstr "Objecto «%1$s» respondeu: «%2$s»"
 
 #: class-online-status-insl-list-table.php:169
@@ -180,76 +181,76 @@ msgid "No avatars are being tracked."
 msgstr "Nenhum avatar configurado."
 
 #. Plugin Name of the plugin/theme
-#: class-online-status-insl.php:44 online-status-insl.php:157
+#: class-online-status-insl.php:56 online-status-insl.php:157
 #: online-status-insl.php:158 online-status-insl.php:190
 msgid "Online Status inSL"
 msgstr "Online Status inSL"
 
-#: class-online-status-insl.php:48
+#: class-online-status-insl.php:60
 msgid "Online Status inSL Widget"
 msgstr "Widget de Online Status inSL"
 
-#: class-online-status-insl.php:81
+#: class-online-status-insl.php:93
 msgid "(unknown avatar)"
 msgstr "(avatar desconhecido)"
 
-#: class-online-status-insl.php:83
+#: class-online-status-insl.php:95
 msgid "(invalid URL)"
 msgstr "(URL inválido)"
 
-#: class-online-status-insl.php:150
+#: class-online-status-insl.php:162
 msgid "Second Life Online Status"
 msgstr "Second Life Online Status"
 
-#: class-online-status-insl.php:153
+#: class-online-status-insl.php:165
 msgid "I am "
 msgstr "Estou "
 
-#: class-online-status-insl.php:154
+#: class-online-status-insl.php:166
 msgid " in Second Life."
 msgstr " no Second Life."
 
-#: class-online-status-insl.php:156
+#: class-online-status-insl.php:168
 msgid "having problems contacting RPC server..."
 msgstr "com problemas a contactar o servidor..."
 
-#: class-online-status-insl.php:160
+#: class-online-status-insl.php:172
 msgid "Please set up your in-world object first"
 msgstr "Por favor, primeiro configure o seu objecto no SL"
 
-#: class-online-status-insl.php:163
+#: class-online-status-insl.php:175
 msgid "none"
 msgstr "nenhum"
 
-#: class-online-status-insl.php:186
+#: class-online-status-insl.php:208
 msgid "Title"
 msgstr "Título"
 
-#: class-online-status-insl.php:195
+#: class-online-status-insl.php:217
 msgid "Avatar Name"
 msgstr "Nome do avatar"
 
-#: class-online-status-insl.php:238
+#: class-online-status-insl.php:260
 msgid "Unconfigured"
 msgstr "Não configurado"
 
-#: class-online-status-insl.php:244
+#: class-online-status-insl.php:266
 msgid "Before status message"
 msgstr "Antes da mensagem de status"
 
-#: class-online-status-insl.php:252
+#: class-online-status-insl.php:274
 msgid "After status message"
 msgstr "Depois da mensagem de status"
 
-#: class-online-status-insl.php:260
+#: class-online-status-insl.php:282
 msgid "Error message when communicating with SL"
 msgstr "Mensagem de erro na comunicação com o SL"
 
-#: class-online-status-insl.php:269
+#: class-online-status-insl.php:291
 msgid "Widget not configured message"
 msgstr "Mensagem de widget não configurado"
 
-#: class-online-status-insl.php:278
+#: class-online-status-insl.php:300
 msgid "Profile picture?"
 msgstr "Imagem de perfil?"
 
@@ -349,17 +350,14 @@ msgstr "O pedido tem de vir do Second Life ou OpenSimulator"
 
 #. translators: in-world status (online/offline/unknown), avatar display name, avatar key (UUID).
 #: save-channel.php:47
-msgid "Status \"%1\\$s\" set for \"%2\\$s\" (%3\\$s)"
+#, php-format
+msgid "Status \"%1$s\" set for \"%2$s\" (%3$s)"
 msgstr "Estado «%1$s» definido para «%2$s» (%3$s)"
 
-#. translators: URL, avatar display name, object name, object key.
-#: save-channel.php:94
-#, php-format
-msgid ""
-"PermURL \"%1$s\" saved for user \"%2$s\" using object named \"%3$s\" (%4$s)"
-msgstr ""
-"PermURL %1$s guardado para o utilizador «%2$s» usando o objecto chamado "
-"«%3$s» (%4$s)"
+#. translators: the sentence begins with the avatar name.
+#: save-channel.php:56
+msgid " is not yet registered!"
+msgstr " ainda não foi registado!"
 
 #: save-channel.php:103
 msgid "No PermURL specified on registration"
