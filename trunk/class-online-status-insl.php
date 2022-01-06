@@ -84,7 +84,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				: apply_filters( 'widget_title', $instance['title'] );
 
 			if ( ! empty( $title ) ) {
-				echo wp_kses( ( $before_title ?? '' ) . ' ' . ( $title ?? '' ) . ' ' . ( $after_title ?? '' ), self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+				echo wp_kses( $before_title . ' ' . $title . ' ' . $after_title, self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			}
 
 			// Code to check the in-world thingy and spew out results.
@@ -102,7 +102,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			// Similar for PermURL...
 			// with a catch: we now do an extra check to see if the avatar comes from the Second Life grid or an OpenSimulator grid;
 			// this will matter down below when we address the issue of profile pics & links (gwyneth 20220106).
-			$perm_url = $settings[ $object_key ]['PermURL'];
+			$perm_url = $settings[ $object_key ]['PermURL'] ?? '';
 
 			/**
 			 *  Because of scope issues, `$in_secondlife` is set here to `false` by default,
@@ -139,13 +139,13 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			// does this widget have an associated in-world object?
 			if ( empty( $settings ) || empty( $settings[ $object_key ]['Status'] ) ) {
 				?>
-		<span class="osinsl-unconfigured"><?php echo esc_attr( $instance['unconfigured'] ); ?></span>
+		<span class="osinsl-unconfigured"><?php echo wp_kses( $instance['unconfigured'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS ); ?></span>
 				<?php
 			} else {
 				?>
-		<span class="osinsl-before-status"><?php echo esc_attr( $instance['before_status'] ); ?></span>
-		<span class="osinsl-status"><?php echo esc_attr( $settings[ $object_key ]['Status'] ); ?></span>
-		<span class="osinsl-after-status"><?php echo esc_attr( $instance['after_status'] ); ?></span>
+		<span class="osinsl-before-status"><?php echo wp_kses( $instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS ); ?></span>
+		<span class="osinsl-status"><?php echo wp_kses( $settings[ $object_key ]['Status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS ); ?></span>
+		<span class="osinsl-after-status"><?php echo wp_kses( $instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS ); ?></span>
 	</div>
 				<?php
 			}
@@ -169,10 +169,8 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			$instance['title']           = wp_kses( $new_instance['title'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['avatar_name']     = wp_kses_post( $new_instance['avatar_name'] ?? '(???)' ); // probably not needed...
 			$instance['object_key']      = wp_kses( $new_instance['object_key'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
-			$instance['before_status']   = $new_instance['before_status'];
-			$instance['after_status']    = $new_instance['after_status'];
-			// $instance['before_status']   = wp_kses( $new_instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
-			// $instance['after_status']    = wp_kses( $new_instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['before_status']   = wp_kses( $new_instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['after_status']    = wp_kses( $new_instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['having_problems'] = wp_kses( $new_instance['having_problems'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['unconfigured']    = wp_kses( $new_instance['unconfigured'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['profile_picture'] = wp_kses( $new_instance['profile_picture'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
@@ -205,7 +203,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			);
 
 			$instance = wp_parse_args( (array) $instance, $defaults );
-			$title    = wp_strip_all_tags( $instance['title'] );
+			$title    = wp_kses( $instance['title'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 
 			// Get the saved options; this will allow us to choose avatar names from
 			// registered in-world objects (which are indexed by object key)
@@ -296,7 +294,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		<input class="widefat"
 			id="<?php echo esc_attr( $this->get_field_id( 'before_status' ) ); ?>"
 			name="<?php echo esc_attr( $this->get_field_name( 'before_status' ) ); ?>" type="text"
-			value="<?php echo esc_attr( $instance['before_status'] ); ?>"
+			value="<?php echo wp_kses( $instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS ); ?>"
 		/>
 	</label>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'after_status' ) ); ?>">
@@ -304,7 +302,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		<input class="widefat"
 			id="<?php echo esc_attr( $this->get_field_id( 'after_status' ) ); ?>"
 			name="<?php echo esc_attr( $this->get_field_name( 'after_status' ) ); ?>" type="text"
-			value="<?php echo esc_attr( $instance['after_status'] ); ?>"
+			value="<?php echo wp_kses( $instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS ); ?>"
 		/>
 	</label>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'having_problems' ) ); ?>">
