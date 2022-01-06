@@ -517,9 +517,9 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 
 			// if we're in Second Life, generate a link to maps.secondlife.com.
 			if ( false !== stripos( $item['PermURL'], 'secondlife' ) ) {
-				$location_str = '<a href="https://maps.secondlife.com/secondlife/%s/%F/%F/%F?title=%s&amp;msg=%s&amp;img=%s" target="_blank">%s (%d,%d,%d)</a><br />(Second Life)';
+				$location_str = '<a href="https://maps.secondlife.com/secondlife/%s/%F/%F/%F?title=%s&amp;msg=%s&amp;img=%s" target="_blank">%s (%d,%d,%d)</a><br /><small>(Second Life)</small>';
 			} else {
-				$location_str = '%s (%d,%d,%d)<br />(OpenSimulator)';
+				$location_str = '%s (%d,%d,%d)<br /><small>(OpenSimulator)</small>';
 			}
 
 			return wp_sprintf(
