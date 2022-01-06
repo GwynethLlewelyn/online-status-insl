@@ -475,7 +475,10 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 				),
 			);
 
-			return '<a href="https://my.secondlife.com/' .
+			// If the object is in Second Life, we can add a few more cute things;
+			// if it's in OpenSimulator, we may not be so lucky (gwyneth 20220106)...
+			if ( false !== stripos( $item['PermURL'], 'secondlife' ) ) {
+				$display_string = '<a href="https://my.secondlife.com/' .
 				$avatar_name_sanitised .
 				'" target="_blank">' .
 				esc_attr( $item['avatarDisplayName'] ) .
@@ -485,18 +488,24 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 				esc_attr( $item['avatarDisplayName'] ) .
 				'" title="' .
 				esc_attr( $item['avatarDisplayName'] ) .
-				'" class="aligncenter" valign="bottom"></a>' .
-				$this->row_actions( $actions );
+				'" class="aligncenter" valign="bottom"></a>';
+			} else {
+				$display_string = esc_attr( $item['avatarDisplayName'] );
+			}
+
+			return $display_string . $this->row_actions( $actions );
 		}
 
 		/**
 		 *  Deals with the special column with the object's region name.
 		 *
+		 *  If the request comes from Second Life, add a fancy map link (gwyneth 20220106).
+		 *
 		 *  @param string $item to be selected for the action.
 		 *  @return string HTML-formatted code for the link that will enable this action.
 		 */
 		public function column_objectRegion( $item ) {
-			// parse name of the region and coordinates to create a link to maps.secondlife.com.
+			// parse name of the region and coordinates.
 			$object_region = esc_attr( $item['objectRegion'] ); // first, sanitise!
 			$region_name   = substr(
 				$object_region,
@@ -506,8 +515,15 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 			$coords        = trim( esc_attr( $item['objectLocalPosition'] ), '() \t\n\r' );
 			$xyz           = explode( ',', $coords );
 
+			// if we're in Second Life, generate a link to maps.secondlife.com.
+			if ( false !== stripos( $item['PermURL'], 'secondlife' ) ) {
+				$location_str = '<a href="https://maps.secondlife.com/secondlife/%s/%F/%F/%F?title=%s&amp;msg=%s&amp;img=%s" target="_blank">%s (%d,%d,%d)</a><br />(Second Life)';
+			} else {
+				$location_str = '%s (%d,%d,%d)<br />(OpenSimulator)';
+			}
+
 			return wp_sprintf(
-				'<a href="https://maps.secondlife.com/secondlife/%s/%F/%F/%F?title=%s&amp;msg=%s&amp;img=%s" target="_blank">%s (%d,%d,%d)</a>',
+				$location_str,
 				esc_attr( $region_name ),
 				$xyz[0],
 				$xyz[1],

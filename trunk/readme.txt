@@ -133,7 +133,7 @@ Essentially, yes. Basically, you can certainly track if an avatar is online/offl
 
 If you just wish to have a text message saying "my avatar is online on grid X", then this plugin will certainly work.
 
-In future versions, the options to extract profile data from OpenSimulator grids might have some extra settings, but it still won't work with every grid. Each grid really does this differently!
+In future versions, the options to extract profile data from OpenSimulator grids might have some extra settings, but it still won't work with every grid (however, getting the profile picture _may_ be possible). Each grid really does this differently!
 
 = Can I also track NPCs/bots? =
 
@@ -325,7 +325,7 @@ or
 
 **objectkey** should be the Object Key of an in-world online status tracking object. This should be used alternatively to **avatar** and is useful if you have several objects tracking your avatar across different grids, all for the same avatar name. Note that object keys may change over time (when they get copied, duplicated, taken back to inventory and rezzed again, etc.) so this should be used only as a last alternative, when you really have several avatars in different grids, all with the same name.
 
-**picture** is optional and defaults to *none* (i.e. profile picture is not shown); if the user has set the SL web profile to be visible, this will retrieve their profile picture, and resize it to 80x80. Options are *left*, *right*, and *center* which will provide minimal formatting (additional styling requires CSS; image size is fixed for now; see the **CSS** section for more information).
+**picture** is optional and defaults to *none* (i.e. profile picture is not shown); if the user has set the Second Life web profile to be visible, this will retrieve their profile picture, and resize it to 80x80. Options are *left*, *right*, and *center* which will provide minimal formatting (additional styling requires CSS; image size is fixed for now; see the **CSS** section for more information). However, for the time being, pictures for avatars in OpenSimulator grids will _not_ be displayed.
 
 If the **picture** is set, **status** can be set to *off* (just show the picture but not the actual status).
 

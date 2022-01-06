@@ -93,12 +93,15 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			$avatar_display_name = $settings[ $object_key ]['avatarDisplayName'] ?? __( '(unknown avatar)', 'Online_Status_InSL' );
 			// Similar for PermURL...
 			$perm_url = $settings[ $object_key ]['PermURL'] ?? __( '(invalid URL)', 'Online_Status_InSL' );
+			// Check if this avatar comes from the Second Life grid or an OpenSimulator grid;
+			// this will matter down below when we address the issue of profile pics & links (gwyneth 20220106).
+			$in_secondlife = ( false !== stripos( $settings[ $objectkey ]['PermURL'], 'secondlife' ) );
 			?>
 	<div class='osinsl'>
 			<?php
 			// See if the user wants us to place a profile picture for the avatar.
 			// Note that we're using the default alignleft, aligncenter, alignright classes for WP.
-			if ( ! empty( $instance['profile_picture'] ) && 'none' !== $instance['profile_picture'] ) {
+			if ( ! empty( $instance['profile_picture'] ) && 'none' !== $instance['profile_picture'] && $in_secondlife ) {
 				$avatar_name_sanitised = sanitise_avatarname( $avatar_display_name );
 			?>
 		<a href="https://my.secondlife.com/<?php echo $avatar_name_sanitised; ?>" target="_blank">
@@ -110,7 +113,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		</a>
 		<br />
 			<?php
-			} // if picture == none, do not put anything here.
+			} // if picture == none, or if this avatar comes from OpenSimulator, do not put anything here.
 
 			// does this widget have an associated in-world object?
 			if ( empty( $settings ) || empty( $settings[ $object_key ]['Status'] ) ) {

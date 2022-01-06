@@ -523,9 +523,12 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 				$avatar_name_sanitised = sanitise_avatarname(
 					$settings[ $objectkey ]['avatarDisplayName']
 				);
-				if ( ! empty( $picture ) && ( 'none' !== $picture ) ) {
+				// check if we're in Second Life (gwyneth 20220106).
+				$in_secondlife = ( false !== stripos( $settings[ $objectkey ]['PermURL'], 'secondlife' ) );
+
+				if ( ! empty( $picture ) && ( 'none' !== $picture ) && $in_secondlife ) {
 					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
-						// This will only work on OpenSimulator if there is an avatar with the same name in SL!
+						// For now, avatars in OpenSimulator grids will not get profile links (gwyneth 20220106).
 						$return_value .=
 							"<a href='https://my.secondlife.com/" .
 							$avatar_name_sanitised .
@@ -561,13 +564,14 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 			}
 		}
 		// Search through settings; retrieve first tracked object with this avatar name.
-
 		$found_avatar = false;
 
 		foreach ( $settings as $tracked_avatar ) {
 			if ( ! empty( $tracked_avatar['avatarDisplayName'] )
 				&& ( $avatar === $tracked_avatar['avatarDisplayName'] ) ) {
-				if ( ! empty( $picture ) && ( 'none' !== $picture ) ) {
+				// See comment above: OpenSimulator avatars will neither get a picture, nor a profile link (gwyneth 20220106).
+				$in_secondlife = ( false !== stripos( $tracked_avatar['PermURL'], 'secondlife' ) );
+				if ( ! empty( $picture ) && ( 'none' !== $picture ) && $in_secondlife ) {
 					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
 						$return_value .=
 							"<a href='https://my.secondlife.com/" .
