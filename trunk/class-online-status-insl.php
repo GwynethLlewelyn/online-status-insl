@@ -192,11 +192,11 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				// phpcs:ignore
 				error_log(
 					wp_sprintf(
-						'DEBUG: instance[avatar_name]: "%1$s" instance[object_key]: "%2$s" settings[instance[object_key]] %3$s what we\'re assigning, after all: "%4$s"',
+						'DEBUG: instance[avatar_name]: "%1$s" instance[object_key]: "%2$s" settings[instance[object_key]] "%3$s" and finally: what we\'re assigning, after all: "%4$s"',
 						$instance['avatar_name'],
 						$instance['object_key'],
 						print_r( $settings[ $instance['object_key'] ], true ), // phpcs:ignore
-						$settings[ $instance['object_key'] ]['avatarDisplayName']
+						$settings[ $instance['object_key'] ]['avatarDisplayName'] ?? 'invalid avatar display name'
 					)
 				);
 				$instance['avatar_name'] = $settings[ $instance['object_key'] ]['avatarDisplayName'] ?? '(???)';
