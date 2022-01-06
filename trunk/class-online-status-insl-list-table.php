@@ -12,7 +12,7 @@
 
 if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 	// 1.4.0 includes WP_List_Table to manage the list of objects. Duh! So much easier! Warning: this class is
-	// not 'plugin-developer' friendly and might disappear in the future
+	// not 'plugin-developer' friendly and might disappear in the future.
 	if ( ! class_exists( 'WP_List_Table' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
@@ -143,8 +143,9 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						self::emit_status_message( 'info', $status_message );
 
 						// Get PermURL and contact the object.
-						$request = new WP_Http();
-						$result  = $request->request(
+						// Note: I used the WP_Http class directly; but now I prefer to use the encapsulated
+						// `wp_remote_*` functions instead (gwyneth 20220106).
+						$result = wp_remote_post(
 							$this->internal_settings[ $ping_tracking_object ]['PermURL'],
 							array(
 								'method' => 'POST',
@@ -152,7 +153,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 							)
 						);
 
-						if ( 200 === $result['response']['code'] ) {
+						if ( 200 === wp_remote_retrieve_response_code( $result ) ) {
 							self::emit_status_message(
 								'success',
 								wp_sprintf(
@@ -264,8 +265,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						self::emit_status_message( 'info', $status_message );
 
 						// Get PermURL and contact it.
-						$request = new WP_Http();
-						$result  = $request->request(
+						$result = wp_remote_post(
 							$this->internal_settings[ $reset_tracking_object ]['PermURL'],
 							array(
 								'method' => 'POST',
@@ -275,7 +275,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 
 						// For some reason, we always get an error, although the communication worked!
 						// Maybe a good idea is to read the settings again? Or save them?
-						if ( 200 === $result['response']['code'] ) {
+						if ( 200 === wp_remote_retrieve_response_code( $result ) ) {
 							self::emit_status_message(
 								'success',
 								wp_sprintf(
@@ -325,8 +325,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 						self::emit_status_message( 'info', $status_message );
 
 						// Get PermURL and send it the killing message!
-						$request = new WP_Http();
-						$result  = $request->request(
+						$result = wp_remote_post(
 							$this->internal_settings[ $die_tracking_object ]['PermURL'],
 							array(
 								'method' => 'POST',
@@ -334,7 +333,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 							)
 						);
 
-						if ( 200 === $result['response']['code'] ) {
+						if ( 200 === wp_remote_retrieve_response_code( $result ) ) {
 							self::emit_status_message(
 								'success',
 								wp_sprintf(
@@ -396,7 +395,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		/**
 		 *  Places a checkbox on the column for the user to select this object.
 		 *
-		 *  @param string $item to be selected.
+		 *  @param object $item to be selected.
 		 *  @return string HTML-formatted code for the correspondent item.
 		 */
 		public function column_cb( $item ) {
@@ -435,7 +434,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		/**
 		 *  Deals with the special column with the avatar's display name.
 		 *
-		 *  @param string $item to be selected for the action.
+		 *  @param object $item to be selected for the action.
 		 *  @return string HTML-formatted code for the link that will enable this action.
 		 */
 		public function column_avatarDisplayName( $item ) {
@@ -501,7 +500,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *
 		 *  If the request comes from Second Life, add a fancy map link (gwyneth 20220106).
 		 *
-		 *  @param string $item to be selected for the action.
+		 *  @param object $item to be selected for the action.
 		 *  @return string HTML-formatted code for the link that will enable this action.
 		 */
 		public function column_objectRegion( $item ) {
@@ -616,7 +615,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *  Deals with the special column with the timestamp of the last successful connection
 		 *  with the script running inside the in-world item.
 		 *
-		 *  @param string $item to be selected for the action.
+		 *  @param object $item to be selected for the action.
 		 *  @phan-param array{string: string} $item
 		 *  @return string HTML-formatted code for the link that will enable this action.
 		 */
