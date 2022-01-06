@@ -70,6 +70,13 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 *  @return void
 		 */
 		public function widget( $args, $instance ) {
+			/**
+			 *  The variables below are extracted.
+			 *
+			 *  @var string $before_widget HTML set by user to be shown before the widget is printed
+			 *  @var string $title         Widget title, which may even be set from a filter.
+			 *  @var string $after_widget  HTML set by user to be shown after the widget is printed
+			 */
 			extract( $args, EXTR_SKIP );
 			echo wp_kses( $before_widget ?? '', self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$title = empty( $instance['title'] )
@@ -96,12 +103,19 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			// with a catch: we now do an extra check to see if the avatar comes from the Second Life grid or an OpenSimulator grid;
 			// this will matter down below when we address the issue of profile pics & links (gwyneth 20220106).
 			$perm_url = $settings[ $object_key ]['PermURL'];
+
+			/**
+			 *  Because of scope issues, `$in_secondlife` is set here to `false` by default,
+			 *  and changed below if we properly detect that the request comes from Second Life.
+			 *  (gwyneth 20220106)
+			 *
+			 *  @var boolean
+			 */
+			$in_secondlife = false;
 			if ( empty( $perm_url ) ) {
 				$perm_url = esc_attr__( '(invalid URL)', 'Online_Status_InSL' );
-				// If it has an invalid/unexisting PermURL, I guess we can assume it's unconfigured (gwyneth 20220106)...
-				$in_secondlife = false;
 			} else {
-				$in_secondlife = stripos( $perm_url, 'secondlife' ) );
+				$in_secondlife = ( false !== stripos( $perm_url, 'secondlife' ) ); // making sure that this is boolean  (gwyneth 20220106)!
 			}
 			?>
 	<div class='osinsl'>
@@ -248,7 +262,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 
 					// Output a dropbox option with 'Avatar Name [Region (x,y,z)]'.
 					?>
-		<option <?php if ( $one_tracked_object['objectKey'] == $instance['object_key'] ) : ?>
+		<option <?php if ( $one_tracked_object['objectKey'] === $instance['object_key'] ) : ?>
 			selected="selected"
 				<?php endif; ?>
 			value="<?php echo esc_attr( $one_tracked_object['objectKey'] ); ?>">

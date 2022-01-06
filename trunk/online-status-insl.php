@@ -481,15 +481,23 @@ function online_status_insl_register_settings() {
  * @return string               Shortcode output.
  */
 function online_status_insl_shortcode( $atts = array(), $content = null, $tag = '' ) {
-	// error_log('Entering online_status_insl_shortcode, atts are ' . print_r($atts, true)); // debug.
+	/**
+	*  The variables below are extracted.
+	*
+	*  @var string $avatar       Avatar name if it exists, and provides a default of (???) which is supposed *not* to exist.
+	*  @var string $objectkey    If there are multiple avatars with the same name, you need the object key instead.
+	*  @var string $picture      Emits picture attrs, can be center/right/left/ etc. Defaults to 'none'.
+	*  @var string $status       To flag that this widget should not emit any status text, just the picture (or nothing).
+	*  @var string $profilelink  Puts a link to the SL web profile if the picture is active. Does not work for OpenSimulator.
+	*/
 	extract(
 		shortcode_atts(
 			array(
-				'avatar'      => '(???)', // assigns $avatar to name if it exists, and provides a default of (???) which is supposed *not* to exist.
-				'objectkey'   => NULL_KEY, // if there are multiple avatars with the same name, you need the object key instead.
-				'picture'     => 'none', // emits picture tags, can be center/right/left/ etc.
-				'status'      => 'on', // emits no status, just the picture (or nothing).
-				'profilelink' => 'off', // puts links to web profile if picture active.
+				'avatar'      => '(???)',
+				'objectkey'   => NULL_KEY,
+				'picture'     => 'none',
+				'status'      => 'on',
+				'profilelink' => 'off',
 			),
 			$atts
 		)
