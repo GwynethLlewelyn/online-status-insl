@@ -159,9 +159,9 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 *  It now includes our 'own' check of tags for `wp_kses()` in an attempt
 		 *  to preserve _some_ of the perfectly valid tags (gwyneth 20220106).
 		 *
-		 *  @param string[] $new_instance (one wonders why this gets passed at all).
-		 *  @param string[] $old_instance (the widget we're currently modifying).
-		 *  @return string[] with the new instance.
+		 *  @param string[] $new_instance (allegedly, these are the settings we get via form).
+		 *  @param string[] $old_instance The (full set of the) old settings for this widget.
+		 *  @return string[]|false Returns the new instance, or false for no update.
 		 *  @phan-return array{}
 		 */
 		public function update( $new_instance, $old_instance ) {
@@ -169,8 +169,10 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			$instance['title']           = wp_kses( $new_instance['title'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['avatar_name']     = wp_kses_post( $new_instance['avatar_name'] ?? '(???)' ); // probably not needed...
 			$instance['object_key']      = wp_kses( $new_instance['object_key'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
-			$instance['before_status']   = wp_kses( $new_instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
-			$instance['after_status']    = wp_kses( $new_instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			$instance['before_status']   = $new_instance['before_status'];
+			$instance['after_status']    = $new_instance['after_status'];
+			// $instance['before_status']   = wp_kses( $new_instance['before_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			// $instance['after_status']    = wp_kses( $new_instance['after_status'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['having_problems'] = wp_kses( $new_instance['having_problems'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['unconfigured']    = wp_kses( $new_instance['unconfigured'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$instance['profile_picture'] = wp_kses( $new_instance['profile_picture'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
