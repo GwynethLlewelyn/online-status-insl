@@ -17,7 +17,7 @@
  */
 
 if ( empty( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] ) ) {
-	header( 'HTTP/1.0 405 Method Not Allowed' );
+	status_header( 405, 'Method Not Allowed' );
 	header( 'Content-type: text/plain; charset=utf-8' );
 	die( esc_attr__( 'Request has to come from Second Life or OpenSimulator', 'online-status-insl' ) );
 }
@@ -40,17 +40,17 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 
 		update_option( 'online_status_insl_settings', $settings );
 
-		header( 'HTTP/1.0 200 OK' );
+		status_header( 200, 'OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
-		echo wp_sprintf(
+		printf(
 			// translators: in-world status (online/offline/unknown), avatar display name, avatar key (UUID).
-			wp_kses_post( __( 'Status "%1\$s" set for "%2\$s" (%3\$s)', 'online-status-insl' ) ),
+			__( 'Status "%1$s" set for "%2$s" (%3$s)', 'online-status-insl' ),
 			esc_attr( $_REQUEST['status'] ),
 			esc_attr( $settings[ $object_key ]['avatarDisplayName'] ),
 			esc_attr( $settings[ $object_key ]['avatarKey'] )
 		);
 	} else {
-		header( 'HTTP/1.0 404 Avatar not found' );
+		status_header( 404, 'Avatar not found' );
 		header( 'Content-type: text/plain; charset=utf-8' );
 		// translators: the sentence begins with the avatar name.
 		echo esc_attr( $_REQUEST['avatar_name'] ) . esc_attr__( ' is not yet registered!', 'online-status-insl' );
@@ -87,7 +87,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 
 		update_option( 'online_status_insl_settings', $settings );
 
-		header( 'HTTP/1.0 200 OK' );
+		status_header( 200, 'OK' );
 		header( 'Content-type: text/plain; charset=utf-8' );
 		echo wp_sprintf(
 			// translators: URL, avatar display name, object name, object key.
@@ -98,7 +98,7 @@ if ( ! empty( $_REQUEST['action'] ) && 'status' === $_REQUEST['action'] ) {
 			$settings[ $object_key ]['objectKey']
 		);
 	} else {
-		header( 'HTTP/1.0 405 Method Not Allowed' );
+		status_header( 405, 'Method Not Allowed' );
 		header( 'Content-type: text/plain; charset=utf-8' );
 		esc_attr_e( 'No PermURL specified on registration', 'online-status-insl' );
 	}
