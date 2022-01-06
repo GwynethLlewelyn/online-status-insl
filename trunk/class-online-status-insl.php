@@ -186,19 +186,24 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		 */
 		public function form( $instance ) {
 			$defaults = array(
+				// translators: this is the title of the *widget* by default.
 				'title'           => __( 'Second Life Online Status', 'online-status-insl' ),
 				'avatar_name'     => '', // probably not needed, we get this from the settings.
 				'object_key'      => NULL_KEY,
+				// translators: what ought to appear *before* the online/offline status.
 				'before_status'   => __( 'I am ', 'online-status-insl' ),
+				// translators: what ought to appear *after* the online/offline status.
 				'after_status'    => __( ' in Second Life.', 'online-status-insl' ),
+				// translators: the message replacing status/after_status if WordPress cannot contact the in-world object.
 				'having_problems' => __(
-					'having problems contacting RPC server...',
+					'having problems contacting the in-world object...',
 					'online-status-insl'
 				),
 				'unconfigured'    => __(
 					'Please set up your in-world object first',
 					'online-status-insl'
 				),
+				// translators: when the user is asked for a profile picture alignment, 'none' means *not* to display the profile picture at all.
 				'profile_picture' => __( 'none', 'online-status-insl' ),
 			);
 
@@ -324,14 +329,14 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 		/>
 	</label>
 	<label for="<?php echo esc_attr( $this->get_field_id( 'profile_picture' ) ); ?>">
-			<?php esc_attr_e( 'Profile picture?', 'online-status-insl' ); ?>
+			<?php /* translators: this question is for the profile picture alignment. */ esc_attr_e( 'Profile picture?', 'online-status-insl' ); ?>
 	</label>
 	<select id="<?php echo esc_attr( $this->get_field_id( 'profile_picture' ) ); ?>"
 		name="<?php echo esc_attr( $this->get_field_name( 'profile_picture' ) ); ?>" class="widefat">
-		<option <?php echo ( 'none' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'none', 'online-status-insl' ); ?></option>
-		<option <?php echo ( 'center' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'center', 'online-status-insl' ); ?></option>
-		<option <?php echo ( 'left' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'left', 'online-status-insl' ); ?></option>
-		<option <?php echo ( 'right' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'right', 'online-status-insl' ); ?></option>
+		<option <?php /* translators: this means no profile picture at all. */ echo ( 'none' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'none', 'online-status-insl' ); ?></option>
+		<option <?php /* translators: profile picture aligned to the center. */ echo ( 'center' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'center', 'online-status-insl' ); ?></option>
+		<option <?php /* translators: profile picture aligned to the left. */ echo ( 'left' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'left', 'online-status-insl' ); ?></option>
+		<option <?php /* translators: profile picture aligned to the right. */ echo ( 'right' === $instance['profile_picture'] ) ? 'selected="selected"' : ''; ?>><?php esc_attr_e( 'right', 'online-status-insl' ); ?></option>
 	</select>
 </p>
 			<?php
