@@ -152,7 +152,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 							)
 						);
 
-						if ( '200' === $result['response']['code'] ) {
+						if ( 200 === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
 								wp_sprintf(
@@ -275,7 +275,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 
 						// For some reason, we always get an error, although the communication worked!
 						// Maybe a good idea is to read the settings again? Or save them?
-						if ( '200' === $result['response']['code'] ) {
+						if ( 200 === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
 								wp_sprintf(
@@ -334,7 +334,7 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 							)
 						);
 
-						if ( '200' === $result['response']['code'] ) {
+						if ( 200 === $result['response']['code'] ) {
 							self::emit_status_message(
 								'success',
 								wp_sprintf(
