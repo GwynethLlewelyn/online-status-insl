@@ -28,7 +28,7 @@
  * Some tweaks by SignpostMarv
  *
  * `WP_List_Table` code adapted from WP Engineer, Matt Van Andel and Paul Underwood
- * `WP_Http` code adapted from planetOzh
+ * `WP_Http` code adapted from [@planetOzh](https://planetozh.com/)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -70,9 +70,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 define( 'NULL_KEY', '00000000-0000-0000-0000-000000000000' ); // always useful when playing around with SL-related code.
 define( 'ONLINE_STATUS_INSL_MAIN_FILE', __FILE__ ); // needed by blocks/blocks.php (gwyneth 20210622) - unused (yet); will be used in 1.6.0+.
-if ( ! class_exists( 'WP_Http' ) ) {
-	include_once ABSPATH . WPINC . '/class-http.php';
-}
 
 // Include the two classes we're using.
 require_once 'class-online-status-insl.php';
