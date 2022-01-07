@@ -10,6 +10,11 @@
  *  @link     https://gwynethllewelyn.net/online-status-insl/
  */
 
+// Do not allow direct access to this file.
+if ( ! defined( 'WPINC' ) ) {
+	die( 'Direct script access denied.' ); // no translation, because `__()` may not be available...
+}
+
 if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 	// 1.4.0 includes WP_List_Table to manage the list of objects. Duh! So much easier! Warning: this class is
 	// not 'plugin-developer' friendly and might disappear in the future.

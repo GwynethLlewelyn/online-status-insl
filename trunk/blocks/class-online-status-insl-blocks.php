@@ -11,6 +11,11 @@
  * @link     https://gwynethllewelyn.net/online-status-insl/
  **/
 
+// Do not allow direct access to this file.
+if ( ! defined( 'WPINC' ) ) {
+	die( 'Direct script access denied.' ); // no translation, because `__()` may not be available...
+}
+
 /**
  * Class Online_Status_InSL_Blocks
  */
