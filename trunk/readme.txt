@@ -4,8 +4,8 @@ Donate link: https://paypal.me/GwynethLlewelyn
 Tags: second life, opensimulator, online, status, profile, sl
 Requires at least: 5.0
 Requires PHP: 7.3
-Tested up to: 5.8.2
-Stable tag: trunk
+Tested up to: 5.8
+Stable tag: 1.6.1
 License: BSD-3-Clause
 License URI: https://directory.fsf.org/wiki/License:BSD-3-Clause
 
@@ -181,112 +181,12 @@ I'm glad you find it useful. Sure, to make collaboration easier, the code for th
 * TODO: how to fix 'fake' requests (after all, the only thing you need to do is to fake a few headers using, say, Postman...)
 * TODO: re-audit those edge cases when a 'fake' request can potentially still do some XSS injection (!)
 
-= 1.6.0 (abandoned) =
-* Adds support for editor blocks (Gutenberg): unfinished!
-* Several more layers of complexity in setting up the plugin, because: Gutenberg 😩
-* Currently *on hold* since other things have priority...
-
-= 1.5.0 =
-Recent versions of WordPress basically broke _everything_. So:
-
-* Cleaned up one or two things to bring the code up to PHP 7.3+ compliance
-* Fixed some fatal errors due to WP changes on the call to `WP_Widget::__construct()`
-* Asked for translation validation from the WP Polyglot team; until they approve it, you can continue to use the supplied `.mo` and `.po` files
-* Figured out a workaround to load the _current_ language files: https://stackoverflow.com/questions/45525390/wordpress-plugin-translation-load-plugin-textdomain#comment105104921_45883184; see https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/#loading-text-domain
-* Fixed location of Portuguese (European) and British English translation files (Portuguese was empty!)
-* Fixed a stupid copy & paste that broke `ping`
-* Sprinkled a few more `esc_attr()` to prevent possible XSS attacks
-* Added more 'compatible' versions (from 1.3.8 to 1.4.2 are considered 'compatible')
-* Lots of (manual) pretty formatting, mostly because WP's formatting logic is weird for automated prettifiers
-* Now the LSL script will use HTTPS for outgoing calls (if the WP site is set up to use `https://`); incoming calls with HTTPS are possible, _manually_ replacing `llRequestURL()` with `llRequestSecureURL()`, in SL as well as https-enabled OpenSim grids
-
-**TODO:** Automatically detect if OpenSim has a working `llRequestSecureURL()` implementation and update script automatically
-
-= 1.4.2 =
-* Experimental support for PHP 8.0
-
-= 1.4.1 =
-* Bumped version to make sure WordPress.org doesn't de-list us from their archive
-* Trying to make everything work under PHP 7.4+ without giving any warnings
-
-= 1.4.0 =
-* New backoffice display, using `WP_List_Table`. This makes it more portable to future versions and is 100% compatible with the overall look & feel of WordPress
-* In-world script now allows remote reset/deletion requests. Older objects will silently fail with reset/deletion requests, but the rest of the functionality will still work!
-* You can now ping in-world objects to see if they're active and/or your WP database is in sync. This will work with older scripts, too
-* Objects that have the current version will have its version number coloured green; older (but functional) versions will be displayed in yellow; ancient versions (which will not work) will be displayed red
-* Status display on the plugin backoffice is coloured green for online, red for offline
-* You can now use bulk actions to ping/delete/reset/destroy objects
-* Several sections of the code were reshuffled, and lots of comments added
-
-= 1.3.8 =
-* Changed the way avatar names are selected: now it's by object key, not avatar name (to allow avatars on OpenSim grids to be tracked)
-* Because 1.3.7 didn't fix the deletion error, new code was developed using the above changes; this might invalidate previous versions! (Because objects are now tracked by object key and not avatar name, previous settings might have invalid data)
-* Avatar profile pictures do not use `align=XXX` tags but instead the class gets `aligncenter`, `alignleft`, `alignright` for consistency with WP, current themes, and recent CSS versions
-* When selecting an avatar name on the Widget, it displays region and position (to allow avatars with the same name in different grids to be easily selected)
-* Added `objectkey` option for the shortcode (to deal with avatars with the same name in different grids)
-* Added fancy banner
-* Added a few extra translations (they only appeared on in-world HTTP-in responses, not on WP)
-* Confirmed compatibility with WP 3.9
-* Users upgrading directly from 1.0 (or earlier versions) should now manually delete the `channel.inc` file under `wp-content/uploads`
-
-= 1.3.7 =
-* Minor retweaking of the logic for deleting online status indicators from the admin page
-
-= 1.3.6 =
-* Fixed tiny bug with incompatible function names with other plugins of mine
-
-= 1.3.5 =
-* Added support for multiple languages. Portuguese was added. [Translators welcome](https://translate.wordpress.org/projects/wp-plugins/online-status-insl/)!
-* Fixed issue for avatars with "Resident" as their last name (links to profile images were broken)
-* Fixed minor programming issues and alt/title tags for the images for full HTML compliance
-
-= 1.3.0 =
-* Completely changed the communications protocol. Now no HTTP-in calls are used. This makes the widget much faster to show on pages, and should lead to less "status unknown errors". Thanks to [Celebrity Trollop](https://my.secondlife.com/celebrity.trollop) for proposing a much simpler way to the code design!
-* Additionally, shortcodes were not really working _unless_ there was also a widget on the blog. The change should now fix this.
-
-= 1.2.1 =
-* Fixed lack of return code on HTTP requests to in-world objects, probably caused by timeouts. Thanks for Puilia for checking it and to Celebrity Trollop for providing a simple fix (I've also added 60 seconds of timeout instead of the default of 5)
-
-= 1.2.0 =
-* Adds SL profile picture to the widget, to the backoffice, and to shortcodes
-* Added the ability to delete entries from the database
-* Changed LSL script to be inside a textarea for better layout
-* Fixed shortcode bugs and added new options
-* Fixed incorrect saving of serialized settings and added `maybe_unserialize()` to deal with warnings when serialization was not required (happened when multiple widgets were used)
-* Added `target="_blank"` on links to avatar profile and object location
-* Removed dependency on `cURL`
-
-= 1.1.2 =
-* More URL bug fixes, solved with `rawurlencode()`
-
-= 1.1.1 =
-* Fixes a bug on links when in-world object names have single quotes in the names
-
-= 1.1.0 =
-* Implements the Shortcode API for embedding the status on a page or post (with its own CSS classes)
-* Added further snapshots to help out the installation process in Second Life
-
-= 1.0 =
-Major upgrade! Note that the old version of the LSL script will not work any longer! You need to replace all in-world scripted objects manually!
-
-* Uses `HTTPRequest` and `HTTP-in` instead of XML-RPC
-* Supports multiple avatars and multiple widgets
-* Options are now saved using the WP mechanism instead of using external files
-* Uses a caching mechanism to reduce the number of requests to the simulators
-* Added CSS `div` and `span` for the widget to allow restyling
-
-= 0.9.1 =
-* Added some contributed code by [SignpostMarv](https://signpostmarv.name/) replacing obsolete attribute escaping code
-* Added smaller screenshot
-* Added a FAQ Q&A for "status unknown"
-
-= 0.9 =
-* First release.
+The remaining (historical) changelog is kept on the file `changelog.txt`, as per the WP recommendations.
 
 == Upgrade Notice ==
 
 = 1.6.0 =
-Adds editor blocks (Gutenberg) support, thus requiring WP 5.0 or later.
+Major code refactoring, trying to keep it cleanly styled according to the WordPress Coding Standard (as checked by the PHP CodeSniffer). Also tested under PHP 8.1 and WP 5.8+.
 
 = 1.5.0 =
 Due to changes in the way WP handles translations, and the level of restrictions imposed by recent
