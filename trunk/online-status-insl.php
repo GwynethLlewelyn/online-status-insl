@@ -1,72 +1,75 @@
 <?php
 /**
-Plugin Name: Online Status inSL
-Plugin URI: https://gwynethllewelyn.net/online-status-insl/
-Description: Shows your online status in the Second Life®/OpenSimulator virtual worlds on a widget (or use shortcodes/editor blocks)
-Version: 1.6.1
-Requires at least: 5.0
-Requires PHP: 7.3
-Author: Gwyneth Llewelyn
-Author URI: https://gwynethllewelyn.net/
-License: BSD-3-Clause
-License URI: https://directory.fsf.org/wiki/License:BSD-3-Clause
-Text Domain: online-status-insl
-Domain Path: /languages
-
-Copyright 2011-2022 Gwyneth Llewelyn. Most rights reserved.
-
-Some tweaks by SignpostMarv
-
-`WP_List_Table` code adapted from WP Engineer, Matt Van Andel and Paul Underwood
-`WP_Http` code adapted from planetOzh
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
-
-	(1) Redistributions of source code must retain the above copyright
-	notice, this list of conditions and the following disclaimer.
-
-	(2) Redistributions in binary form must reproduce the above copyright
-	notice, this list of conditions and the following disclaimer in
-	the documentation and/or other materials provided with the
-	distribution.
-
-	(3)The name of the author may not be used to
-	endorse or promote products derived from this software without
-	specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
-IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
-
----
-
-Based on code developed by Dave Doolin, http://website-in-a-weekend.net/extending-wordpress/wordpress-widget-plugin-super-easy-customization-tuesday-means-technical/
-
- * PHPDocumentor tags for this plugin below.
+ * Online Status inSL
  *
- * @category OnlineStatusInSL
- * @package  OnlineStatusInSL
- * @author   Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
- * @license  https://directory.fsf.org/wiki/License:BSD-3-Clause BSD 3-Clause "New" or "Revised" License
- * @version  1.6.1
- * @link     https://gwynethllewelyn.net/online-status-insl/
+ * @package           OnlineStatusInSL
+ * @category          OnlineStatusInSL
+ * @author            Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
+ * @license           https://directory.fsf.org/wiki/License:BSD-3-Clause BSD 3-Clause "New" or "Revised" License
+ * @version           1.6.1
+ * @link              https://gwynethllewelyn.net/online-status-insl/
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Online Status inSL
+ * Plugin URI:        https://gwynethllewelyn.net/online-status-insl/
+ * Description:       Shows your online status in the Second Life®/OpenSimulator virtual worlds on a widget (or use shortcodes/editor blocks)
+ * Version:           1.6.1
+ * Requires at least: 5.0
+ * Requires PHP:      7.3
+ * Author:            Gwyneth Llewelyn
+ * Author URI:        https://gwynethllewelyn.net/
+ * License:           BSD-3-Clause
+ * License URI:       https://directory.fsf.org/wiki/License:BSD-3-Clause
+ * Text Domain:       online-status-insl
+ * Domain Path:       /languages
+ *
+ * Copyright 2011-2022 Gwyneth Llewelyn. Most rights reserved.
+ *
+ * Some tweaks by SignpostMarv
+ *
+ * `WP_List_Table` code adapted from WP Engineer, Matt Van Andel and Paul Underwood
+ * `WP_Http` code adapted from [@planetOzh](https://planetozh.com/)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ * (1) Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *
+ * (2) Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in
+ * the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * (3)The name of the author may not be used to
+ * endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * ---
+ *
+ * Based on code developed by Dave Doolin, http://website-in-a-weekend.net/extending-wordpress/wordpress-widget-plugin-super-easy-customization-tuesday-means-technical/
  */
+
+// Do not allow direct access to this file.
+if ( ! defined( 'WPINC' ) ) {
+	die( 'Direct script access denied.' ); // no translation, because `__()` may not be available...
+}
 
 define( 'NULL_KEY', '00000000-0000-0000-0000-000000000000' ); // always useful when playing around with SL-related code.
 define( 'ONLINE_STATUS_INSL_MAIN_FILE', __FILE__ ); // needed by blocks/blocks.php (gwyneth 20210622) - unused (yet); will be used in 1.6.0+.
-if ( ! class_exists( 'WP_Http' ) ) {
-	include_once ABSPATH . WPINC . '/class-http.php';
-}
 
 // Include the two classes we're using.
 require_once 'class-online-status-insl.php';
