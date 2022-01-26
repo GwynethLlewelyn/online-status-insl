@@ -6,16 +6,17 @@
  * @category          OnlineStatusInSL
  * @author            Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
  * @license           https://directory.fsf.org/wiki/License:BSD-3-Clause BSD 3-Clause "New" or "Revised" License
- * @version           1.6.1
+ * @version           1.6.2
  * @link              https://gwynethllewelyn.net/online-status-insl/
  *
  * @wordpress-plugin
  * Plugin Name:       Online Status inSL
  * Plugin URI:        https://gwynethllewelyn.net/online-status-insl/
  * Description:       Shows your online status in the Second Life®/OpenSimulator virtual worlds on a widget (or use shortcodes/editor blocks)
- * Version:           1.6.1
+ * Version:           1.6.2
  * Requires at least: 5.0
  * Requires PHP:      7.3
+ * Tested up to:      5.9.1-alpha
  * Author:            Gwyneth Llewelyn
  * Author URI:        https://gwynethllewelyn.net/
  * License:           BSD-3-Clause

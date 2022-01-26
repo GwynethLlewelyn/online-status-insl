@@ -4,8 +4,8 @@ Donate link: https://paypal.me/GwynethLlewelyn
 Tags: second life, opensimulator, online, status, profile, sl
 Requires at least: 5.0
 Requires PHP: 7.3
-Tested up to: 5.8
-Stable tag: 1.6.1
+Tested up to: 5.9.1-alpha
+Stable tag: 1.6.2
 License: BSD-3-Clause
 License URI: https://directory.fsf.org/wiki/License:BSD-3-Clause
 
@@ -168,18 +168,8 @@ I'm glad you find it useful. Sure, to make collaboration easier, the code for th
 
 == Changelog ==
 
-= 1.6.1 =
-* Major code refactoring to comply as much as possible with the WordPress coding guidelines!
-* Code is now being audited via [PHP CodeSniffer](https://github.com/tommcfarlin/phpcs-wpcs-vscode) to check for non-conformities to overall style (even if sometimes I have no choice but to override it); I've also run [PHP Mess Detector](https://phpmd.org/) to figure out more tricky/obscure aspects. There are still some outstanding issues to fix!
-* PHP 8+ is stricter when handling wrong types, so some changes were warranted...
-* Added gazillions of anti-XSS checks, sometimes to the point of exasperation. The current code should run much slower, but at least it will be a _bit_ more secure...
-* Gutenberg support (blocks & widgets) is, for the moment, on hold (too complex for my tiny little head); bumped to 2.0.0
-* Changing " to ' wherever appropriate to conform to some new fancy PHP guidelines!
-* Publishing to GitHub as well (which also required SVN to ignore Git-specific things, as well as ignoring my own local configuration, and whatever Mac-specific hidden files that are pointless to save).
-* Lots of code refactoring _with_ PHPDoc-compliant code documentation, since being on GitHub _may_ mean that more people contribute code (wishful thinking, I know); also, there will be (potentially) some automated tasks in GitHub looking for the documentation...
-* Getting translations updated for the new code. Note that only the English-UK team responded (the Portuguese team couldn't care less about this plugin), so I'm sticking with the old method of providing translations. I've tried putting the files on Crowdin, but I think they do not work yet...
-* TODO: how to fix 'fake' requests (after all, the only thing you need to do is to fake a few headers using, say, Postman...)
-* TODO: re-audit those edge cases when a 'fake' request can potentially still do some XSS injection (!)
+= 1.6.2 =
+Bumped version after having successfully tested that everything continues to work under WP 5.9.1-alpha and PHP 8.1.2.
 
 The remaining (historical) changelog is kept on the file `changelog.txt`, as per the WP recommendations.
 
