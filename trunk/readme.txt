@@ -4,8 +4,8 @@ Donate link: https://paypal.me/GwynethLlewelyn
 Tags: second life, opensimulator, online, status, profile, sl
 Requires at least: 5.0
 Requires PHP: 7.3
-Tested up to: 5.9.1-alpha
-Stable tag: 1.6.2
+Tested up to: 5.9.3
+Stable tag: 1.6.3
 License: BSD-3-Clause
 License URI: https://directory.fsf.org/wiki/License:BSD-3-Clause
 
@@ -168,10 +168,11 @@ I'm glad you find it useful. Sure, to make collaboration easier, the code for th
 
 == Changelog ==
 
-= 1.6.2 =
-Bumped version after having successfully tested that everything continues to work under WP 5.9.1-alpha and PHP 8.1.2.
+= 1.6.3 =
+Apparently, a vulnerability was detected on the Gutenberg Block subsystem (which is not yet working anyway), and Automattic closed access to this plugin. Hopefully, I managed to fix it, and their automatic validation system will accept the changes. If not, I'll drop blocks support for the time being.
 
 The remaining (historical) changelog is kept on the file `changelog.txt`, as per the WP recommendations.
+
 
 == Upgrade Notice ==
 

@@ -6,7 +6,7 @@
  *  @package  OnlineStatusInSL
  *  @author   Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
  *  @license  https://directory.fsf.org/wiki/License:BSD-3-Clause BSD 3-Clause "New" or "Revised" License
- *  @version  1.6.2
+ *  @version  1.6.3
  *  @link     https://gwynethllewelyn.net/online-status-insl/
  */
 

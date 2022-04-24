@@ -2,6 +2,9 @@
 
 _(Historical only)_
 
+= 1.6.2 =
+Bumped version after having successfully tested that everything continues to work under WP 5.9.1-alpha and PHP 8.1.2.
+
 = 1.6.1 =
 * Major code refactoring to comply as much as possible with the WordPress coding guidelines!
 * Code is now being audited via [PHP CodeSniffer](https://github.com/tommcfarlin/phpcs-wpcs-vscode) to check for non-conformities to overall style (even if sometimes I have no choice but to override it); I've also run [PHP Mess Detector](https://phpmd.org/) to figure out more tricky/obscure aspects. There are still some outstanding issues to fix!
