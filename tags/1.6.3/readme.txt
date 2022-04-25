@@ -1,11 +1,11 @@
 === Online Status inSL ===
 Contributors: gwynethllewelyn
-Donate link: https://gwynethllewelyn.net/
+Donate link: https://paypal.me/GwynethLlewelyn
 Tags: second life, opensimulator, online, status, profile, sl
-Requires at least: 4.6
+Requires at least: 5.0
 Requires PHP: 7.3
-Tested up to: 5.7.3-alpha
-Stable tag: trunk
+Tested up to: 5.9.3
+Stable tag: 1.6.3
 License: BSD-3-Clause
 License URI: https://directory.fsf.org/wiki/License:BSD-3-Clause
 
@@ -79,7 +79,7 @@ This happens when the dataserver in Second Life is slow in responding; there is 
 
 = I upgraded and now the widget does not update the status =
 
-Go in-world and touch the in-world object. It should re-register and everything should work fine again.
+Go in-world and touch the in-world object. It should re-register and everything should work fine again. If not, create a new LSL script — using the provided pre-generated one — and replace the old one. The idea is that the API hasn't changed much, to make sure that old scripts will still work (see the first question in this FAQ), but, alas, I'm merely human and prone to err.
 
 = The LSL script cannot contact the webserver! =
 
@@ -123,15 +123,39 @@ My apologies. New users have a "fake" last name, "Resident", which is however ne
 
 = Can I get translations in different languages? =
 
-Starting with 1.3.5, you can. A default English .po file is supplied, so you can tweak it to your own language. I've added Portuguese as an example. More translations are welcome!
+Starting with 1.3.5, you can. A default English (US) `.pot` file is supplied, so [you can tweak it to your own language using POEdit](https://poedit.net/). I've added Portuguese and British English as examples. More translations are most welcome!
+
+**Note:** WordPress multilingual support is currently being done differently (no need to directly tweak `.po` files), but it requires the WordPress 'translation team' to approve them (this is not under my control). See also the developer notes for tags 1.5.0 and 1.6.1.
 
 = Will this work for OpenSimulator-based grids? =
 
-Not quite, but almost. Basically, you can certainly track if an avatar is online/offline on any grid (the tracking code is grid-independent). However, each OpenSimulator grid operator stores avatar profiles differently. This means that you won't get any fancy pictures, links to profiles, or to location — these are hard-coded to work with the Second Life grid.
+Essentially, yes. Basically, you can certainly track if an avatar is online/offline on any grid (the tracking code is grid-independent). However, each OpenSimulator grid operator stores avatar profiles differently. This means that you won't get any fancy pictures, links to profiles, or to location — these are hard-coded to work with the Second Life grid.
 
 If you just wish to have a text message saying "my avatar is online on grid X", then this plugin will certainly work.
 
-In future versions, the options to extract profile data from OpenSimulator grids might have some extra settings, but it still won't work with every grid. Each grid really does this differently!
+In future versions, the options to extract profile data from OpenSimulator grids might have some extra settings, but it still won't work with every grid (however, getting the profile picture _may_ be possible). Each grid really does this differently!
+
+= Can I also track NPCs/bots? =
+
+NPCs (Non-Player Characters) or 'bots (automated avatars, controlled by software) are perfectly 'normal' avatars from the perspective of the Second Life Grid; they have no more and no less features than human-controlled avatars and are created exactly in the same way. The sole difference is that, instead of a human behind a Second Life Viewer (released by Linden Lab or by a third party, such as the Firestorm Viewer), there is just software 'speaking' the network protocol developed by Linden Lab for the communication between the Grid and the Viewers; from the perspective of the Grid, therefore, it has no way of distinguishing if there is a human behind a viewer or merely software 'talking' exactly the same protocol, using a popular software development kit such as [LibreMetaverse](https://github.com/cinderblocks/libremetaverse).
+
+Because of that, it's perfectly possible to track NPCs/bots for their online status, exactly as if these were 'normal', human-driven avatars. It's likely, however, that you'll need to log in to the Grid as the NPC/bot to properly set up everything as required (i.e. dropping the script inside an object owned by the NPC/bot).
+
+LibreMetaverse works not only for the Second Life Grid, but also for any OpenSimulator-based grid. As such, any NPCs/bots that are set up using a 'normal' avatar which gets then driven by software using LibreMetaverse will be able to be tracked for their online status, in a grid-independent way, within the limitations addressed on the above question.
+
+However, OpenSimulator _also_ supports 'native' NPCs. This is a feature that Linden Lab _could_ have offered on their Grid as well, but decided not to. Under OpenSimulator, it's possible to 'create' a NPC/bot from a script, which will look exactly like a 'normal', regular avatar, but which does _not_ require external software running under LibreMetaverse — you can do it within the environment provided by OpenSimulator itself, using extended LSL functions to directly script avatar-based NPCs/bots. While these can do pretty much everything that a 'normal' (human) avatar can, at the database level, they are distinguished from humans by a special flag, which gets set when a NPC is 'created', and which will also bind that NPC to a human avatar (i.e. the human avatar running the script creating a NPC will become its 'owner'). This a way to deal with potential security issues: OpenSimulator NPCs aren't anonymous, in the sense that nobody knows who is behind it, but rather 'belong' to a specific user (and therefore can be flagged for abuse like any other object), and that link is enforced at the core level — it cannot be tampered with using LSL.
+
+This allows, among many other things, to use LSL to 'detect' if an avatar is being driven by a human or just by software. It also allows parcel owners to, say, allow human avatars to run scripts on their land, but forbid NPCs to do so. NPCs may be even banned from entering land parcels, whole regions, or even full estates; and grid owners can also ban NPCs altogether (effectively turning off the ability to create and script them), just like on the Second Life Grid.
+
+As such, _these_ kinds of special, native OpenSimulator NPC avatars _may_ fail to be tracked properly regarding their online status. On a fully permissible OpenSimulator grid, it might be possible to consistently get the online status, but it will be tricky — when a NPC goes offline and comes back online, in general, even though it might look the same and have the same name as before, it _will_ have a _different_ UUID (at least, that's what I think that happens; there might be a way to override that procedure), and, as such, any online tracking script that is looking for a specific, valid UUID will fail — the 'reborn' NPC will technically be a _different_ avatar in the database, even if it looks exactly the same. Again, I believe this is done for security considerations. It means that everything that a NPC 'owns' is, at best, _transient_ — it will only be 'owned' as long as that NPC avatar is online. If it drops out of the grid, and comes back, whatever it has owned is now gone. Also, there is no way for a _human_ to log in as a NPC (and vice-versa: you cannot use an _existing_ account for a NPC; each NPC is created on the spot as a completely new entry in the avatar database), so that means it's impossible to log in with the NPC's account (technically, NPC avatars don't have associated 'accounts', even though they certainly have inventory, a profile, worn & attached items, etc.) and write a script to be dropped by the NPC inside an object it owns. This will simply be impossible.
+
+Nevertheless, with some clever scripting, it _may_ be possible to achieve something similar. Because NPCs are created with an inventory — including items worn & attached — it's conceivable that the avatar may come with a box with a copy of the online tracking script. During creation, that box will be assigned ownership to either the NPC or possibly to the NPC's owner (depends on the scripting used): in the former case, it's certainly plausible to admit that the NPC can be scripted to drop that box on the ground once it gets launched. Assuming that the NPC is created on land specifically designed for that purpose, with the proper permissions set (allowing NPCs from a certain group — which can _also_ be set when the NPC is created — to drop objects and run scripts in the parcel), it is conceivable therefore that such an avatar _may_ have an online tracker script active (and therefore its online status being actively tracked!), although it might be pointless: after all, an NPC will either be online or not exist at all (from the perspective of the database!).
+
+In short: aye, you _can_ track the online status of bots and NPCs, if they're scripted using the LibreMetaverse toolkit; there will be some limitations for OpenSimulator bots (lack of a profile picture, for example); but tracking native OpenSimulator NPCs will very likely _not_ work, or, if it does, it will be essentially pointless to do so.
+
+= This plugin is awesome! I have lots of suggestions on how to improve it! Can I send them to you? =
+
+I'm glad you find it useful. Sure, to make collaboration easier, the code for this plugin is also on [GitHub]()
 
 == Screenshots ==
 
@@ -144,106 +168,22 @@ In future versions, the options to extract profile data from OpenSimulator grids
 
 == Changelog ==
 
-= 1.5.0 =
-Recent versions of WordPress basically broke _everything_. So:
+= 1.6.3 =
+* Apparently, a vulnerability was detected on the Gutenberg Block subsystem (which is not yet working anyway), and Automattic closed access to this plugin. Hopefully, I managed to fix it, and their automatic validation system will ac
+ccept the changes. If not, I'll drop blocks support for the time being.
+* On the GitHub repository, added a few extra configuration files for detecting code violations
 
-* Cleaned up one or two things to bring the code up to PHP 7.3+ compliance
-* Fixed some fatal errors due to WP changes on the call to `WP_Widget::__construct()`
-* Asked for translation validation from the WP Polyglot team; until they approve it, you can continue to use the supplied .mo and .po files
-* Figured out a workaround to load the _current_ language files: https://stackoverflow.com/questions/45525390/wordpress-plugin-translation-load-plugin-textdomain#comment105104921_45883184; see https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/#loading-text-domain
-* Fixed location of Portuguese (European) and British English translation files (Portuguese was empty!)
-* Fixed a stupid copy & paste that broke `ping`
-* Sprinkled a few more `esc_attr()` to prevent possible XSS attacks
-* Added more 'compatible' versions (from 1.3.8 to 1.4.2 are considered 'compatible')
-* Lots of (manual) pretty formatting, mostly because WP's formatting logic is weird for automated prettifiers
-* Now the LSL script will use HTTPS for outgoing calls (if the WP site is set up to use `https://`); incoming calls with HTTPS are possible, _manually_ replacing `llRequestURL()` with `llRequestSecureURL()`, in SL as well as https-enabled OpenSim grids
+The remaining (historical) changelog is kept on the file `changelog.txt`, as per the WP recommendations.
 
-TODO: Automatically detect if OpenSim has a working llRequestSecureURL() implementation and update script automatically
-TODO: Add a Gutenberg Block.
-
-= 1.4.2 =
-* Experimental support for PHP 8.0
-
-= 1.4.1 =
-* Bumped version to make sure WordPress.org doesn't de-list us from their archive
-* Trying to make everything work under PHP 7.4+ without giving any warnings
-
-= 1.4.0 =
-* New backoffice display, using `WP_List_Table`. This makes it more portable to future versions and is 100% compatible with the overall look & feel of WordPress
-* In-world script now allows remote reset/deletion requests. Older objects will silently fail with reset/deletion requests, but the rest of the functionality will still work!
-* You can now ping in-world objects to see if they're active and/or your WP database is in sync. This will work with older scripts, too
-* Objects that have the current version will have its version number coloured green; older (but functional) versions will be displayed in yellow; ancient versions (which will not work) will be displayed red
-* Status display on the plugin backoffice is coloured green for online, red for offline
-* You can now use bulk actions to ping/delete/reset/destroy objects
-* Several sections of the code were reshuffled, and lots of comments added
-
-= 1.3.8 =
-* Changed the way avatar names are selected: now it's by object key, not avatar name (to allow avatars on OpenSim grids to be tracked)
-* Because 1.3.7 didn't fix the deletion error, new code was developed using the above changes; this might invalidate previous versions! (Because objects are now tracked by object key and not avatar name, previous settings might have invalid data)
-* Avatar profile pictures do not use `align=XXX` tags but instead the class gets `aligncenter`, `alignleft`, `alignright` for consistency with WP, current themes, and recent CSS versions
-* When selecting an avatar name on the Widget, it displays region and position (to allow avatars with the same name in different grids to be easily selected)
-* Added *objectkey* option for the shortcode (to deal with avatars with the same name in different grids)
-* Added fancy banner
-* Added a few extra translations (they only appeared on in-world HTTP-in responses, not on WP)
-* Confirmed compatibility with WP 3.9
-* Users upgrading directly from 1.0 (or earlier versions) should now manually delete the *channel.inc* file under *wp-content/uploads*
-
-= 1.3.7 =
-* Minor retweaking of the logic for deleting online status indicators from the admin page
-
-= 1.3.6 =
-* Fixed tiny bug with incompatible function names with other plugins of mine
-
-= 1.3.5 =
-* Added support for multiple languages. Portuguese was added. Translators welcome!
-* Fixed issue for avatars with "Resident" as their last name (links to profile images were broken)
-* Fixed minor programming issues and alt/title tags for the images for full HTML compliance
-
-= 1.3.0 =
-* Completely changed the communications protocol. Now no HTTP-in calls are used. This makes the widget much faster to show on pages, and should lead to less "status unknown errors". Thanks to Celebrity Trollop for proposing a much simpler way to the code design!
-* Additionally, shortcodes were not really working _unless_ there was also a widget on the blog. The change should now fix this.
-
-= 1.2.1 =
-* Fixed lack of return code on HTTP requests to in-world objects, probably caused by timeouts. Thanks for Puilia for checking it and to Celebrity Trollop for providing a simple fix (I've also added 60 seconds of timeout instead of the default of 5)
-
-= 1.2.0 =
-* Adds SL profile picture to the widget, to the backoffice, and to shortcodes
-* Added the ability to delete entries from the database
-* Changed LSL script to be inside a textarea for better layout
-* Fixed shortcode bugs and added new options
-* Fixed incorrect saving of serialized settings and added maybe_unserialize to deal with warnings when serialization was not required (happened when multiple widgets were used)
-* Added target="_blank" on links to avatar profile and object location
-* Removed dependency on cURL
-
-= 1.1.2 =
-* More URL bug fixes, solved with rawurlencode
-
-= 1.1.1 =
-* Fixes a bug on links when in-world object names have single quotes in the names
-
-= 1.1.0 =
-* Implements the Shortcode API for embedding the status on a page or post (with its own CSS classes)
-* Added further snapshots to help out the installation process in Second Life
-
-= 1.0 =
-Major upgrade! Note that the old version of the LSL script will not work any longer! You need to replace all in-world scripted objects manually
-
-* Uses HTTPRequest and HTTP-in instead of XML-RPC
-* Supports multiple avatars and multiple widgets
-* Options are now saved using the WP mechanism instead of using external files
-* Uses a caching mechanism to reduce the number of requests to the simulators
-* Added CSS div and span for the widget to allow restyling
-
-= 0.9.1 =
-
-* Added some contributed code by SignpostMarv replacing obsolete attribute escaping code
-* Added smaller screenshot
-* Added a FAQ Q&A for "status unknown"
-
-= 0.9 =
-* First release.
 
 == Upgrade Notice ==
+
+= 1.6.0 =
+Major code refactoring, trying to keep it cleanly styled according to the WordPress Coding Standard (as checked by the PHP CodeSniffer). Also tested under PHP 8.1 and WP 5.8+.
+
+= 1.5.0 =
+Due to changes in the way WP handles translations, and the level of restrictions imposed by recent
+versions of PHP, this plugin has been bumped to work only with PHP > 7.3 and WP > 4.6.
 
 = 1.4.0 =
 If you had problems in deleting unused items, this version might fix them for you. Notice that things changed in the way the list of objects/avatars are tracked. You might have problems when upgrading this plugin and trying to delete previous objects! Sorry for that, there was a nasty bug in the code.
@@ -258,7 +198,7 @@ The whole content of the widget is included inside a `<div class='osinsl'>`
 
 The text before the status is a `span` with class `osinsl-before-status`. The status itself is `osinsl-status` and the text afterwards is `osinsl-after-status`.
 
-Status unknown (i.e. SL dataserver issues) is styled as `osinsl-problems` and the text for an unconfigured widget is styled `osinsl-unconfigured`.
+_Status unknown_ (i.e. SL dataserver issues) is styled as `osinsl-problems` and the text for an unconfigured widget is styled `osinsl-unconfigured`.
 
 The profile picture (if visible) will have the class `osinsl-profile-picture`. Users can set the horizontal alignment (using the standard *alignleft*, *aligncenter*, *alignright* classes) but nothing else. Size is limited to 80x80 (all this might be changed).
 
@@ -271,14 +211,16 @@ To style embedded shortcode, change the CSS class for `osinsl-shortcode`.
 The overall syntax is:
 
 `[osinsl avatar="<avatar name>" picture="[none|center|right|left]" status="[on|off]" profilelink="[on|off]"]`
+
 or
+
 `[osinsl objectkey="<UUID>" picture="[none|center|right|left]" status="[on|off]" profilelink="[on|off]"]`
 
 **avatar** should have a valid Second Life/OpenSimulator avatar name which has an associated online status indicator in SL/OpenSimulator. This will expand to show the online status (e.g. usually *online*, *offline*, or an error message if no widget was configured or if the avatar is not being tracked). Note that if you have avatars with the same name on different grids, this will just get you one of them.
 
 **objectkey** should be the Object Key of an in-world online status tracking object. This should be used alternatively to **avatar** and is useful if you have several objects tracking your avatar across different grids, all for the same avatar name. Note that object keys may change over time (when they get copied, duplicated, taken back to inventory and rezzed again, etc.) so this should be used only as a last alternative, when you really have several avatars in different grids, all with the same name.
 
-**picture** is optional and defaults to *none* (i.e. profile picture is not shown); if the user has set the SL web profile to be visible, this will retrieve their profile picture, and resize it to 80x80. Options are *left*, *right*, and *center* which will provide minimal formatting (additional styling requires CSS; image size is fixed for now; see the **CSS** section for more information).
+**picture** is optional and defaults to *none* (i.e. profile picture is not shown); if the user has set the Second Life web profile to be visible, this will retrieve their profile picture, and resize it to 80x80. Options are *left*, *right*, and *center* which will provide minimal formatting (additional styling requires CSS; image size is fixed for now; see the **CSS** section for more information). However, for the time being, pictures for avatars in OpenSimulator grids will _not_ be displayed.
 
 If the **picture** is set, **status** can be set to *off* (just show the picture but not the actual status).
 
