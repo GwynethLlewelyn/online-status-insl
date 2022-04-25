@@ -82,14 +82,13 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			 *  @var string $title         Widget title, which may even be set from a filter.
 			 *  @var string $after_widget  HTML set by user to be shown after the widget is printed
 			 */
-			extract( $args, EXTR_SKIP );
-			echo wp_kses( $before_widget ?? '', self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			echo wp_kses( $args['before_widget'] ?? '', self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			$title = empty( $instance['title'] )
 				? '&nbsp;'
 				: apply_filters( 'widget_title', $instance['title'] );
 
 			if ( ! empty( $title ) ) {
-				echo wp_kses( $before_title . ' ' . $title . ' ' . $after_title, self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+				echo wp_kses( $args['before_title'] . ' ' . $title . ' ' . $args['after_title'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 			}
 
 			// Code to check the in-world thingy and spew out results.
@@ -130,9 +129,9 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 			if ( ! empty( $instance['profile_picture'] ) && 'none' !== $instance['profile_picture'] && $in_secondlife ) {
 				$avatar_name_sanitised = sanitise_avatarname( $avatar_display_name );
 				?>
-		<a href="https://my.secondlife.com/<?php echo $avatar_name_sanitised; ?>" target="_blank">
+		<a href="https://my.secondlife.com/<?php echo esc_attr( $avatar_name_sanitised ); ?>" target="_blank">
 		<img class="osinsl-profile-picture align<?php echo esc_attr( $instance['profile_picture'] ); ?>"
-			src="https://my-secondlife.s3.amazonaws.com/users/<?php echo $avatar_name_sanitised; ?>/thumb_sl_image.png"
+			src="https://my-secondlife.s3.amazonaws.com/users/<?php echo esc_attr( $avatar_name_sanitised ); ?>/thumb_sl_image.png"
 			width="80" height="80"
 			alt="<?php echo esc_attr( $avatar_display_name ); ?>"
 			title="<?php echo esc_attr( $avatar_display_name ); ?>" valign="top">
@@ -155,7 +154,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				<?php
 			}
 			// return to widget handling code.
-			echo wp_kses( $after_widget, self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
+			echo wp_kses( $args['after_widget'], self::ONLINE_STATUS_INSL_VALID_KSES_TAGS );
 		} // end function widget
 
 		/**
@@ -227,7 +226,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 				( ! empty( $instance['object_key'] && NULL_KEY !== $instance['object_key'] ) )
 			) {
 				if ( defined( WP_DEBUG ) ) {
-					// phpcs:ignore WordPress.PHP.DevelopmentFunctions
+					// phpcs:disable WordPress.PHP.DevelopmentFunctions
 					error_log(
 						wp_sprintf(
 							'DEBUG: instance[avatar_name]: "%1$s" instance[object_key]: "%2$s" settings[instance[object_key]] "%3$s" and finally: what we\'re assigning, after all: "%4$s"',
@@ -237,6 +236,7 @@ if ( ! class_exists( 'Online_Status_InSL' ) ) {
 							$settings[ $instance['object_key'] ]['avatarDisplayName'] ?? 'invalid avatar display name'
 						)
 					);
+					// phpcs:enable
 				}
 				$instance['avatar_name'] = $settings[ $instance['object_key'] ]['avatarDisplayName'] ?? '(???)';
 			}

@@ -175,7 +175,7 @@ function online_status_insl_admin_menu_options() {
  */
 function request_protocol() {
 	$is_secure = false;
-	if ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ) {
+	if ( ! empty( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ) {
 		$is_secure = true;
 	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] || ! empty( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && 'on' === $_SERVER['HTTP_X_FORWARDED_SSL'] ) {
 		$is_secure = true;
@@ -434,6 +434,7 @@ default
 		<div class="instructions">
 		<?php
 		// Add some instructions.
+		// TODO(gwyneth): Change this a bit so that there are no HTML tags inside.
 		_e(
 			'<p><strong>Ping</strong>: Checks if in-world object is still alive; if not, you should remove it manually.</p>',
 			'online-status-insl'
@@ -494,27 +495,27 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 	*  @var string $status       To flag that this widget should not emit any status text, just the picture (or nothing).
 	*  @var string $profilelink  Puts a link to the SL web profile if the picture is active. Does not work for OpenSimulator.
 	*/
-	extract(
-		shortcode_atts(
-			array(
-				'avatar'      => '(???)',
-				'objectkey'   => NULL_KEY,
-				'picture'     => 'none',
-				'status'      => 'on',
-				'profilelink' => 'off',
-			),
-			$atts
-		)
+	$atts = shortcode_atts(
+		array(
+			'avatar'      => '(???)',
+			'objectkey'   => NULL_KEY,
+			'picture'     => 'none',
+			'status'      => 'on',
+			'profilelink' => 'off',
+		),
+		$atts,
+		$tag
 	);
+
 	// search for the avatar name.
 	$settings = maybe_unserialize( get_option( 'online_status_insl_settings' ) );
 
 	// figure out stupid id for nice formatting.
 	$os_insl_id = 'broken'; // default: we assume it's broken until proven otherwise (gwyneth 20220103)!
-	if ( ! empty( $avatar ) && ( '(???)' !== $avatar ) ) {
-		$os_insl_id = strtolower( strtr( $avatar, ' ', '-' ) );
-	} elseif ( ! empty( $objectkey ) && ( NULL_KEY !== $objectkey ) ) {
-		$os_insl_id = $objectkey;
+	if ( ! empty( $atts['avatar'] ) && ( '(???)' !== $atts['avatar'] ) ) {
+		$os_insl_id = strtolower( strtr( $atts['avatar'], ' ', '-' ) );
+	} elseif ( ! empty( $atts['objectkey'] ) && ( NULL_KEY !== $atts['objectkey'] ) ) {
+		$os_insl_id = $atts['objectkey'];
 	}
 	// Store things in a return value; add class attributes to allow styling.
 	// Added esc_attr() in case someone creates an avatar name encoded with a XSS attack (gwyneth 20210621).
@@ -530,16 +531,16 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 
 		$avatar_name_sanitised = ''; // to avoid assigning nulls (gwyneth 20220103).
 
-		if ( ! empty( $objectkey ) && ( NULL_KEY !== $objectkey ) ) {
-			if ( ! empty( $settings[ $objectkey ] ) ) {
+		if ( ! empty( $atts['objectkey'] ) && ( NULL_KEY !== $atts['objectkey'] ) ) {
+			if ( ! empty( $settings[ $atts['objectkey'] ] ) ) {
 				$avatar_name_sanitised = sanitise_avatarname(
-					$settings[ $objectkey ]['avatarDisplayName']
+					$settings[ $atts['objectkey'] ]['avatarDisplayName']
 				);
 				// check if we're in Second Life (gwyneth 20220106).
-				$in_secondlife = ( false !== stripos( $settings[ $objectkey ]['PermURL'], 'secondlife' ) );
+				$in_secondlife = ( false !== stripos( $settings[ $atts['objectkey'] ]['PermURL'], 'secondlife' ) );
 
-				if ( ! empty( $picture ) && ( 'none' !== $picture ) && $in_secondlife ) {
-					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+				if ( ! empty( $atts['picture'] ) && ( 'none' !== $atts['picture'] ) && $in_secondlife ) {
+					if ( ! empty( $atts['profilelink'] ) && ( 'off' !== $atts['profilelink'] ) ) {
 						// For now, avatars in OpenSimulator grids will not get profile links (gwyneth 20220106).
 						$return_value .=
 							"<a href='https://my.secondlife.com/" .
@@ -548,7 +549,7 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 					}
 					$return_value .=
 						'<img class="osinsl-profile-picture align' .
-						$picture .
+						$atts['picture'] .
 						'" alt="' .
 						$avatar_name_sanitised .
 						'" title="' .
@@ -556,23 +557,23 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 						'" src="https://my-secondlife.s3.amazonaws.com/users/' .
 						$avatar_name_sanitised .
 						'/thumb_sl_image.png" width="80" height="80" alt="' .
-						$avatar .
+						$atts['avatar'] .
 						'" valign="bottom">';
-					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+					if ( ! empty( $atts['profilelink'] ) && ( 'off' !== $atts['profilelink'] ) ) {
 						$return_value .= '</a>';
 					}
 				}
-				if ( ! empty( $status ) && ( 'off' !== $status ) ) {
-					$return_value .= $settings[ $objectkey ]['Status'];
+				if ( ! empty( $atts['status'] ) && ( 'off' !== $atts['status'] ) ) {
+					$return_value .= $settings[ $atts['objectkey'] ]['Status'];
 				}
 			} else {
 				// no such object being tracked!
 				$return_value .=
-					__( 'Invalid object key: ', 'online-status-insl' ) . $objectkey;
+					__( 'Invalid object key: ', 'online-status-insl' ) . $atts['objectkey'];
 			}
 		} else {
-			if ( ! empty( $avatar ) ) {
-				$avatar_name_sanitised = sanitise_avatarname( $avatar );
+			if ( ! empty( $atts['avatar'] ) ) {
+				$avatar_name_sanitised = sanitise_avatarname( $atts['avatar'] );
 			}
 		}
 		// Search through settings; retrieve first tracked object with this avatar name.
@@ -580,11 +581,11 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 
 		foreach ( $settings as $tracked_avatar ) {
 			if ( ! empty( $tracked_avatar['avatarDisplayName'] )
-				&& ( $avatar === $tracked_avatar['avatarDisplayName'] ) ) {
+				&& ( $atts['avatar'] === $tracked_avatar['avatarDisplayName'] ) ) {
 				// See comment above: OpenSimulator avatars will neither get a picture, nor a profile link (gwyneth 20220106).
 				$in_secondlife = ( false !== stripos( $tracked_avatar['PermURL'], 'secondlife' ) );
-				if ( ! empty( $picture ) && ( 'none' !== $picture ) && $in_secondlife ) {
-					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+				if ( ! empty( $atts['picture'] ) && ( 'none' !== $atts['picture'] ) && $in_secondlife ) {
+					if ( ! empty( $atts['profilelink'] ) && ( 'off' !== $atts['profilelink'] ) ) {
 						$return_value .=
 							"<a href='https://my.secondlife.com/" .
 							$avatar_name_sanitised .
@@ -592,7 +593,7 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 					}
 					$return_value .=
 						'<img class="osinsl-profile-picture align' .
-						$picture ?? '' .
+						$atts['picture'] ?? '' .
 						'" alt="' .
 						$avatar_name_sanitised .
 						'" title="' .
@@ -600,13 +601,13 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 						'" src="https://my-secondlife.s3.amazonaws.com/users/' .
 						$avatar_name_sanitised .
 						'/thumb_sl_image.png" width="80" height="80" alt="' .
-						$avatar ?? '' .
+						$atts['avatar'] ?? '' .
 						'" valign="bottom">';
-					if ( ! empty( $profilelink ) && ( 'off' !== $profilelink ) ) {
+					if ( ! empty( $atts['profilelink'] ) && ( 'off' !== $atts['profilelink'] ) ) {
 						$return_value .= '</a>';
 					}
 				}
-				if ( ! empty( $status ) && ( 'off' !== $status ) ) {
+				if ( ! empty( $atts['status'] ) && ( 'off' !== $atts['status'] ) ) {
 					$return_value .= $tracked_avatar['Status'] ?? __( '(unknown status)', 'online-status-insl' );
 				}
 				$found_avatar = true;
@@ -614,7 +615,7 @@ function online_status_insl_shortcode( $atts = array(), $content = null, $tag = 
 			}
 		}
 		if ( ! $found_avatar ) {
-			$return_value .= __( 'No widget configured for ', 'online-status-insl' ) . $avatar;
+			$return_value .= __( 'No widget configured for ', 'online-status-insl' ) . $atts['avatar'];
 		} else {
 			$return_value .= __( 'No avatars being tracked', 'online-status-insl' );
 		}
@@ -655,8 +656,6 @@ function online_status_insl_shortcodes_init() {
  *  Main action/filter calls for this plugin.
  */
 
-// error_log( 'Entering action/hook area...' ); // debug.
-// add_filter( 'load_textdomain_mofile', 'online_status_insl_load_textdomain_mofile', 10, 2 ); // deprecated.
 add_action( 'init', 'online_status_insl_load_textdomain' ); // load translations here.
 add_action( 'widgets_init', 'online_status_insl_widget_init' );
 add_action( 'admin_menu', 'online_status_insl_admin_menu_options' );
@@ -664,6 +663,5 @@ register_activation_hook( __FILE__, 'online_status_insl_widget_activate' );
 register_deactivation_hook( __FILE__, 'online_status_insl_widget_deactivate' );
 add_action( 'admin_init', 'online_status_insl_register_settings' );
 add_action( 'init', 'online_status_insl_shortcodes_init' );
-// error_log( 'Leaving action/hook area...' ); // debug.
 
 $wpdpd = new Online_Status_InSL( 'online-status-insl', 'Online Status inSL' );

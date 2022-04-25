@@ -169,7 +169,9 @@ I'm glad you find it useful. Sure, to make collaboration easier, the code for th
 == Changelog ==
 
 = 1.6.3 =
-Apparently, a vulnerability was detected on the Gutenberg Block subsystem (which is not yet working anyway), and Automattic closed access to this plugin. Hopefully, I managed to fix it, and their automatic validation system will accept the changes. If not, I'll drop blocks support for the time being.
+* Apparently, a vulnerability was detected on the Gutenberg Block subsystem (which is not yet working anyway), and Automattic closed access to this plugin. Hopefully, I managed to fix it, and their automatic validation system will ac
+ccept the changes. If not, I'll drop blocks support for the time being.
+* On the GitHub repository, added a few extra configuration files for detecting code violations
 
 The remaining (historical) changelog is kept on the file `changelog.txt`, as per the WP recommendations.
 

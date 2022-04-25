@@ -42,5 +42,7 @@ package.json
 package-lock.json
 .eslintrc.yml
 
-# Ignore wordpress stubs, only required for debugging anyway
+# Ignore development aids
 wordpress-stubs.php
+phpcs.xml
+phpmd.xml

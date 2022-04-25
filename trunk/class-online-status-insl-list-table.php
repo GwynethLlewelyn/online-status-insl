@@ -661,19 +661,19 @@ if ( ! class_exists( 'Online_Status_InSL_List_Table' ) ) {
 		 *  Utility function to be passed to `usort` to reorder the sortable columns
 		 *  according to our preferences (ascending or descending),
 		 *
-		 *  @param string[] $a one of the strings to be compared inside `usort`.
-		 *  @param string[] $b the other string to be compared with.
-		 *  @phan-param array{string:string} $a
-		 *  @phan-param array{string:string} $a
-		 *  @return boolean result of comparing a with b, returning `asc` (ascending) for true, false otherwise.
+		 *  @param string[] $col1 one of the strings to be compared inside `usort`.
+		 *  @param string[] $col2 the other string to be compared with.
+		 *  @phan-param array{string:string} $col1
+		 *  @phan-param array{string:string} $col2
+		 *  @return boolean result of comparing col1 with col2, returning `asc` (ascending) for true, false otherwise.
 		 */
-		private function usort_reorder( $a, $b ) {
+		private function usort_reorder( $col1, $col2 ) {
 			// If no sort, default to avatarDisplayName.
-			$orderby = esc_attr( $_GET['orderby'] ?? 'avatarDisplayName' );
+			$orderby = wp_unslash( $_GET['orderby'] ?? 'avatarDisplayName' );
 			// If no order, default to asc.
-			$order = esc_attr( $_GET['order'] ?? 'asc' );
+			$order = wp_unslash( $_GET['order'] ?? 'asc' );
 			// Determine sort order.
-			$result = strcmp( $a[ $orderby ], $b[ $orderby ] );
+			$result = strcmp( $col1[ $orderby ], $col2[ $orderby ] );
 			// Send final sort direction to usort.
 			return 'asc' === $order ? $result : -$result;
 		}
