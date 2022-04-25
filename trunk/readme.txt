@@ -21,7 +21,10 @@ It also includes a LSL script to place inside an in-world script, which is avail
 
 **Warning**: Version 1.3.8 and above might make it impossible for you to delete old tracking objects. 1.4.0 adds a way to delete all of the tracking objects, but there have been plenty of changes that this simply might not work any longer.
 
-**Note**: Versions before 1.4.0 are so old that I have deleted them from the WordPress repository.
+**Note**: Versions before 1.6.0 are so old that I have deleted them from the WordPress repository.
+
+[![CodeQL](https://github.com/GwynethLlewelyn/online-status-insl/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/GwynethLlewelyn/online-status-insl/actions/workflows/codeql-analysis.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d0ac5bb62e7a4ce9bb011af03091f5d4)](https://www.codacy.com/gh/GwynethLlewelyn/online-status-insl/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GwynethLlewelyn/online-status-insl&amp;utm_campaign=Badge_Grade)
 
 == Installation ==
 
@@ -155,7 +158,7 @@ In short: aye, you _can_ track the online status of bots and NPCs, if they're sc
 
 = This plugin is awesome! I have lots of suggestions on how to improve it! Can I send them to you? =
 
-I'm glad you find it useful. Sure, to make collaboration easier, the code for this plugin is also on [GitHub]()
+I'm glad you find it useful. Sure, to make collaboration easier, the code for this plugin is also on [GitHub](https://github.com/GwynethLlewelyn/online-status-insl)
 
 == Screenshots ==
 
@@ -169,8 +172,7 @@ I'm glad you find it useful. Sure, to make collaboration easier, the code for th
 == Changelog ==
 
 = 1.6.3 =
-* Apparently, a vulnerability was detected on the Gutenberg Block subsystem (which is not yet working anyway), and Automattic closed access to this plugin. Hopefully, I managed to fix it, and their automatic validation system will ac
-ccept the changes. If not, I'll drop blocks support for the time being.
+* Apparently, a vulnerability was detected on the Gutenberg Block subsystem (which is not yet working anyway), and Automattic closed access to this plugin. Hopefully, I managed to fix it, and their automatic validation system will accept the changes. If not, I'll drop blocks support for the time being.
 * On the GitHub repository, added a few extra configuration files for detecting code violations
 
 The remaining (historical) changelog is kept on the file `changelog.txt`, as per the WP recommendations.
