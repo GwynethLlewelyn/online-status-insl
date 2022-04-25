@@ -5,7 +5,7 @@
     <description>Rules for WordPress plugins</description>
 
 	<!-- do not check for old code, which will be hopelessly smelly (gwyneth 20220425) -->
-	<exclude-pattern>.*/tags/.*</exclude-pattern>
+	<exclude-pattern>*/tags/*</exclude-pattern>
 
     <arg name="basepath" value="trunk"/>
     <arg name="extensions" value="php"/>
