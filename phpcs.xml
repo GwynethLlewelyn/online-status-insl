@@ -24,7 +24,7 @@
     <rule ref="PHPCompatibility"/>
 	<rule ref="PHPCompatibilityWP"/>
 
-    <config name="testVersion" value="7.4-"/>
+    <config name="testVersion" value="8.2-"/>
 
     <!-- Allow long lines -->
     <rule ref="Generic.Files.LineLength">
@@ -33,19 +33,19 @@
 
     <rule ref="WordPress.WP.DeprecatedClasses">
         <properties>
-            <property name="minimum_supported_version" value="5.4"/>
+            <property name="minimum_supported_version" value="7.4"/>
         </properties>
     </rule>
 
     <rule ref="WordPress.WP.DeprecatedFunctions">
         <properties>
-            <property name="minimum_supported_version" value="5.4"/>
+            <property name="minimum_supported_version" value="7.4"/>
         </properties>
     </rule>
 
     <rule ref="WordPress.WP.DeprecatedParameters">
         <properties>
-            <property name="minimum_supported_version" value="5.4"/>
+            <property name="minimum_supported_version" value="7.4"/>
         </properties>
     </rule>
 
