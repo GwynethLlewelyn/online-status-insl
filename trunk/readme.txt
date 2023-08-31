@@ -15,7 +15,7 @@ Allows you to show your Second Life® or OpenSimulator online status on any Word
 
 This simple plugin with associated widget allows you to show your online status in Second Life® or any OpenSimulator grid.
 
-It also includes a LSL script to place inside an in-world script, which is available from the Settings menu.
+It also includes a LSL script to place inside an in-world object, which is available from the Settings menu.
 
 **Warning**: Versions 1.3.X and above are utterly incompatible with previous versions; you will need to add the new script to all your in-world scripted objects or your blog will not display the status at all!
 
