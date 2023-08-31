@@ -2,6 +2,7 @@
 .gitignore
 .gitattributes
 .git
+.github
 
 # Stupid macOS temporary files
 
